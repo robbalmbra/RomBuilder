@@ -7,12 +7,11 @@
 # Broken in catalina
 
 # Install build tools
-if [ -f "/etc/lsb-release" ]; then
+if [ -f "/etc/lsb-release" ] && [ ! -d "/opt/build_env" ]; then
   # Linux install
-  git clone https://github.com/akhilnarang/scripts.git build_env --depth=1
-  sudo chmod +x build_env/setup/android_build_env.sh
-  . build_env/setup/android_build_env.sh
-  rm -rf build_env 2 > /dev/null
+  git clone https://github.com/akhilnarang/scripts.git /opt/build_env --depth=1
+  sudo chmod +x /opt/build_env/setup/android_build_env.sh
+  . /opt/build_env/setup/android_build_env.sh
 else
   # MacOS install - todo
   echo ""
