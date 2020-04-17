@@ -1,3 +1,3 @@
 # RomBuilder
 
-[flush-build.sj](flush-build.sh)
+[flush-build.sh](scripts/flush-build.sh)
