@@ -6,4 +6,6 @@
 
 [start-docker.sh](scripts/start-docker.sh) - Start build within a docker environment using a specified config
 
+[start-local.sh](scripts/start-local.sh) - Start build within a local environment using a specified config
+
 ## Notes
