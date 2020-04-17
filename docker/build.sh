@@ -1,5 +1,7 @@
 #!/bin/bash
 
+BOOT_LOGGING=0
+
 # Check for local use, not using docker
 if [ ! -z "$OUTPUT_DIR" ]; then
   BUILD_DIR="$OUTPUT_DIR"
@@ -104,7 +106,7 @@ if [ ! -f "$BUILD_DIR/rom/.lm" ]; then
 
   echo "Local modifications ..."
 
-if [ ! -z "$BOOT_LOGGING" ]; then
+if [ $BOOT_LOGGING -eq 1 ]; then
   # Enable logging via logcat
 cat >> "$BUILD_DIR/rom/device/samsung/universal9810-common/rootdir/etc/init.samsung.rc" << EOL
 

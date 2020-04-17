@@ -4,7 +4,7 @@
 # Script for local build V1.0
 
 # Install mega
-
+# Broken in catalina
 
 # Install build tools
 if [ -f "/etc/lsb-release" ]; then
