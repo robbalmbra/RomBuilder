@@ -1,4 +1,3 @@
-
 #!/bin/bash
 
 # Script for local build V1.0
