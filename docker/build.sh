@@ -27,7 +27,7 @@ fi
 
 # precautionary mount check for macos systems
 if [ -f "$BUILD_DIR/android.sparseimage" ]; then
-  umount "$BUILD_DIR/rom/" > /dev/null 2>&1
+  hdiutil detach "$BUILD_DIR/rom/" > /dev/null 2>&1
   hdiutil attach "$BUILD_DIR/android.sparseimage" -mountpoint "$BUILD_DIR/rom/" > /dev/null 2>&1
 fi
 

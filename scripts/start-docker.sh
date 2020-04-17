@@ -37,7 +37,7 @@ if [ ! -f "/etc/lsb-release" ]; then
     hdiutil create -type SPARSE -fs 'Case-sensitive Journaled HFS+' -size 125g "$BUILD_FOLDER/android.sparseimage"
   fi
 
-  unmount "$BUILD_FOLDER/files/rom" > /dev/null 2>&1
+  hdiutil detach "$BUILD_FOLDER/files/rom" > /dev/null 2>&1
   hdiutil attach "$BUILD_FOLDER/android.sparseimage" -mountpoint "$BUILD_FOLDER/rom/" > /dev/null 2>&1
 fi
 
