@@ -1,0 +1,23 @@
+version: '3'
+services:
+  evox_build:
+    hostname: evox_build
+    container_name: evox_build
+    build: ./
+    volumes:
+      - ./../files/ccache:/ccache
+      - ./../files/rom:/root/rom
+      - ./../files/logs:/root/logs
+      - ./user_modifications.sh:/root/user_modifications.sh
+    environment:
+    - CCACHE_DIR=${CCACHE_DIR}
+    - BUILD_NAME=${BUILD_NAME}
+    - UPLOAD_NAME=${UPLOAD_NAME}
+    - BOOT_LOGGING=${BOOT_LOGGING}
+    - MEGA_USERNAME=${MEGA_USERNAME}
+    - MEGA_PASSWORD=${MEGA_PASSWORD}
+    - DEVICES=${DEVICES}
+    - REPO=${REPO}
+    - BRANCH=${BRANCH}
+    - SKIP_PULL=${SKIP_PULL}
+    restart: unless-stopped
