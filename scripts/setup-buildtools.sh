@@ -26,10 +26,12 @@ echo "Pulling and installing build tools"
 apt-get install git -y > /dev/null 2>&1
 git config --global user.name "Robert Balmbra" > /dev/null 2>&1
 git config --global user.email "robbalmbra@gmail.com" > /dev/null 2>&1
+error_exit "git config"
 
 git clone https://github.com/akhilnarang/scripts.git /opt/build_env --depth=1 > /dev/null 2>&1
 sudo chmod +x /opt/build_env/setup/android_build_env.sh > /dev/null 2>&1
 . /opt/build_env/setup/android_build_env.sh > /dev/null 2>&1
+error_exit "build script"
 
 echo "Installing apt packages"
 apt-get -y upgrade > /dev/null 2>&1 && \
@@ -37,6 +39,7 @@ apt-get -y install make python3 git screen wget openjdk-8-jdk python-lunch lsb-c
 autoconf libtool g++ libcrypto++-dev libz-dev libsqlite3-dev libssl-dev libcurl4-gnutls-dev libreadline-dev \
 libpcre++-dev libsodium-dev libc-ares-dev libfreeimage-dev libavcodec-dev libavutil-dev libavformat-dev \
 libswscale-dev libmediainfo-dev libzen-dev libuv1-dev libxkbcommon-dev libxkbcommon-x11-0 zram-config > /dev/null 2>&1
+error_exit "apt install"
 
 # Install mega
 echo "Installing mega command line tools"
