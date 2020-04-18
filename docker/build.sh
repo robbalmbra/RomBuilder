@@ -31,6 +31,9 @@ if [[ ! -z "${BUILDKITE}" ]]; then
   export CCACHE_DIR=/tmp/build/ccache
 fi
 
+# Flush logs
+rm -rf "$BUILD_DIR/logs/*"
+
 if [[ ! -z "${CCACHE_DIR}" ]]; then
   mkdir "$CCACHE_DIR" > /dev/null 2>&1
 fi
@@ -214,7 +217,6 @@ for DEVICE in $DEVICES; do
     lunch $build_id
   fi
   error_exit "lunch" 
-  buildkite-agent artifact upload "$BUILD_DIR/logs/*/*" #test debug remove
   mkdir -p "../logs/$DEVICE/"
   
   # Run build
@@ -224,8 +226,21 @@ for DEVICE in $DEVICES; do
     mka bacon -j$(nproc --all) 2>&1 | tee "../logs/$DEVICE/make_${DEVICE}_android10.txt"
   fi
   error_exit "mka bacon"
-  buildkite-agent artifact upload "$BUILD_DIR/logs/*/*"
+
+  # Upload logs to buildkite
+  if [[ ! -z "${BUILDKITE}" ]]; then
+    buildkite-agent artifact upload "../logs/$DEVICE/make_${DEVICE}_android10.txt" > /dev/null 2>&1
+  fi
+  
+  # Extract any errors from log if exist
   grep -iE 'crash|error|fail|fatal|unknown' "../logs/$DEVICE/make_${DEVICE}_android10.txt" 2>&1 | tee "../logs/$DEVICE/make_${$DEVICE}_errors_android10.txt"
+  
+  # Log errors if exist
+  if [[ ! -z "${BUILDKITE}" ]]; then
+    if [ -f "../logs/$DEVICE/make_${$DEVICE}_errors_android10.txt" ]; then
+      buildkite-agent artifact upload "../logs/$DEVICE/make_${$DEVICE}_errors_android10.txt" > /dev/null 2>&1
+    fi
+  fi
 done
 echo "Builds complete"
 
