@@ -97,5 +97,6 @@ done
 # Run build
 cd "$CURRENT"
 echo "Running build script"
+export USER_MODS="$(pwd)/../docker/user_modifications.sh"
 "$(pwd)/../docker/build.sh"
 error_exit "build script"
