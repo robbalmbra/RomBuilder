@@ -13,7 +13,8 @@ CURRENT=$(pwd)
 
 # Install build tools
 if [ -f "/etc/lsb-release" ] && [ ! -d "/opt/build_env" ]; then
-  # Linux install  
+  # Linux install
+  echo "Pulling and installing tools"
   git clone https://github.com/akhilnarang/scripts.git /opt/build_env --depth=1
   sudo chmod +x /opt/build_env/setup/android_build_env.sh
   . /opt/build_env/setup/android_build_env.sh
@@ -81,4 +82,5 @@ done
 
 # Run build
 cd "$CURRENT"
+echo "Running build script"
 $(pwd)/../docker/build.sh
