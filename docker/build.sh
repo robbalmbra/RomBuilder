@@ -19,6 +19,10 @@ if [[ ! -z "${BUILDKITE}" ]]; then
   export CCACHE_DIR=/tmp/build/ccache
 fi
 
+if [[ ! -z "${CCACHE_DIR}" ]]; then
+  mkdir $CCACHE_DIR > /dev/null 2>&1
+fi
+
 echo "Setting BUILD_DIR to '$BUILD_DIR'"
 
 length=${#BUILD_DIR}
