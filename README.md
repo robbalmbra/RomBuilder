@@ -14,4 +14,4 @@ Files needed to deploy a build within a docker environment with the nessassary t
 
 ## Notes
 
-For macOS systems, install [MEGAcmd](https://github.com/meganz/MEGAcmd) for the upload process 
+For macOS systems, install [MEGAcmd](https://github.com/meganz/MEGAcmd) and mega macos binaries to allow the upload process to function.
