@@ -8,12 +8,12 @@ if [ -d "/opt/build_env" ]; then
 fi
 
 if [[ $EUID -ne 0 ]]; then
-  echo "Error - Script must be run as root" 
+  echo "Error - Script must be run as root"
   exit 1
 fi
 
 # Install build tools
-echo "Pulling and installing tools"
+echo "Pulling and installing build tools"
 git clone https://github.com/akhilnarang/scripts.git /opt/build_env --depth=1 > /dev/null 2>&1
 sudo chmod +x /opt/build_env/setup/android_build_env.sh > /dev/null 2>&1
 . /opt/build_env/setup/android_build_env.sh > /dev/null 2>&1
