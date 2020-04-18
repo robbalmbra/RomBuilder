@@ -84,7 +84,7 @@ else
     # Pull latest sources
     echo "Pulling sources ..."
     mkdir "$BUILD_DIR/rom/" > /dev/null 2>&1
-    if [[ -z "${BUILDKITE}" ]]; then
+    if [[ ! -z "${BUILDKITE}" ]]; then
       cd "$BUILD_DIR/rom/" && repo init -u $REPO -b $BRANCH --no-clone-bundle --depth=1 1> /dev/null
     else
       cd "$BUILD_DIR/rom/" && repo init -u $REPO -b $BRANCH --no-clone-bundle --depth=1
