@@ -112,6 +112,8 @@ else
     fi
   else
    # Clean if reprocessing
+   echo "Cleaning build ..."
+   cd "$BUILD_DIR/rom/"
    make clean >/dev/null 2>&1
    make clobber >/dev/null 2>&1
   fi
