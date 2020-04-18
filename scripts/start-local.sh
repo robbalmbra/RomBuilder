@@ -17,6 +17,13 @@ if [ -f "/etc/lsb-release" ] && [ ! -d "/opt/build_env" ]; then
   libpcre++-dev libsodium-dev libc-ares-dev libfreeimage-dev libavcodec-dev libavutil-dev libavformat-dev \
   libswscale-dev libmediainfo-dev libzen-dev libuv1-dev libxkbcommon-dev libxkbcommon-x11-0 zram-config > /dev/null 2>&1   
 
+  # Download and build mega
+  if [ ! -d "/opt/MEGAcmd/" ]; then
+    wget --quiet -O /opt/megasync.deb https://mega.nz/linux/MEGAsync/xUbuntu_$(lsb_release -rs)/amd64/megasync-xUbuntu_$(lsb_release -rs)_amd64.deb && ls /opt/ && dpkg -i /opt/megasync.deb
+    cd /opt/ && git clone --quiet https://github.com/meganz/MEGAcmd.git
+    cd /opt/MEGAcmd && git submodule update --quiet --init --recursive && sh autogen.sh > /dev/null 2>&1 && ./configure --quiet && make > /dev/null 2>&1 && make install > /dev/null 2>&1
+  fi
+
 else
   # MacOS install - todo
   echo ""
