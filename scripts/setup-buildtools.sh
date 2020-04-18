@@ -32,3 +32,11 @@ apt update --fix-missing > /dev/null 2>&1
 sudo apt install -f > /dev/null 2>&1
 cd /opt/ && git clone --quiet https://github.com/meganz/MEGAcmd.git > /dev/null 2>&1
 cd /opt/MEGAcmd && git submodule update --quiet --init --recursive && sh autogen.sh > /dev/null 2>&1 && ./configure --quiet > /dev/null 2>&1 && make > /dev/null 2>&1 && make install > /dev/null 2>&1
+
+# Removing temp files
+rm -rf /opt/MEGAcmd/ 2> /dev/null
+rm -rf /opt/mega/ 2> /dev/null
+rm -rf /opt/megasync.deb 2> /dev/null
+
+# ld for libs
+ldconfig
