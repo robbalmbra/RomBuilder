@@ -33,9 +33,6 @@ if [[ ! -z "${BUILDKITE}" ]]; then
   export CCACHE_DIR=/tmp/build/ccache
 fi
 
-# Flush logs
-rm -rf "$BUILD_DIR/logs/*"
-
 if [[ ! -z "${CCACHE_DIR}" ]]; then
   mkdir "$CCACHE_DIR" > /dev/null 2>&1
 fi
@@ -45,6 +42,9 @@ echo "Setting BUILD_DIR to '$BUILD_DIR'"
 length=${#BUILD_DIR}
 last_char=${BUILD_DIR:length-1:1}
 [[ $last_char == "/" ]] && BUILD_DIR=${BUILD_DIR:0:length-1}; :
+
+# Flush logs
+rm -rf "$BUILD_DIR/logs/"
 
 # macos specific requirements for local usage
 if [ ! -f "/etc/lsb-release" ] && [ ! -f "$BUILD_DIR/android.sparseimage" ]; then
