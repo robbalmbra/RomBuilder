@@ -23,6 +23,9 @@ if [[ ! -z "${BUILDKITE}" ]]; then
   mkdir /tmp/build > /dev/null 2>&1
   BUILD_DIR="/tmp/build"
   
+  # Copy modifications to build dir
+  cp "$USER_MODS" "$BUILD_DIR/user_modifications.sh" > /dev/null 2>&1
+  
   echo "Setting CCACHE to '/tmp/build/ccache'"
   export USE_CCACHE=1
   export CCACHE_DIR=/tmp/build/ccache
