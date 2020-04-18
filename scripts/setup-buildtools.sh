@@ -1,5 +1,5 @@
 #!/bin/bash
-# Setup script for build tools on host
+# Setup script for build tools for buildkite
 
 # Checks
 if [ -d "/opt/build_env" ]; then
