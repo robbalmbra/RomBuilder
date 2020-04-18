@@ -97,7 +97,7 @@ else
     # Pulling local manifests
     echo "Pulling local manifests ..."
     if [[ ! -z "${BUILDKITE}" ]]; then
-      cd "$BUILD_DIR/rom/.repo/" && git clone https://github.com/robbalmbra/local_manifests.git -b android-10.0 --depth=1 1> /dev/null && cd ..
+      cd "$BUILD_DIR/rom/.repo/" && git clone https://github.com/robbalmbra/local_manifests.git -b android-10.0 --depth=1 > /dev/null 2>&1 && cd ..
       if [ $? -ne 0 ]; then
         echo "$0 - Cloning local manifest failed"
         exit 1
@@ -116,7 +116,7 @@ else
   echo "Syncing sources ..."
   
   if [[ ! -z "${BUILDKITE}" ]]; then
-    repo sync -c -j$(nproc --all) --force-sync --no-clone-bundle --no-tags --quiet 1> /dev/null
+    repo sync -c -j$(nproc --all) --force-sync --no-clone-bundle --no-tags --quiet > /dev/null 2>&1
     if [ $? -ne 0 ]; then
       echo "$0 - Sycing sources failed"
       exit 1
