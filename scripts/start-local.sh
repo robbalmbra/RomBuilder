@@ -33,6 +33,7 @@ export TARGET_GAPPS_ARCH=arm64
 export TARGET_SUPPORTS_GOOGLE_RECORDER=true
 export CCACHE_DIR=$OUTPUT_DIR/ccache
 export BRANCH=ten
+export BOOT_LOGGING=1
 
 # Check vars
 variables=(
