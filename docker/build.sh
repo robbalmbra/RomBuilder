@@ -214,6 +214,7 @@ for DEVICE in $DEVICES; do
     lunch $build_id
   fi
   error_exit "lunch" 
+  buildkite-agent artifact upload "$BUILD_DIR/logs/*/*" #test debug remove
   mkdir -p "../logs/$DEVICE/"
   
   # Run build
@@ -223,6 +224,7 @@ for DEVICE in $DEVICES; do
     mka bacon -j$(nproc --all) 2>&1 | tee "../logs/$DEVICE/make_${DEVICE}_android10.txt"
   fi
   error_exit "mka bacon"
+  buildkite-agent artifact upload "$BUILD_DIR/logs/*/*"
   grep -iE 'crash|error|fail|fatal|unknown' "../logs/$DEVICE/make_${DEVICE}_android10.txt" 2>&1 | tee "../logs/$DEVICE/make_${$DEVICE}_errors_android10.txt"
 done
 echo "Builds complete"
