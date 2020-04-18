@@ -9,20 +9,17 @@ else
   BUILD_DIR="/root"
 fi
 
-# Persist rom through builds with buildkite
+# Persist rom through builds with buildkite and enable ccache
 if [[ ! -z "${BUILDKITE}" ]]; then
   mkdir /tmp/build > /dev/null 2>&1
   BUILD_DIR="/tmp/build"
+  
+  echo "Setting CCACHE to '/tmp/build/ccache'"
+  export USE_CCACHE=1
+  export CCACHE_DIR=/tmp/build/ccache
 fi
 
 echo "Setting BUILD_DIR to '$BUILD_DIR'"
-
-# Override for kite build for ccache in standard dir
-if [[ ! -z "${BUILDKITE}" ]]; then
-  echo "Overriding ccache to /ccache"
-  export USE_CCACHE=1
-  export CCACHE_DIR=/ccache
-fi
 
 length=${#BUILD_DIR}
 last_char=${BUILD_DIR:length-1:1}
