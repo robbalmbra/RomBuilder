@@ -22,17 +22,17 @@ sed -i '/^SamsungD/d' universal9810-common.mk
 
 cd ../starlte/
 sed -i 's/lineage/aosp/g' AndroidProducts.mk
-mv lineage_starlte.mk aosp_starlte.mk
+mv lineage_starlte.mk aosp_starlte.mk > /dev/null 2>&1
 sed -i 's/lineage/aosp/g' aosp_starlte.mk
 
 cd ../star2lte/
 sed -i 's/lineage/aosp/g' AndroidProducts.mk
-mv lineage_star2lte.mk aosp_star2lte.mk
+mv lineage_star2lte.mk aosp_star2lte.mk > /dev/null 2>&1
 sed -i 's/lineage/aosp/g' aosp_star2lte.mk
 
 cd ../crownlte/
 sed -i 's/lineage/aosp/g' AndroidProducts.mk
-mv lineage_crownlte.mk aosp_crownlte.mk
+mv lineage_crownlte.mk aosp_crownlte.mk > /dev/null 2>&1
 sed -i 's/lineage/aosp/g' aosp_crownlte.mk
 
 cd "$BUILD_DIR/rom/hardware/samsung/"
