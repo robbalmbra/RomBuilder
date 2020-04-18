@@ -9,6 +9,12 @@ else
   BUILD_DIR="/root"
 fi
 
+# Override for kite build for ccache in standard dir
+if [[ ! -z "${BUILDKITE}" ]]; then
+  export USE_CCACHE=1
+  export CCACHE_DIR=/ccache
+fi
+
 echo "Executing build in $OUTPUT_DIR"
 
 length=${#BUILD_DIR}
