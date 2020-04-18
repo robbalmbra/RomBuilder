@@ -3,7 +3,7 @@
 # Script for local build V1.0
 
 # Install requirements for build
-CURRENT=$(pwd)
+CURRENT="$(pwd)"
 
 # Make sure user is in root to reduce permission issues
 #if [[ $EUID -ne 0 ]]; then
@@ -83,4 +83,4 @@ done
 # Run build
 cd "$CURRENT"
 echo "Running build script"
-$(pwd)/../docker/build.sh
+"$(pwd)/../docker/build.sh"
