@@ -11,7 +11,7 @@ fi
 
 # Override for kite build for ccache in standard dir
 if [[ ! -z "${BUILDKITE}" ]]; then
-  echo "$0 - Overriding ccache to /ccache"
+  echo "Overriding ccache to /ccache"
   export USE_CCACHE=1
   export CCACHE_DIR=/ccache
 fi
