@@ -93,7 +93,6 @@ if [ -n "$SKIP_PULL" ]; then
 else
 
   # Check if repo needs to be reporocessed or initialized
-  ls -al "$BUILD_DIR/rom/"
   if [ ! -d "$BUILD_DIR/rom/.repo/" ]; then
     # Pull latest sources
     echo "Pulling sources ..."
