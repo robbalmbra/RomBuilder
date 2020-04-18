@@ -1,6 +1,15 @@
 #!/bin/bash
 # Setup script for build tools for buildkite
 
+error_exit()
+{
+    ret="$?"
+    if [ "$ret" != "0" ]; then
+        echo "Error - '$1' failed with return code '$ret'"
+        exit 1
+    fi
+}
+
 # Checks
 if [ -d "/opt/build_env" ]; then
   echo "Warning - Build scripts already exist on the system"
