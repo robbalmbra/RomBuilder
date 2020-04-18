@@ -206,14 +206,22 @@ export IFS=","
 for DEVICE in $DEVICES; do
   echo "Building $BUILD_NAME for $DEVICE ..."
 
+  # Run lunch
   build_id="${BUILD_NAME}_$DEVICE-userdebug"
-  lunch $build_id
-
-  # Check for errors for lunch command
-  error_exit "lunch"
-
+  if [[ ! -z "${BUILDKITE}" ]]; then
+    lunch $build_id > /dev/null 2>&1
+  else
+    lunch $build_id
+  fi
+  error_exit "lunch" 
   mkdir -p "../logs/$DEVICE/"
-  mka bacon -j$(nproc --all) 2>&1 | tee "../logs/$DEVICE/make_${DEVICE}_android10.txt"
+  
+  # Run build
+  if [[ ! -z "${BUILDKITE}" ]]; then
+    mka bacon -j$(nproc --all) 2>&1 | tee "../logs/$DEVICE/make_${DEVICE}_android10.txt" > /dev/null 2>&1
+  else
+    mka bacon -j$(nproc --all) 2>&1 | tee "../logs/$DEVICE/make_${DEVICE}_android10.txt"
+  fi
   error_exit "mka bacon"
   grep -iE 'crash|error|fail|fatal|unknown' "../logs/$DEVICE/make_${DEVICE}_android10.txt" 2>&1 | tee "../logs/$DEVICE/make_${$DEVICE}_errors_android10.txt"
 done
