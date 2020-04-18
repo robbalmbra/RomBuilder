@@ -2,6 +2,15 @@
 
 BOOT_LOGGING=0
 
+error_exit()
+{
+    ret="$?"
+    if [ "$ret" != "0" ]; then
+        echo "Error - '$1' failed with return code '$ret'"
+        exit 1
+    fi
+}
+
 # Check for local use, not using docker
 if [ ! -z "$OUTPUT_DIR" ]; then
   BUILD_DIR="$OUTPUT_DIR"
@@ -100,6 +109,7 @@ else
     mkdir "$BUILD_DIR/rom/" > /dev/null 2>&1
     if [[ ! -z "${BUILDKITE}" ]]; then
       cd "$BUILD_DIR/rom/" && repo init -u $REPO -b $BRANCH --no-clone-bundle --depth=1 > /dev/null 2>&1
+      error_exit "repo init"
       # Check for errors
       if [ $? -ne 0 ]; then
         echo "$0 - Init failed"
@@ -107,17 +117,18 @@ else
       fi
     else
       cd "$BUILD_DIR/rom/" && repo init -u $REPO -b $BRANCH --no-clone-bundle --depth=1
+      error_exit "repo init"
     fi
     # Pulling local manifests
     echo "Pulling local manifests ..."
     if [[ ! -z "${BUILDKITE}" ]]; then
-      cd "$BUILD_DIR/rom/.repo/" && git clone https://github.com/robbalmbra/local_manifests.git -b android-10.0 --depth=1 > /dev/null 2>&1 && cd ..
-      if [ $? -ne 0 ]; then
-        echo "$0 - Cloning local manifest failed"
-        exit 1
-      fi
+      cd "$BUILD_DIR/rom/.repo/" && git clone https://github.com/robbalmbra/local_manifests.git -b android-10.0 --depth=1 > /dev/null 2>&1
+      error_exit "clone local manifest"
+      cd ..
     else
-      cd "$BUILD_DIR/rom/.repo/" && git clone https://github.com/robbalmbra/local_manifests.git -b android-10.0 --depth=1 && cd ..
+      cd "$BUILD_DIR/rom/.repo/" && git clone https://github.com/robbalmbra/local_manifests.git -b android-10.0 --depth=1
+      error_exit "clone local manifest"
+      cd ..
     fi
   else
    # Clean if reprocessing
@@ -125,6 +136,7 @@ else
    cd "$BUILD_DIR/rom/"
    make clean >/dev/null 2>&1
    make clobber >/dev/null 2>&1
+   error_exit "make clean"
   fi
 
   # Sync sources
@@ -133,12 +145,10 @@ else
   
   if [[ ! -z "${BUILDKITE}" ]]; then
     repo sync -c -j$(nproc --all) --force-sync --no-clone-bundle --no-tags --quiet > /dev/null 2>&1
-    if [ $? -ne 0 ]; then
-      echo "$0 - Sycing sources failed"
-      exit 1
-    fi
+    error_exit "repo sync"
   else
     repo sync -c -j$(nproc --all) --force-sync --no-clone-bundle --no-tags --quiet
+    error_exit "repo sync"
   fi
 
 fi
@@ -176,9 +186,11 @@ fi
 if [ -f "$BUILD_DIR/user_modifications.sh" ]; then
   echo "$0 - Using user modification script"
   $BUILD_DIR/user_modifications.sh $BUILD_DIR 2> /dev/null
+  error_exit "user modifications"
 elif [ -f "$BUILD_DIR/../docker/user_modifications.sh" ]; then
   echo "$0 - Using user modification script"
   $BUILD_DIR/../docker/user_modifications.sh $BUILD_DIR 2> /dev/null
+  error_exit "user modifications"
 fi
 
 fi
@@ -192,6 +204,7 @@ cd "$BUILD_DIR/rom/"
 . build/envsetup.sh > /dev/null 2>&1
 export USE_CCACHE=1
 ccache -M 50G > /dev/null 2>&1
+error_exit "ccache"
 
 # Iterate over builds
 export IFS=","
@@ -202,13 +215,11 @@ for DEVICE in $DEVICES; do
   lunch $build_id
 
   # Check for errors for lunch command
-  if [ $? -ne 0 ]; then
-    echo "$0 - Error, lunch command for $build_id returned non 0 error"
-    exit 1
-  fi
+  error_exit "lunch"
 
   mkdir -p "../logs/$DEVICE/"
   mka bacon -j$(nproc --all) 2>&1 | tee "../logs/$DEVICE/make_${DEVICE}_android10.txt"
+  error_exit "mka bacon"
   grep -iE 'crash|error|fail|fatal|unknown' "../logs/$DEVICE/make_${DEVICE}_android10.txt" 2>&1 | tee "../logs/$DEVICE/make_${$DEVICE}_errors_android10.txt"
 done
 echo "Builds complete"
@@ -216,12 +227,14 @@ echo "Builds complete"
 # Upload firmware to mega
 echo "Uploading to mega ..."
 mega-login $MEGA_LOGIN $MEGA_PASSWORD > /dev/null 2>&1
+error_exit "mega login"
 
 shopt -s nocaseglob
 DATE=$(date '+%d-%m-%y');
 for ROM in $BUILD_DIR/rom/out/target/product/*/*.zip; do
   echo "$0 - Uploading $(basename $ROM)"
   mega-put -c $ROM $UPLOAD_NAME/$DATE/
+  error_exit "mega put"
 done
 echo "Upload complete"
 
