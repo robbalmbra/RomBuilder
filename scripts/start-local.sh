@@ -44,7 +44,9 @@ fi
 
 # Sets vars for run script
 export OUTPUT_DIR=$(pwd)/../files/;
-mkdir "$OUTPUT_DIR" > /dev/null 2>&1
+if [[ -z "${BUILDKITE}" ]]; then
+  mkdir "$OUTPUT_DIR" > /dev/null 2>&1
+fi
 
 export BUILD_NAME=aosp
 export UPLOAD_NAME=evox
