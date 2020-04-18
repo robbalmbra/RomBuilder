@@ -1,7 +1,5 @@
 #!/bin/bash
 
-BOOT_LOGGING=0
-
 error_exit()
 {
     ret="$?"
