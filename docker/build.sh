@@ -9,7 +9,12 @@ else
   BUILD_DIR="/root"
 fi
 
-echo "Executing build in $OUTPUT_DIR"
+# Override for kite build for ccache in standard dir
+if [[ ! -z "${BUILDKITE}" ]]; then
+  echo "Overriding ccache to /ccache"
+  export USE_CCACHE=1
+  export CCACHE_DIR=/ccache
+fi
 
 length=${#BUILD_DIR}
 last_char=${BUILD_DIR:length-1:1}
@@ -84,11 +89,27 @@ else
     # Pull latest sources
     echo "Pulling sources ..."
     mkdir "$BUILD_DIR/rom/" > /dev/null 2>&1
-    cd "$BUILD_DIR/rom/" && repo init -u $REPO -b $BRANCH --no-clone-bundle --depth=1
-
+    if [[ ! -z "${BUILDKITE}" ]]; then
+      cd "$BUILD_DIR/rom/" && repo init -u $REPO -b $BRANCH --no-clone-bundle --depth=1 > /dev/null 2>&1
+      # Check for errors
+      if [ $? -ne 0 ]; then
+        echo "$0 - Init failed"
+        exit 1
+      fi
+    else
+      cd "$BUILD_DIR/rom/" && repo init -u $REPO -b $BRANCH --no-clone-bundle --depth=1
+    fi
     # Pulling local manifests
     echo "Pulling local manifests ..."
-    cd "$BUILD_DIR/rom/.repo/" && git clone https://github.com/robbalmbra/local_manifests.git -b android-10.0 --depth=1 && cd ..
+    if [[ ! -z "${BUILDKITE}" ]]; then
+      cd "$BUILD_DIR/rom/.repo/" && git clone https://github.com/robbalmbra/local_manifests.git -b android-10.0 --depth=1 > /dev/null 2>&1 && cd ..
+      if [ $? -ne 0 ]; then
+        echo "$0 - Cloning local manifest failed"
+        exit 1
+      fi
+    else
+      cd "$BUILD_DIR/rom/.repo/" && git clone https://github.com/robbalmbra/local_manifests.git -b android-10.0 --depth=1 && cd ..
+    fi
   else
    # Clean if reprocessing
    make clean >/dev/null 2>&1
@@ -98,7 +119,16 @@ else
   # Sync sources
   cd "$BUILD_DIR/rom/"
   echo "Syncing sources ..."
-  repo sync -c -j$(nproc --all) --force-sync --no-clone-bundle --no-tags --quiet
+  
+  if [[ ! -z "${BUILDKITE}" ]]; then
+    repo sync -c -j$(nproc --all) --force-sync --no-clone-bundle --no-tags --quiet > /dev/null 2>&1
+    if [ $? -ne 0 ]; then
+      echo "$0 - Sycing sources failed"
+      exit 1
+    fi
+  else
+    repo sync -c -j$(nproc --all) --force-sync --no-clone-bundle --no-tags --quiet
+  fi
 
 fi
 
