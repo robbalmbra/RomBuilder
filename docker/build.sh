@@ -110,11 +110,6 @@ else
     if [[ ! -z "${BUILDKITE}" ]]; then
       cd "$BUILD_DIR/rom/" && repo init -u $REPO -b $BRANCH --no-clone-bundle --depth=1 > /dev/null 2>&1
       error_exit "repo init"
-      # Check for errors
-      if [ $? -ne 0 ]; then
-        echo "$0 - Init failed"
-        exit 1
-      fi
     else
       cd "$BUILD_DIR/rom/" && repo init -u $REPO -b $BRANCH --no-clone-bundle --depth=1
       error_exit "repo init"
@@ -179,8 +174,6 @@ on property:sys.boot_completed=1
     stop logger
 EOL
 fi
-
-
 
 # Execute specific user modifications and environment specific options if avaiable
 if [ -f "$BUILD_DIR/user_modifications.sh" ]; then
