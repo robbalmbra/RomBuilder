@@ -6,10 +6,10 @@
 CURRENT=$(pwd)
 
 # Make sure user is in root to reduce permission issues
-if [[ $EUID -ne 0 ]]; then
-  echo "$0 - Error, please elevate permissions to root" 
-  exit 1
-fi
+#if [[ $EUID -ne 0 ]]; then
+#  echo "$0 - Error, please elevate permissions to root" 
+#  exit 1
+#fi
 
 # Install build tools
 if [ -f "/etc/lsb-release" ] && [ ! -d "/opt/build_env" ]; then
