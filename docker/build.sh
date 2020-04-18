@@ -191,7 +191,7 @@ echo "Environment setup ..."
 cd "$BUILD_DIR/rom/"
 . build/envsetup.sh > /dev/null 2>&1
 export USE_CCACHE=1
-ccache -M 70G > /dev/null 2>&1
+ccache -M 50G > /dev/null 2>&1
 
 # Iterate over builds
 export IFS=","
