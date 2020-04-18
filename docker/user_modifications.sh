@@ -8,10 +8,10 @@ BUILD_DIR=$1;
 sed -i 's#<integer name="config_deviceHardwareKeys">.*#<integer name="config_deviceHardwareKeys">72</integer>#' "$BUILD_DIR/rom/frameworks/base/core/res/res/values/evolution_config.xml"
 
 # config_deviceHardwareWakeKeys 73
-sed -i 's#<integer name="config_deviceHardwareWakeKeys">.*#<integer name="config_deviceHardwareWakeKeys">73</integer>#' evolution_config.xml "$BUILD_DIR/rom/frameworks/base/core/res/res/values/evolution_config.xml"
+sed -i 's#<integer name="config_deviceHardwareWakeKeys">.*#<integer name="config_deviceHardwareWakeKeys">73</integer>#' "$BUILD_DIR/rom/frameworks/base/core/res/res/values/evolution_config.xml"
 
 # config_haveHigherAspectRatioScreen true
-sed -i 's#<bool name="config_haveHigherAspectRatioScreen">.*#<bool name="config_haveHigherAspectRatioScreen">true</bool>#' evolution_config.xml "$BUILD_DIR/rom/frameworks/base/core/res/res/values/evolution_config.xml"
+sed -i 's#<bool name="config_haveHigherAspectRatioScreen">.*#<bool name="config_haveHigherAspectRatioScreen">true</bool>#' "$BUILD_DIR/rom/frameworks/base/core/res/res/values/evolution_config.xml"
 
 # Other
 
