@@ -84,8 +84,11 @@ else
     # Pull latest sources
     echo "Pulling sources ..."
     mkdir "$BUILD_DIR/rom/" > /dev/null 2>&1
-    cd "$BUILD_DIR/rom/" && repo init -u $REPO -b $BRANCH --no-clone-bundle --depth=1
-
+    if [[ -z "${BUILDKITE}" ]]; then
+      cd "$BUILD_DIR/rom/" && repo init -u $REPO -b $BRANCH --no-clone-bundle --depth=1 1> /dev/null
+    else
+      cd "$BUILD_DIR/rom/" && repo init -u $REPO -b $BRANCH --no-clone-bundle --depth=1
+    fi
     # Pulling local manifests
     echo "Pulling local manifests ..."
     cd "$BUILD_DIR/rom/.repo/" && git clone https://github.com/robbalmbra/local_manifests.git -b android-10.0 --depth=1 && cd ..
