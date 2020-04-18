@@ -2,6 +2,15 @@
 
 # Script for local build V1.0
 
+error_exit()
+{
+    ret="$?"
+    if [ "$ret" != "0" ]; then
+        echo "Error - '$1' failed with return code '$ret'"
+        exit 1
+    fi
+}
+
 # Install requirements for build
 CURRENT="$(pwd)"
 
@@ -89,3 +98,4 @@ done
 cd "$CURRENT"
 echo "Running build script"
 "$(pwd)/../docker/build.sh"
+error_exit "build script"
