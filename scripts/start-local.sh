@@ -4,16 +4,15 @@
 
 # Install requirements for build
 
+# Make sure user is in root to reduce permission issues
+if [[ $EUID -ne 0 ]]; then
+  echo "$0 - Error, please elevate permissions to root" 
+  exit 1
+fi
+
 # Install build tools
 if [ -f "/etc/lsb-release" ] && [ ! -d "/opt/build_env" ]; then
-  # Linux install
-  
-  # Make sure user is in root to reduce permission issues
-  if [[ $EUID -ne 0 ]]; then
-    echo "$0 - Error, please elevate permissions to root" 
-    exit 1
-  fi
-  
+  # Linux install  
   git clone https://github.com/akhilnarang/scripts.git /opt/build_env --depth=1
   sudo chmod +x /opt/build_env/setup/android_build_env.sh
   . /opt/build_env/setup/android_build_env.sh
