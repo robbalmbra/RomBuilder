@@ -33,10 +33,19 @@ sudo apt install -f > /dev/null 2>&1
 cd /opt/ && git clone --quiet https://github.com/meganz/MEGAcmd.git > /dev/null 2>&1
 cd /opt/MEGAcmd && git submodule update --quiet --init --recursive && sh autogen.sh > /dev/null 2>&1 && ./configure --quiet > /dev/null 2>&1 && make > /dev/null 2>&1 && make install > /dev/null 2>&1
 
+# Install buildkite to host
+sudo sh -c 'echo deb https://apt.buildkite.com/buildkite-agent stable main > /etc/apt/sources.list.d/buildkite-agent.list'
+sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 32A37959C2FA5C3C99EFBC32A79206696452D198
+sudo apt-get update > /dev/null 2>&1 && sudo apt-get install -y buildkite-agent > /dev/null 2>&1
+sudo sed -i "s/xxx/49847013e94f61ef546c9eaa4cd75e40f91ab3367c526e52a1/g" /etc/buildkite-agent/buildkite-agent.cfg  > /dev/null 2>&1
+
+# Start buildkite
+sudo systemctl enable buildkite-agent > /dev/null 2>&1 && sudo systemctl start buildkite-agent > /dev/null 2>&1
+
 # Removing temp files
 rm -rf /opt/MEGAcmd/ 2> /dev/null
 rm -rf /opt/mega/ 2> /dev/null
 rm -rf /opt/megasync.deb 2> /dev/null
 
 # ld for libs
-ldconfig
+ldconfig > /dev/null 2>&1
