@@ -39,7 +39,6 @@ apt-get -y install make python3 git screen wget openjdk-8-jdk python-lunch lsb-c
 autoconf libtool g++ libcrypto++-dev libz-dev libsqlite3-dev libssl-dev libcurl4-gnutls-dev libreadline-dev \
 libpcre++-dev libsodium-dev libc-ares-dev libfreeimage-dev libavcodec-dev libavutil-dev libavformat-dev \
 libswscale-dev libmediainfo-dev libzen-dev libuv1-dev libxkbcommon-dev libxkbcommon-x11-0 zram-config > /dev/null 2>&1
-error_exit "apt install"
 
 # Install mega
 echo "Installing mega command line tools"
