@@ -9,6 +9,12 @@ else
   BUILD_DIR="/root"
 fi
 
+# Persist rom through builds with buildkite
+if [[ ! -z "${BUILDKITE}" ]]; then
+  mkdir /tmp/build > /dev/null 2>&1
+  BUILD_DIR="/tmp/build"
+fi
+
 # Override for kite build for ccache in standard dir
 if [[ ! -z "${BUILDKITE}" ]]; then
   echo "Overriding ccache to /ccache"
