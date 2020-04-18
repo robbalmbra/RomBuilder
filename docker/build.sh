@@ -16,8 +16,6 @@ if [[ ! -z "${BUILDKITE}" ]]; then
   export CCACHE_DIR=/ccache
 fi
 
-echo "Executing build in $OUTPUT_DIR"
-
 length=${#BUILD_DIR}
 last_char=${BUILD_DIR:length-1:1}
 [[ $last_char == "/" ]] && BUILD_DIR=${BUILD_DIR:0:length-1}; :
