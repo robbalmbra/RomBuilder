@@ -153,11 +153,13 @@ else
 
 fi
 
-if [ ! -f "$BUILD_DIR/rom/.lm" ]; then
-
-  echo "Local modifications ..."
+echo "Local modifications ..."
 
 if [ $BOOT_LOGGING -eq 1 ]; then
+
+  isLoggingInFile=$(cat "$BUILD_DIR/rom/device/samsung/universal9810-common/rootdir/etc/init.samsung.rc" | grep -c "/system/bin/logcat")
+  if [ $isLoggingInFile -eq 0 ]; then
+
   # Enable logging via logcat
 cat >> "$BUILD_DIR/rom/device/samsung/universal9810-common/rootdir/etc/init.samsung.rc" << EOL
 
@@ -178,6 +180,7 @@ on property:sys.boot_completed=1
     # Stop the logger service
     stop logger
 EOL
+  fi
 fi
 
 # Execute specific user modifications and environment specific options if avaiable
@@ -190,11 +193,6 @@ elif [ -f "$BUILD_DIR/../docker/user_modifications.sh" ]; then
   $BUILD_DIR/../docker/user_modifications.sh $BUILD_DIR 1> /dev/null
   error_exit "user modifications"
 fi
-
-fi
-
-# Mark local modifications done
-touch "$BUILD_DIR/rom/.lm"
 
 # Build
 echo "Environment setup ..."
