@@ -4,6 +4,12 @@
 
 SKIP_PULL=0
 
+# Check for docker
+if [ ! -x "$(command -v docker)" ]; then
+    echo "$0 - Error, install docker"
+    exit 1
+else
+
 set -a
 . ../docker/.env
 set +a
