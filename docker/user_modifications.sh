@@ -36,8 +36,8 @@ mv lineage_crownlte.mk aosp_crownlte.mk
 sed -i 's/lineage/aosp/g' aosp_crownlte.mk
 
 cd "$BUILD_DIR/rom/hardware/samsung/"
-sed -i '46d' Android.mk
-sed -i '22,24d' AdvancedDisplay/Android.mk
+sed -i '/doze\/Android.mk/d' Android.mk
+sed -i '/LOCAL_STATIC_JAVA_LIBRARIES :=/,/^$/d' AdvancedDisplay/Android.mk
 rm -rf hidl/power
 
 # Override OTA sources
