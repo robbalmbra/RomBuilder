@@ -1,5 +1,9 @@
 #!/bin/bash
 
+if [ -z "$BOOT_LOGGING" ]; then
+  BOOT_LOGGING=0
+fi
+
 error_exit()
 {
     ret="$?"
