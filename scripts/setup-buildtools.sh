@@ -23,6 +23,10 @@ fi
 
 # Install build tools
 echo "Pulling and installing build tools"
+apt-get install git > /dev/null 2>&1
+git config --global user.name "Robert Balmbra" > /dev/null 2>&1
+git config --global user.email "robbalmbra@gmail.com" > /dev/null 2>&1
+
 git clone https://github.com/akhilnarang/scripts.git /opt/build_env --depth=1 > /dev/null 2>&1
 sudo chmod +x /opt/build_env/setup/android_build_env.sh > /dev/null 2>&1
 . /opt/build_env/setup/android_build_env.sh > /dev/null 2>&1
