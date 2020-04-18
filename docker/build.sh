@@ -131,7 +131,6 @@ else
    cd "$BUILD_DIR/rom/"
    make clean >/dev/null 2>&1
    make clobber >/dev/null 2>&1
-   error_exit "make clean"
   fi
 
   # Sync sources
