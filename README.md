@@ -8,4 +8,10 @@
 
 [start-local.sh](scripts/start-local.sh) - Start build within a local environment using a specified config
 
+## Docker
+
+Files needed to deploy a build within a docker environment with the nessassary tools.
+
 ## Notes
+
+For macOS systems, install [MEGAcmd](https://github.com/meganz/MEGAcmd) and mega macos binaries to allow the upload process to function.
