@@ -86,12 +86,25 @@ else
     mkdir "$BUILD_DIR/rom/" > /dev/null 2>&1
     if [[ ! -z "${BUILDKITE}" ]]; then
       cd "$BUILD_DIR/rom/" && repo init -u $REPO -b $BRANCH --no-clone-bundle --depth=1 1> /dev/null
+      # Check for errors
+      if [ $? -ne 0 ]; then
+        echo "$0 - Init failed"
+        exit 1
+      fi
     else
       cd "$BUILD_DIR/rom/" && repo init -u $REPO -b $BRANCH --no-clone-bundle --depth=1
     fi
     # Pulling local manifests
     echo "Pulling local manifests ..."
-    cd "$BUILD_DIR/rom/.repo/" && git clone https://github.com/robbalmbra/local_manifests.git -b android-10.0 --depth=1 && cd ..
+    if [[ ! -z "${BUILDKITE}" ]]; then
+      cd "$BUILD_DIR/rom/.repo/" && git clone https://github.com/robbalmbra/local_manifests.git -b android-10.0 --depth=1 1> /dev/null && cd ..
+      if [ $? -ne 0 ]; then
+        echo "$0 - Pull failed"
+        exit 1
+      fi
+    else
+      cd "$BUILD_DIR/rom/.repo/" && git clone https://github.com/robbalmbra/local_manifests.git -b android-10.0 --depth=1 && cd ..
+    fi
   else
    # Clean if reprocessing
    make clean >/dev/null 2>&1
