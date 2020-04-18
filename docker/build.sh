@@ -15,6 +15,8 @@ if [[ ! -z "${BUILDKITE}" ]]; then
   BUILD_DIR="/tmp/build"
 fi
 
+echo "Setting BUILD_DIR to '$BUILD_DIR'"
+
 # Override for kite build for ccache in standard dir
 if [[ ! -z "${BUILDKITE}" ]]; then
   echo "Overriding ccache to /ccache"
