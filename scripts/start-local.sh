@@ -72,7 +72,7 @@ if [[ -z "${BUILDKITE}" ]]; then
   export LOCAL_BRANCH=android-10.0
   
   # User modifications
-  export USER_MODIFICATIONS=
+  export USER_MODIFICATIONS=""
 fi
 
 # Check vars
