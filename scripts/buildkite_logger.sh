@@ -24,7 +24,7 @@ do
 
   # Print line
   last_line="$line"
-  echo $line
+  echo "$line"
 
   # Wait
   sleep $SLEEP_WAIT
