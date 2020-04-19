@@ -70,6 +70,9 @@ if [[ -z "${BUILDKITE}" ]]; then
   export BOOT_LOGGING=1
   export LOCAL_REPO=https://github.com/robbalmbra/local_manifests.git
   export LOCAL_BRANCH=android-10.0
+  
+  # User modifications
+  export USER_MODIFICATIONS=
 fi
 
 # Check vars
@@ -96,10 +99,24 @@ do
   fi
 done
 
+if [[ ! -z "$USER_MODIFICATIONS" ]]; then
+  # Check and get user modifications either as a url or env string
+  regex='(https?|ftp|file)://[-A-Za-z0-9\+&@#/%?=~_|!:,.;]*[-A-Za-z0-9\+&@#/%=~_|]'
+  if [[ $USER_MODIFICATIONS =~ $regex ]]
+  then 
+    # Get url and save to local file
+    wget $USER_MODIFICATIONS -O "$CURRENT/../docker/user_modifications.sh"
+  else
+    echo $USER_MODIFICATIONS > "$CURRENT/../docker/user_modifications.sh"
+  fi
+fi
+
 # Run build
 cd "$CURRENT"
 echo "Running build script"
-export USER_MODS="$(pwd)/../docker/user_modifications.sh"
-export BUILDKITE_LOGGER="$(pwd)/buildkite_logger.sh"
+chmod +x "$CURRENT/../docker/user_modifications.sh"
+chmod +x "$CURRENT/buildkite_logger.sh"
+export USER_MODS="$CURRENT/../docker/user_modifications.sh"
+export BUILDKITE_LOGGER="$CURRENT/buildkite_logger.sh"
 "$(pwd)/../docker/build.sh"
 error_exit "build script"
