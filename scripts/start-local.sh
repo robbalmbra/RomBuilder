@@ -95,7 +95,7 @@ for variable in "${variables[@]}"
 do
   if [[ -z ${!variable+x} ]]; then
     echo "$0 - Error, $variable isn't set.";
-    break
+    exit 1
   fi
 done
 
