@@ -27,6 +27,7 @@ if [[ ! -z "${BUILDKITE}" ]]; then
 
   # Copy modifications to build dir
   cp "$USER_MODS" "$BUILD_DIR/user_modifications.sh" > /dev/null 2>&1
+  cp "$BUILDKITE_LOGGER" "$BUILD_DIR/buildkite_logger.sh" > /dev/null 2>&1
 
   echo "Setting CCACHE to '/tmp/build/ccache'"
   export USE_CCACHE=1
@@ -226,12 +227,23 @@ for DEVICE in $DEVICES; do
   error_exit "lunch"
   mkdir -p "../logs/$DEVICE/"
 
+  # Flush log
+  echo "" > ../logs/$DEVICE/make_${DEVICE}_android10.txt
+  
+  # Log to buildkite
+  if [[ ! -z "${BUILDKITE}" ]]; then
+    #todo
+    #BUILD_COMPLETE
+  fi
+
   # Run build
   if [[ ! -z "${BUILDKITE}" ]]; then
     mka bacon -j$(nproc --all) 2>&1 | tee "../logs/$DEVICE/make_${DEVICE}_android10.txt" > /dev/null 2>&1
   else
     mka bacon -j$(nproc --all) 2>&1 | tee "../logs/$DEVICE/make_${DEVICE}_android10.txt"
   fi
+  
+  echo "BUILD_COMPLETE" > ../logs/$DEVICE/make_${DEVICE}_android10.txt
 
   # Upload log to buildkite
   if [[ ! -z "${BUILDKITE}" ]]; then
