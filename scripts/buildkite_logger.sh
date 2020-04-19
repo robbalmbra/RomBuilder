@@ -10,7 +10,7 @@ while [ 1 ]
 do
   # Retrieve last line
   line=$(tail -n 1 "$LOG_FILE")
-
+  
   # Exit if build is marked as complete
   if [[ $line == "BUILD_COMPLETE" ]]; then
     break
@@ -21,6 +21,11 @@ do
     sleep $SLEEP_WAIT
     continue
   fi
+
+  # Get and set percentage
+  percent="${line:1:3}"
+
+  echo $percent
 
   # Print line
   last_line="$line"
