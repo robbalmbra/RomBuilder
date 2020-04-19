@@ -113,7 +113,7 @@ if [[ ! -z "$USER_MODIFICATIONS" ]]; then
     echo "Downloading and saving USER_MODIFICATIONS to '$CURRENT/user_modifications.sh'"
     wget $USER_MODIFICATIONS -O "$CURRENT/user_modifications.sh"
   else
-    echo "Error - USER_MODIFICATIONS isn't a valid url."
+    echo "Error - '$USER_MODIFICATIONS' isn't a valid url."
     exit 1
   fi
   
