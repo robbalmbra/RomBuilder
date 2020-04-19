@@ -18,6 +18,7 @@ do
 
   # Skip if line is the same
   if [ "$line" -eq "$last_line" ]; then
+    sleep $SLEEP_WAIT
     continue
   fi
 
