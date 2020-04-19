@@ -99,8 +99,9 @@ do
   fi
 done
 
+# Check and get user modifications either as a url or env string
+cd "$CURRENT"
 if [[ ! -z "$USER_MODIFICATIONS" ]]; then
-  # Check and get user modifications either as a url or env string
   regex='(https?|ftp|file)://[-A-Za-z0-9\+&@#/%?=~_|!:,.;]*[-A-Za-z0-9\+&@#/%=~_|]'
   if [[ $USER_MODIFICATIONS =~ $regex ]]
   then 
@@ -112,7 +113,6 @@ if [[ ! -z "$USER_MODIFICATIONS" ]]; then
 fi
 
 # Run build
-cd "$CURRENT"
 echo "Running build script"
 chmod +x "$CURRENT/../docker/user_modifications.sh"
 chmod +x "$CURRENT/buildkite_logger.sh"
