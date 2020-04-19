@@ -113,18 +113,14 @@ if [[ ! -z "$USER_MODIFICATIONS" ]]; then
     echo "Downloading and saving USER_MODIFICATIONS to '$CURRENT/user_modifications.sh'"
     wget $USER_MODIFICATIONS -O "$CURRENT/user_modifications.sh"
   else
-    echo "Saving USER_MODIFICATIONS to '$CURRENT/user_modifications.sh'"
-    echo $USER_MODIFICATIONS > "$CURRENT/user_modifications.sh"
+    echo "Error - USER_MODIFICATIONS isn't a valid url."
+    exit 1
   fi
   
   chmod +x "$CURRENT/user_modifications.sh"
   chmod +x "$CURRENT/buildkite_logger.sh"
   export USER_MODS="$CURRENT/user_modifications.sh"
 fi
-
-cat "$CURRENT/user_modifications.sh"
-
-exit 1
 
 # Run build
 echo "Running build script"
