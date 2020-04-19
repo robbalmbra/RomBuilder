@@ -106,8 +106,10 @@ if [[ ! -z "$USER_MODIFICATIONS" ]]; then
   if [[ $USER_MODIFICATIONS =~ $regex ]]
   then 
     # Get url and save to local file
+    echo "Downloading and saving USER_MODIFICATIONS to '$CURRENT/user_modifications.sh'"
     wget $USER_MODIFICATIONS -O "$CURRENT/user_modifications.sh"
   else
+    echo "Saving USER_MODIFICATIONS to '$CURRENT/user_modifications.sh'"
     echo $USER_MODIFICATIONS > "$CURRENT/user_modifications.sh"
   fi
 fi
