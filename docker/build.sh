@@ -24,13 +24,20 @@ fi
 if [[ ! -z "${BUILDKITE}" ]]; then
   mkdir /tmp/build > /dev/null 2>&1
   BUILD_DIR="/tmp/build"
-  
+
   # Copy modifications to build dir
   cp "$USER_MODS" "$BUILD_DIR/user_modifications.sh" > /dev/null 2>&1
-  
+
   echo "Setting CCACHE to '/tmp/build/ccache'"
   export USE_CCACHE=1
   export CCACHE_DIR=/tmp/build/ccache
+
+  # Set logging rate if hasnt been defined within BUILDKITE
+  if [[ -z "${LOGGING_RATE}" ]]; then
+    # Default to 10 seconds if hasnt been set
+    export LOGGING_RATE=10
+  fi
+  echo "Setting LOGGING_RATE to '$LOGGING_RATE'"
 fi
 
 if [[ ! -z "${CCACHE_DIR}" ]]; then
@@ -144,7 +151,7 @@ else
   # Sync sources
   cd "$BUILD_DIR/rom/"
   echo "Syncing sources ..."
-  
+
   if [[ ! -z "${BUILDKITE}" ]]; then
     repo sync -c -j$(nproc --all) --force-sync --no-clone-bundle --no-tags --quiet > /dev/null 2>&1
     error_exit "repo sync"
@@ -216,35 +223,35 @@ for DEVICE in $DEVICES; do
   else
     lunch $build_id
   fi
-  error_exit "lunch" 
+  error_exit "lunch"
   mkdir -p "../logs/$DEVICE/"
-  
+
   # Run build
   if [[ ! -z "${BUILDKITE}" ]]; then
-    mka bacon -j$(nproc --all) 2>&1 | tee "../logs/$DEVICE/make_${DEVICE}_android10.txt" > /dev/null 2>&1
+    mka bacon -j$(nproc --all) 2>&1 | tee "../logs/$DEVICE/make_${DEVICE}_android10.txt" | tail -f -s $LOGGING_RATE
   else
     mka bacon -j$(nproc --all) 2>&1 | tee "../logs/$DEVICE/make_${DEVICE}_android10.txt"
   fi
-   
+
   ret="$?"
   if [ "$ret" != "0" ]; then
     echo "Error - '$1' failed with return code '$ret'"
-    
+
     # Upload logs to buildkite
     if [[ ! -z "${BUILDKITE}" ]]; then
       buildkite-agent artifact upload "../logs/$DEVICE/make_${DEVICE}_android10.txt" > /dev/null 2>&1
     fi
-  
+
     # Extract any errors from log if exist
     grep -iE 'crash|error|fail|fatal|unknown' "../logs/$DEVICE/make_${DEVICE}_android10.txt" 2>&1 | tee "../logs/$DEVICE/make_${DEVICE}_errors_android10.txt"
-  
+
     # Log errors if exist
     if [[ ! -z "${BUILDKITE}" ]]; then
       if [ -f "../logs/$DEVICE/make_${DEVICE}_errors_android10.txt" ]; then
         buildkite-agent artifact upload "../logs/$DEVICE/make_${DEVICE}_errors_android10.txt" > /dev/null 2>&1
       fi
     fi
-    
+
     exit 1
     break
   fi
