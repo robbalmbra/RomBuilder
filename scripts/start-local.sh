@@ -95,9 +95,14 @@ for variable in "${variables[@]}"
 do
   if [[ -z ${!variable+x} ]]; then
     echo "$0 - Error, $variable isn't set.";
-    exit 1
+    quit=1
+    break
   fi
 done
+
+if [ $quit -ne 0 ]; then
+  exit 1
+fi
 
 # Check and get user modifications either as a url or env string
 cd "$CURRENT"
