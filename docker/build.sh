@@ -228,19 +228,20 @@ for DEVICE in $DEVICES; do
 
   # Run build
   if [[ ! -z "${BUILDKITE}" ]]; then
-    mka bacon -j$(nproc --all) 2>&1 | tee "../logs/$DEVICE/make_${DEVICE}_android10.txt" | tail -f -s $LOGGING_RATE
+    mka bacon -j$(nproc --all) 2>&1 | tee "../logs/$DEVICE/make_${DEVICE}_android10.txt" > /dev/null 2>&1
   else
     mka bacon -j$(nproc --all) 2>&1 | tee "../logs/$DEVICE/make_${DEVICE}_android10.txt"
   fi
 
+  # Upload log to buildkite
+  if [[ ! -z "${BUILDKITE}" ]]; then
+    buildkite-agent artifact upload "../logs/$DEVICE/make_${DEVICE}_android10.txt" > /dev/null 2>&1
+  fi
+
+  # Upload error log to buildkite if any errors occur
   ret="$?"
   if [ "$ret" != "0" ]; then
     echo "Error - '$1' failed with return code '$ret'"
-
-    # Upload logs to buildkite
-    if [[ ! -z "${BUILDKITE}" ]]; then
-      buildkite-agent artifact upload "../logs/$DEVICE/make_${DEVICE}_android10.txt" > /dev/null 2>&1
-    fi
 
     # Extract any errors from log if exist
     grep -iE 'crash|error|fail|fatal|unknown' "../logs/$DEVICE/make_${DEVICE}_android10.txt" 2>&1 | tee "../logs/$DEVICE/make_${DEVICE}_errors_android10.txt"
