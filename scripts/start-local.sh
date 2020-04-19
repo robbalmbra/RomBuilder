@@ -52,21 +52,25 @@ if [[ -z "${BUILDKITE}" ]]; then
   mkdir "$OUTPUT_DIR" > /dev/null 2>&1
 fi
 
-export BUILD_NAME=aosp
-export UPLOAD_NAME=evox
-export MEGA_USERNAME=robbalmbra@gmail.com
-export MEGA_PASSWORD=Er1hcK0wN$PIhN4mT$K#U@5ZusH0zdcT
-export DEVICES=crownlte,starlte,star2lte
-export REPO=https://github.com/Evolution-X/manifest
-export USE_CCACHE=1
-export CUSTOM_BUILD_TYPE=UNOFFICIAL
-export TARGET_BOOT_ANIMATION_RES=1080
-export TARGET_GAPPS_ARCH=arm64
-export TARGET_SUPPORTS_GOOGLE_RECORDER=true
-export DEVICE_MAINTAINERS="Tiny Rob, Blast"
-export CCACHE_DIR=$OUTPUT_DIR/ccache
-export BRANCH=ten
-export BOOT_LOGGING=1
+if [[ -z "${BUILDKITE}" ]]; then
+  export BUILD_NAME=aosp
+  export UPLOAD_NAME=evox
+  export MEGA_USERNAME=robbalmbra@gmail.com
+  export MEGA_PASSWORD=Er1hcK0wN$PIhN4mT$K#U@5ZusH0zdcT
+  export DEVICES=crownlte,starlte,star2lte
+  export REPO=https://github.com/Evolution-X/manifest
+  export USE_CCACHE=1
+  export CUSTOM_BUILD_TYPE=UNOFFICIAL
+  export TARGET_BOOT_ANIMATION_RES=1080
+  export TARGET_GAPPS_ARCH=arm64
+  export TARGET_SUPPORTS_GOOGLE_RECORDER=true
+  export DEVICE_MAINTAINERS="Tiny Rob, Blast"
+  export CCACHE_DIR=$OUTPUT_DIR/ccache
+  export BRANCH=ten
+  export BOOT_LOGGING=1
+  export LOCAL_REPO=https://github.com/robbalmbra/local_manifests.git
+  export LOCAL_BRANCH=android-10.0
+fi
 
 # Check vars
 variables=(
@@ -78,6 +82,8 @@ variables=(
   DEVICES
   REPO
   BRANCH
+  LOCAL_REPO
+  LOCAL_BRANCH
 )
 
 # Check if required variables are set
