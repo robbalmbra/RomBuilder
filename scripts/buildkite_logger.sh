@@ -25,11 +25,10 @@ do
   # Get and set percentage
   percent="${line:1:3}"
 
-  echo $percent
-
-  # Print line
-  last_line="$line"
-  echo "$line"
+  if [ ! -z "${percent##*[!0-9]*}" ]; then
+    last_line="$line"
+    echo "$line"
+  fi
 
   # Wait
   sleep $SLEEP_WAIT
