@@ -100,7 +100,7 @@ do
   fi
 done
 
-if [ $quit -ne 0 ]; then
+if [ "$quit" -ne 0 ]; then
   exit 1
 fi
 
