@@ -118,6 +118,10 @@ if [[ ! -z "$USER_MODIFICATIONS" ]]; then
   fi
 fi
 
+cat "$CURRENT/user_modifications.sh"
+
+exit 1
+
 # Run build
 echo "Running build script"
 chmod +x "$CURRENT/user_modifications.sh"
