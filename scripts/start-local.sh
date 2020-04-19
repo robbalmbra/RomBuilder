@@ -106,17 +106,17 @@ if [[ ! -z "$USER_MODIFICATIONS" ]]; then
   if [[ $USER_MODIFICATIONS =~ $regex ]]
   then 
     # Get url and save to local file
-    wget $USER_MODIFICATIONS -O "$CURRENT/../docker/user_modifications.sh"
+    wget $USER_MODIFICATIONS -O "$CURRENT/user_modifications.sh"
   else
-    echo $USER_MODIFICATIONS > "$CURRENT/../docker/user_modifications.sh"
+    echo $USER_MODIFICATIONS > "$CURRENT/user_modifications.sh"
   fi
 fi
 
 # Run build
 echo "Running build script"
-chmod +x "$CURRENT/../docker/user_modifications.sh"
+chmod +x "$CURRENT/user_modifications.sh"
 chmod +x "$CURRENT/buildkite_logger.sh"
-export USER_MODS="$CURRENT/../docker/user_modifications.sh"
+export USER_MODS="$CURRENT/user_modifications.sh"
 export BUILDKITE_LOGGER="$CURRENT/buildkite_logger.sh"
 "$(pwd)/../docker/build.sh"
 error_exit "build script"
