@@ -65,7 +65,6 @@ if [[ -z "${BUILDKITE}" ]]; then
   export TARGET_GAPPS_ARCH=arm64
   export TARGET_SUPPORTS_GOOGLE_RECORDER=true
   export DEVICE_MAINTAINERS="Tiny Rob, Blast"
-  export CCACHE_DIR=$OUTPUT_DIR/ccache
   export BRANCH=ten
   export BOOT_LOGGING=1
   export LOCAL_REPO=https://github.com/robbalmbra/local_manifests.git
@@ -77,7 +76,6 @@ fi
 
 # Check vars
 variables=(
-  CCACHE_DIR
   BUILD_NAME
   UPLOAD_NAME
   MEGA_USERNAME
