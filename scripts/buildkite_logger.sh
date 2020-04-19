@@ -9,7 +9,7 @@ last_line=""
 while [ 1 ]
 do
   # Retrieve last line
-  line=$(tail -n 1 $LOG_FILE)
+  line=$(tail -n 1 "$LOG_FILE")
 
   # Exit if build is marked as complete
   if [ "$line" -eq "BUILD_COMPLETE" ]; then
