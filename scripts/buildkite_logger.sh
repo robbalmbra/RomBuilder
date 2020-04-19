@@ -25,7 +25,7 @@ do
   # Get and set percentage
   percent="${line:1:3}"
 
-  if [ ! -z "${percent##*[!0-9]*}" ]; then
+  if [ -n "$percent" ]; then
     last_line="$line"
     echo "$line"
   fi
