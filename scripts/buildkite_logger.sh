@@ -12,12 +12,12 @@ do
   line=$(tail -n 1 "$LOG_FILE")
 
   # Exit if build is marked as complete
-  if [ [ "$line" == "BUILD_COMPLETE" ] ]; then
+  if [[ $line == "BUILD_COMPLETE" ]]; then
     break
   fi
 
   # Skip if line is the same
-  if [ "$line" -eq "$last_line" ]; then
+  if [[ "$line" == "$last_line" ]]; then
     sleep $SLEEP_WAIT
     continue
   fi
