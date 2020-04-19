@@ -122,7 +122,7 @@ if [[ ! -z "$USER_MODIFICATIONS" ]]; then
   export USER_MODS="$CURRENT/user_modifications.sh"
 fi
 
-ls -al "$CURRENT/"
+cat "$CURRENT/user_modifications.sh"
 
 exit 1
 
