@@ -31,10 +31,11 @@ if [[ ! -z "${BUILDKITE}" ]]; then
   mkdir /tmp/build > /dev/null 2>&1
   BUILD_DIR="/tmp/build"
 
-  # Copy modifications to build dir
-  cp "$USER_MODS" "$BUILD_DIR/user_modifications.sh" > /dev/null 2>&1
+  # Copy modifications and logger to build dir if exists
+  if [ ! -z "$USER_MODS" ]; then
+    cp "$USER_MODS" "$BUILD_DIR/user_modifications.sh" > /dev/null 2>&1
+  fi      
   cp "$BUILDKITE_LOGGER" "$BUILD_DIR/buildkite_logger.sh" > /dev/null 2>&1
-  chmod 700 "$BUILD_DIR/buildkite_logger.sh"
 
   echo "Setting CCACHE to '/tmp/build/ccache'"
   export USE_CCACHE=1
