@@ -12,7 +12,7 @@ do
   line=$(tail -n 1 "$LOG_FILE")
 
   # Exit if build is marked as complete
-  if [ "$line" -eq "BUILD_COMPLETE" ]; then
+  if [ [ "$line" == "BUILD_COMPLETE" ] ]; then
     break
   fi
 
