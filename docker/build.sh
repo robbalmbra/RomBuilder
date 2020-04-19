@@ -232,8 +232,7 @@ for DEVICE in $DEVICES; do
   
   # Log to buildkite
   if [[ ! -z "${BUILDKITE}" ]]; then
-    #todo
-    #BUILD_COMPLETE
+    $BUILD_DIR/buildkite_logger.sh "../logs/$DEVICE/make_${DEVICE}_android10.txt" "$LOGGING_RATE" &
   fi
 
   # Run build
