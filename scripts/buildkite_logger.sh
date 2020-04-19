@@ -12,8 +12,13 @@ do
   line=$(tail -n 1 $LOG_FILE)
 
   # Exit if build is marked as complete
-  if [ "$line" -eq "BUILD_COMPLETE" ] && [ "$line" -ne "$last_line" ]; then
+  if [ "$line" -eq "BUILD_COMPLETE" ]; then
     break
+  fi
+
+  # Skip if line is the same
+  if [ "$line" -eq "$last_line" ]; then
+    continue
   fi
 
   # Print line
