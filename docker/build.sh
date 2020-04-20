@@ -22,12 +22,14 @@ fi
 
 # Create and set CCACHE DIR if not set
 if [ -z "$CCACHE_DIR" ]; then
-  mkdir /root/ccache > /dev/null 2>&1
   export CCACHE_DIR=/root/ccache
 fi
 
 # Persist rom through builds with buildkite and enable ccache
 if [[ ! -z "${BUILDKITE}" ]]; then
+  
+  # Prompt to the user the location of the build
+  echo "Setting BUILD_DIR to '$BUILD_DIR'"
   
   # Let the user choice to create unique build folders using environment vairables
   if [ ! -z "$UNIQUE_BUILDS" ]; then
@@ -61,15 +63,15 @@ if [[ ! -z "${BUILDKITE}" ]]; then
     export LOGGING_RATE=15
   fi
   echo "Setting LOGGING_RATE to '$LOGGING_RATE'"
+else
+  # Prompt to the user the location of the build
+  echo "Setting BUILD_DIR to '$BUILD_DIR'"
 fi
 
 # Create ccache directory
 if [[ ! -z "${CCACHE_DIR}" ]]; then
   mkdir "$CCACHE_DIR" > /dev/null 2>&1
 fi
-
-# Prompt to the user the location of the build
-echo "Setting BUILD_DIR to '$BUILD_DIR'"
 
 length=${#BUILD_DIR}
 last_char=${BUILD_DIR:length-1:1}
