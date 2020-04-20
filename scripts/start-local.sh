@@ -42,8 +42,16 @@ if [ -f "/etc/lsb-release" ] && [ ! -d "/opt/build_env" ]; then
   sudo apt install -f
 
 else
-  # MacOS install - todo
-  echo ""
+  # MacOS install
+  # Check if brew is installed
+  if ! [ -x "$(command -v brew help)" ]; then
+    echo 'Error - Brew is not installed'
+    exit 1
+  fi
+
+  # Install gnu sed for compatibility issues
+  brew install gnu-sed > /dev/null 2>&1
+  
 fi
 
 # Sets vars for run script
