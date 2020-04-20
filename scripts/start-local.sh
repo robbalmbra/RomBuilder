@@ -44,7 +44,7 @@ if [ -f "/etc/lsb-release" ] && [ ! -d "/opt/build_env" ]; then
 elif [ "$(uname)" == "Darwin" ]; then
   # MacOS install
   # Check if brew is installed
-  if ! [ -x "$(command -v brew help)" ]; then
+  if ! [ -x "$(command -v brew)" ]; then
     echo 'Error - Brew is not installed'
     exit 1
   fi
