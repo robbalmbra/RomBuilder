@@ -38,14 +38,16 @@ if [[ ! -z "${BUILDKITE}" ]]; then
     rm -rf "$USER_MODS"
   fi
   
+  # Copy build logger to build directory
   cp "$BUILDKITE_LOGGER" "$BUILD_DIR/buildkite_logger.sh" > /dev/null 2>&1
   chmod +x "$BUILD_DIR/buildkite_logger.sh"
 
+  # Set ccache and directory
   echo "Setting CCACHE to '/tmp/build/$UPLOAD_NAME/ccache'"
   export USE_CCACHE=1
   export CCACHE_DIR=/tmp/build/$UPLOAD_NAME/ccache
 
-  # Set logging rate if hasnt been defined within BUILDKITE
+  # Set logging rate if hasnt been defined
   if [[ -z "${LOGGING_RATE}" ]]; then
     # Default to 10 seconds if hasnt been set
     export LOGGING_RATE=15
@@ -53,10 +55,12 @@ if [[ ! -z "${BUILDKITE}" ]]; then
   echo "Setting LOGGING_RATE to '$LOGGING_RATE'"
 fi
 
+# Create ccache directory
 if [[ ! -z "${CCACHE_DIR}" ]]; then
   mkdir "$CCACHE_DIR" > /dev/null 2>&1
 fi
 
+# Prompt to the user the location of the build
 echo "Setting BUILD_DIR to '$BUILD_DIR'"
 
 length=${#BUILD_DIR}
@@ -66,7 +70,7 @@ last_char=${BUILD_DIR:length-1:1}
 # Flush logs
 rm -rf "$BUILD_DIR/logs/"
 
-# macos specific requirements for local usage
+# MACOS specific requirements for local usage
 if [ ! -f "/etc/lsb-release" ] && [ ! -f "$BUILD_DIR/android.sparseimage" ]; then
   # Create image due to macos case issues
   hdiutil create -type SPARSE -fs 'Case-sensitive Journaled HFS+' -size 150g "$BUILD_DIR/android.sparseimage" > /dev/null 2>&1
@@ -78,7 +82,7 @@ if [ ! -f "/etc/lsb-release" ] && [ ! -f "$BUILD_DIR/android.sparseimage" ]; the
   fi
 fi
 
-# precautionary mount check for macos systems
+# Precautionary mount check for macos systems
 if [ -f "$BUILD_DIR/android.sparseimage" ]; then
   hdiutil detach "$BUILD_DIR/rom/" > /dev/null 2>&1
   hdiutil attach "$BUILD_DIR/android.sparseimage" -mountpoint "$BUILD_DIR/rom/" > /dev/null 2>&1
@@ -116,6 +120,7 @@ do
   fi
 done
 
+# Exit on failure of required variables
 if [ $quit -eq 1 ]; then
   exit 1
 fi
@@ -134,6 +139,7 @@ else
 
   # Check if repo needs to be reporocessed or initialized
   if [ ! -d "$BUILD_DIR/rom/.repo/" ]; then
+
     # Pull latest sources
     echo "Pulling sources ..."
     mkdir "$BUILD_DIR/rom/" > /dev/null 2>&1
@@ -158,6 +164,7 @@ else
       cd ..
     fi
   else
+
    # Clean if reprocessing
    echo "Cleaning build ..."
    cd "$BUILD_DIR/rom/"
@@ -242,7 +249,7 @@ for DEVICE in $DEVICES; do
   # Flush log
   echo "" > ../logs/$DEVICE/make_${DEVICE}_android10.txt
   
-  # Log to buildkite
+  # Log to buildkite every N seconds
   if [[ ! -z "${BUILDKITE}" ]]; then
     $BUILD_DIR/buildkite_logger.sh "../logs/$DEVICE/make_${DEVICE}_android10.txt" "$LOGGING_RATE" &
   fi
@@ -254,6 +261,7 @@ for DEVICE in $DEVICES; do
     mka bacon -j$(nproc --all) 2>&1 | tee "../logs/$DEVICE/make_${DEVICE}_android10.txt"
   fi
   
+  # Notify logger script to stop logging to buildkite
   echo "BUILD_COMPLETE" > ../logs/$DEVICE/make_${DEVICE}_android10.txt
 
   # Upload log to buildkite
