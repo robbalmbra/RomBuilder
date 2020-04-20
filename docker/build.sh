@@ -229,6 +229,12 @@ fi
 
 # Execute specific user modifications and environment specific options if avaiable
 if [ -f "$BUILD_DIR/user_modifications.sh" ]; then
+
+  # Override path for sed if os is macOS
+  if [ "$(uname)" == "Darwin" ]; then
+    PATH="/usr/local/opt/gnu-sed/libexec/gnubin:$PATH"
+  fi
+
   echo "Using user modification script"
   $BUILD_DIR/user_modifications.sh "$BUILD_DIR" 1> /dev/null
   error_exit "user modifications"
