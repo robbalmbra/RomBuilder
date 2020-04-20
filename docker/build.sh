@@ -28,18 +28,19 @@ fi
 
 # Persist rom through builds with buildkite and enable ccache
 if [[ ! -z "${BUILDKITE}" ]]; then
-  mkdir /tmp/build > /dev/null 2>&1
-  BUILD_DIR="/tmp/build"
+  mkdir "/tmp/build/$UPLOAD_NAME" > /dev/null 2>&1
+  BUILD_DIR="/tmp/build/$UPLOAD_NAME"
 
   # Copy modifications and logger to build dir if exists
   if [ ! -z "$USER_MODS" ]; then
     cp "$USER_MODS" "$BUILD_DIR/user_modifications.sh" > /dev/null 2>&1
-  fi      
+  fi
+  
   cp "$BUILDKITE_LOGGER" "$BUILD_DIR/buildkite_logger.sh" > /dev/null 2>&1
 
-  echo "Setting CCACHE to '/tmp/build/ccache'"
+  echo "Setting CCACHE to '/tmp/build/name/ccache'"
   export USE_CCACHE=1
-  export CCACHE_DIR=/tmp/build/ccache
+  export CCACHE_DIR=/tmp/build/$UPLOAD_NAME/ccache
 
   # Set logging rate if hasnt been defined within BUILDKITE
   if [[ -z "${LOGGING_RATE}" ]]; then
