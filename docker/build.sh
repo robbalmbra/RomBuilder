@@ -312,6 +312,3 @@ for ROM in $BUILD_DIR/rom/out/target/product/*/*.zip; do
   error_exit "mega put"
 done
 echo "Upload complete"
-
-# Sleep forever
-sleep infinity
