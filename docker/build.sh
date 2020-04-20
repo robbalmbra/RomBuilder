@@ -232,8 +232,7 @@ if [ -f "$BUILD_DIR/user_modifications.sh" ]; then
 
   # Override path for sed if os is macOS
   if [ "$(uname)" == "Darwin" ]; then
-    date () { gdate "$@"; }
-    PATH="/usr/local/opt/gnu-sed/libexec/gnubin:$PATH"
+    PATH="/usr/local/opt/coreutils/libexec/gnubin:$PATH"
   fi
 
   echo "Using user modification script"
