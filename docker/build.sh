@@ -43,6 +43,7 @@ if [[ ! -z "${BUILDKITE}" ]]; then
 
   # Copy modifications and logger to build dir if exists
   if [ ! -z "$USER_MODS" ]; then
+    echo "Copying '$USER_MODS' to '$BUILD_DIR/user_modifications.sh'"
     cp "$USER_MODS" "$BUILD_DIR/user_modifications.sh" > /dev/null 2>&1
     chmod +x "$BUILD_DIR/user_modifications.sh"
     rm -rf "$USER_MODS"
