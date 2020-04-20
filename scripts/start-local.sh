@@ -123,10 +123,10 @@ if [[ ! -z "$USER_MODIFICATIONS" ]]; then
 fi
 
 # Override if modification file exists from buildkite stage
-if [[ ! -z "$CURRENT/user_modifications.sh" ]]; then
+if [[ ! -z "/tmp/build/user_modifications.sh" ]]; then
   echo "Using 'user_modifications.sh' from initial buildkite stage"
-  export USER_MODS="$CURRENT/user_modifications.sh"
-  chmod +x "$CURRENT/user_modifications.sh"
+  export USER_MODS="/tmp/build/user_modifications.sh"
+  chmod +x "/tmp/build/user_modifications.sh"
 fi
 
 # Run build
