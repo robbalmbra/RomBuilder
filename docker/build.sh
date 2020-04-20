@@ -229,7 +229,7 @@ fi
 # Execute specific user modifications and environment specific options if avaiable
 if [ -f "$BUILD_DIR/user_modifications.sh" ]; then
   echo "Using user modification script"
-  $BUILD_DIR/user_modifications.sh $BUILD_DIR 1> /dev/null
+  $BUILD_DIR/user_modifications.sh "$BUILD_DIR" 1> /dev/null
   error_exit "user modifications"
 fi
 
