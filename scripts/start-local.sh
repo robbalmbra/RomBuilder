@@ -122,6 +122,12 @@ if [[ ! -z "$USER_MODIFICATIONS" ]]; then
   export USER_MODS="$CURRENT/user_modifications.sh"
 fi
 
+# Override if modification file exists from buildkite stage
+if [[ ! -z "$CURRENT/user_modifications.sh" ]]; then
+  echo "Using 'user_modifications.sh' from initial buildkite stage"
+  export USER_MODS="$CURRENT/user_modifications.sh"
+fi
+
 # Run build
 echo "Running build script"
 export BUILDKITE_LOGGER="$CURRENT/buildkite_logger.sh"
