@@ -38,7 +38,7 @@ if [[ ! -z "${BUILDKITE}" ]]; then
   
   cp "$BUILDKITE_LOGGER" "$BUILD_DIR/buildkite_logger.sh" > /dev/null 2>&1
 
-  echo "Setting CCACHE to '/tmp/build/name/ccache'"
+  echo "Setting CCACHE to '/tmp/build/$UPLOAD_NAME/ccache'"
   export USE_CCACHE=1
   export CCACHE_DIR=/tmp/build/$UPLOAD_NAME/ccache
 
