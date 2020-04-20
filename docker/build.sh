@@ -43,9 +43,9 @@ if [[ ! -z "${BUILDKITE}" ]]; then
   chmod +x "$BUILD_DIR/buildkite_logger.sh"
 
   # Set ccache and directory
-  echo "Setting CCACHE to '/tmp/build/$UPLOAD_NAME/ccache'"
+  echo "Setting CCACHE to '$BUILD_DIR/ccache'"
   export USE_CCACHE=1
-  export CCACHE_DIR=/tmp/build/$UPLOAD_NAME/ccache
+  export CCACHE_DIR="$BUILD_DIR/ccache"
 
   # Set logging rate if hasnt been defined
   if [[ -z "${LOGGING_RATE}" ]]; then
