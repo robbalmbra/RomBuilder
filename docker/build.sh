@@ -31,6 +31,7 @@ if [[ ! -z "${BUILDKITE}" ]]; then
   
   # Let the user choice to create unique build folders using environment vairables
   if [ ! -z "$UNIQUE_BUILDS" ]; then
+    echo "Enabling unique build"
     mkdir -p "/tmp/build/$UPLOAD_NAME-$BUILDKITE_BUILD_NUMBER" > /dev/null 2>&1
     BUILD_DIR="/tmp/build/$UPLOAD_NAME-$BUILDKITE_BUILD_NUMBER"
   else
