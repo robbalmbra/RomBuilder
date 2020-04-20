@@ -243,6 +243,7 @@ error_exit "ccache"
 
 # Iterate over builds
 export IFS=","
+runonce=0
 for DEVICE in $DEVICES; do
   echo "Building $BUILD_NAME for $DEVICE ..."
 
@@ -255,6 +256,12 @@ for DEVICE in $DEVICES; do
   fi
   error_exit "lunch"
   mkdir -p "../logs/$DEVICE/"
+
+  # Run docs build once
+  if [ "$runonce" -eq 0 ]; then
+    mka api-stubs-docs && mka hiddenapi-lists-docs && mka system-api-stubs-docs && mka test-api-stubs-docs
+    runonce=1
+  fi
 
   # Flush log
   echo "" > ../logs/$DEVICE/make_${DEVICE}_android10.txt
