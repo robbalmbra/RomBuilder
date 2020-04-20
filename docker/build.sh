@@ -28,8 +28,15 @@ fi
 
 # Persist rom through builds with buildkite and enable ccache
 if [[ ! -z "${BUILDKITE}" ]]; then
-  mkdir -p "/tmp/build/$UPLOAD_NAME-$BUILDKITE_BUILD_NUMBER" > /dev/null 2>&1
-  BUILD_DIR="/tmp/build/$UPLOAD_NAME-$BUILDKITE_BUILD_NUMBER"
+  
+  # Let the user choice to create unique build folders using environment vairables
+  if [ ! -z "$UNIQUE_BUILDS" ]; then
+    mkdir -p "/tmp/build/$UPLOAD_NAME-$BUILDKITE_BUILD_NUMBER" > /dev/null 2>&1
+    BUILD_DIR="/tmp/build/$UPLOAD_NAME-$BUILDKITE_BUILD_NUMBER"
+  else
+    mkdir -p "/tmp/build/$UPLOAD_NAME" > /dev/null 2>&1
+    BUILD_DIR="/tmp/build/$UPLOAD_NAME"
+  fi
 
   # Copy modifications and logger to build dir if exists
   if [ ! -z "$USER_MODS" ]; then
