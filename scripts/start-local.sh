@@ -126,6 +126,7 @@ fi
 if [[ ! -z "$CURRENT/user_modifications.sh" ]]; then
   echo "Using 'user_modifications.sh' from initial buildkite stage"
   export USER_MODS="$CURRENT/user_modifications.sh"
+  chmod +x "$CURRENT/user_modifications.sh"
 fi
 
 # Run build
