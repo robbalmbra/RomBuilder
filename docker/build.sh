@@ -232,7 +232,6 @@ if [ -f "$BUILD_DIR/user_modifications.sh" ]; then
 
   # Override path for sed if os is macOS
   if [ "$(uname)" == "Darwin" ]; then
-    export PATH="/usr/local/opt/coreutils/libexec/gnubin:$PATH"
     export PATH="/usr/local/opt/gnu-sed/libexec/gnubin:$PATH"
   fi
 
