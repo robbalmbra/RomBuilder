@@ -234,7 +234,6 @@ if [ -f "$BUILD_DIR/user_modifications.sh" ]; then
   if [ "$(uname)" == "Darwin" ]; then
     export PATH="/usr/local/opt/coreutils/libexec/gnubin:$PATH"
     export PATH="/usr/local/opt/gnu-sed/libexec/gnubin:$PATH"
-    date () { gdate "$@"; }
   fi
 
   echo "Using user modification script"
