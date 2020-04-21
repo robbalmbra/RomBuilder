@@ -332,7 +332,7 @@ shopt -s nocaseglob
 DATE=$(date '+%d-%m-%y');
 for ROM in $BUILD_DIR/rom/out/target/product/*/*.zip; do
   echo "$0 - Uploading $(basename $ROM)"
-  mega-put -c $ROM $UPLOAD_NAME/$DATE/
+  mega-put -c $ROM ROMS/$UPLOAD_NAME/$DATE/
   error_exit "mega put"
 done
 echo "Upload complete"
