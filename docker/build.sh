@@ -60,8 +60,8 @@ if [[ ! -z "${BUILDKITE}" ]]; then
 
   # Set logging rate if hasnt been defined
   if [[ -z "${LOGGING_RATE}" ]]; then
-    # Default to 10 seconds if hasnt been set
-    export LOGGING_RATE=15
+    # Default to 30 seconds if hasnt been set
+    export LOGGING_RATE=30
   fi
   echo "Setting LOGGING_RATE to '$LOGGING_RATE'"
 else
