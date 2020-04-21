@@ -54,6 +54,8 @@ elif [ "$(uname)" == "Darwin" ]; then
   brew install coreutils > /dev/null 2>&1
   curl https://storage.googleapis.com/git-repo-downloads/repo > /usr/local/bin/repo
   chmod +x /usr/local/bin/repo
+  
+  export PATH="/usr/local/opt/python@3.8/bin:$PATH"
 fi
 
 # Sets vars for run script
