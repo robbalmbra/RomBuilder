@@ -53,7 +53,7 @@ elif [ "$(uname)" == "Darwin" ]; then
   brew install gnu-sed > /dev/null 2>&1
   brew install coreutils > /dev/null 2>&1
   brew install ccache
-  curl https://storage.googleapis.com/git-repo-downloads/repo > /usr/local/bin/repo
+  curl https://storage.googleapis.com/git-repo-downloads/repo > /usr/local/bin/repo 2> /dev/null
   chmod +x /usr/local/bin/repo
   
   export PATH="/usr/local/opt/python@3.8/bin:$PATH"
