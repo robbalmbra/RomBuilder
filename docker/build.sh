@@ -313,7 +313,7 @@ for DEVICE in $DEVICES; do
     # Show time of build in minutes
     makesend=`date +%s`
     maketime=$((makesend-makestart))
-    echo "Build finishd in $maketime minutes"
+    echo "Build finishd for $DEVICE in $maketime minutes"
 
     # Upload log to buildkite
     if [[ ! -z "${BUILDKITE}" ]]; then
