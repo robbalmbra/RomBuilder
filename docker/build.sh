@@ -57,7 +57,8 @@ if [[ ! -z "${BUILDKITE}" ]]; then
   echo "Setting CCACHE to '$BUILD_DIR/ccache'"
   export USE_CCACHE=1
   export CCACHE_DIR="$BUILD_DIR/ccache"
-
+  echo "export CCACHE_DIR=\"$BUILD_DIR/ccache\"" > ~/.bashrc
+  
   # Set logging rate if hasnt been defined
   if [[ -z "${LOGGING_RATE}" ]]; then
     # Default to 30 seconds if hasnt been set
@@ -69,7 +70,7 @@ else
   echo "Setting BUILD_DIR to '$BUILD_DIR'"
 fi
 
-# Create ccache directory
+# Create directory
 if [[ ! -z "${CCACHE_DIR}" ]]; then
   mkdir "$CCACHE_DIR" > /dev/null 2>&1
 fi
@@ -243,10 +244,10 @@ fi
 # Build
 echo "Environment setup ..."
 cd "$BUILD_DIR/rom/"
-. build/envsetup.sh > /dev/null 2>&1
 export USE_CCACHE=1
 ccache -M 50G > /dev/null 2>&1
 error_exit "ccache"
+. build/envsetup.sh > /dev/null 2>&1
 
 # Iterate over builds
 export IFS=","
