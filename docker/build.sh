@@ -315,7 +315,8 @@ done
 
 # Upload firmware to mega
 echo "Uploading to mega ..."
-mega-login $MEGA_LOGIN $MEGA_PASSWORD > /dev/null 2>&1
+mega-logout > /dev/null 2>&1
+mega-login $MEGA_USERNAME $MEGA_PASSWORD > /dev/null 2>&1
 error_exit "mega login"
 
 shopt -s nocaseglob
