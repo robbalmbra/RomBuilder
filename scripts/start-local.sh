@@ -57,6 +57,7 @@ elif [ "$(uname)" == "Darwin" ]; then
   chmod +x /usr/local/bin/repo
   
   export PATH="/usr/local/opt/python@3.8/bin:$PATH"
+  export LDFLAGS="-L/usr/local/opt/python@3.8/lib"
 fi
 
 # Sets vars for run script
