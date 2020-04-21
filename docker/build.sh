@@ -277,6 +277,9 @@ for DEVICE in $DEVICES; do
   if [[ ! -z "${BUILDKITE}" ]]; then
     $BUILD_DIR/buildkite_logger.sh "../logs/$DEVICE/make_${DEVICE}_android10.txt" "$LOGGING_RATE" &
   fi
+  
+  # Save start time of build
+  makestart=`date +%s`
 
   # Run build
   if [[ ! -z "${BUILDKITE}" ]]; then
@@ -285,14 +288,6 @@ for DEVICE in $DEVICES; do
     mka bacon -j$(nproc --all) 2>&1 | tee "../logs/$DEVICE/make_${DEVICE}_android10.txt"
   fi
   
-  # Notify logger script to stop logging to buildkite
-  echo "BUILD_COMPLETE" > ../logs/$DEVICE/make_${DEVICE}_android10.txt
-
-  # Upload log to buildkite
-  if [[ ! -z "${BUILDKITE}" ]]; then
-    buildkite-agent artifact upload "../logs/$DEVICE/make_${DEVICE}_android10.txt" > /dev/null 2>&1
-  fi
-
   # Upload error log to buildkite if any errors occur
   ret="$?"
   if [ "$ret" != "0" ]; then
@@ -310,6 +305,20 @@ for DEVICE in $DEVICES; do
 
     exit 1
     break
+  else
+    
+    # Notify logger script to stop logging to buildkite
+    echo "BUILD_COMPLETE" > ../logs/$DEVICE/make_${DEVICE}_android10.txt
+
+    # Show time of build in minutes
+    makesend=`date +%s`
+    maketime=$((makesend-makestart))
+    echo "Build finishd in $maketime minutes"
+
+    # Upload log to buildkite
+    if [[ ! -z "${BUILDKITE}" ]]; then
+      buildkite-agent artifact upload "../logs/$DEVICE/make_${DEVICE}_android10.txt" > /dev/null 2>&1
+    fi
   fi
 done
 
