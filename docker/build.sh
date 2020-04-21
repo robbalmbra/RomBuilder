@@ -59,11 +59,6 @@ else
   echo "Setting BUILD_DIR to '$BUILD_DIR'"
 fi
 
-# Create directory
-if [[ ! -z "${CCACHE_DIR}" ]]; then
-  mkdir "$CCACHE_DIR" > /dev/null 2>&1
-fi
-
 length=${#BUILD_DIR}
 last_char=${BUILD_DIR:length-1:1}
 [[ $last_char == "/" ]] && BUILD_DIR=${BUILD_DIR:0:length-1}; :
@@ -239,6 +234,13 @@ cd "$BUILD_DIR/rom/"
 echo "Setting CCACHE to '$BUILD_DIR/ccache'"
 export CCACHE_DIR="$BUILD_DIR/ccache"
 export USE_CCACHE=1
+
+# Create directory
+if [[ ! -d "$CCACHE_DIR" ]]; then
+  mkdir "$CCACHE_DIR" > /dev/null 2>&1
+fi
+
+# Enable ccache with 50 gigabytes
 ccache -M 50G > /dev/null 2>&1
 error_exit "ccache"
 
