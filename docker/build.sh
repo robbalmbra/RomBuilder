@@ -52,12 +52,6 @@ if [[ ! -z "${BUILDKITE}" ]]; then
   # Copy build logger to build directory
   cp "$BUILDKITE_LOGGER" "$BUILD_DIR/buildkite_logger.sh" > /dev/null 2>&1
   chmod +x "$BUILD_DIR/buildkite_logger.sh"
-
-  # Set ccache and directory
-  echo "Setting CCACHE to '$BUILD_DIR/ccache'"
-  export USE_CCACHE=1
-  export CCACHE_DIR="$BUILD_DIR/ccache"
-  echo "export CCACHE_DIR=\"$BUILD_DIR/ccache\"" > ~/.bashrc
   
   # Set logging rate if hasnt been defined
   if [[ -z "${LOGGING_RATE}" ]]; then
@@ -244,10 +238,14 @@ fi
 # Build
 echo "Environment setup ..."
 cd "$BUILD_DIR/rom/"
+. build/envsetup.sh > /dev/null 2>&1
+
+# Set ccache and directory
+echo "Setting CCACHE to '$BUILD_DIR/ccache'"
+export CCACHE_DIR="$BUILD_DIR/ccache"
 export USE_CCACHE=1
 ccache -M 50G > /dev/null 2>&1
 error_exit "ccache"
-. build/envsetup.sh > /dev/null 2>&1
 
 # Iterate over builds
 export IFS=","
