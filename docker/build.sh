@@ -166,11 +166,11 @@ else
     # Pulling local manifests
     echo "Pulling local manifests ..."
     if [[ ! -z "${BUILDKITE}" ]]; then
-      cd "$BUILD_DIR/rom/.repo/" && git clone "$LOCAL_REPO" -b "$LOCAL_BRANCH" --depth=1 > /dev/null 2>&1
+      cd "$BUILD_DIR/rom/.repo/"; git clone "$LOCAL_REPO" -b "$LOCAL_BRANCH" --depth=1 > /dev/null 2>&1
       error_exit "clone local manifest"
       cd ..
     else
-      cd "$BUILD_DIR/rom/.repo/" && git clone "$LOCAL_REPO" -b "$LOCAL_BRANCH" --depth=1
+      cd "$BUILD_DIR/rom/.repo/"; git clone "$LOCAL_REPO" -b "$LOCAL_BRANCH" --depth=1
       error_exit "clone local manifest"
       cd ..
     fi
