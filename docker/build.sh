@@ -20,11 +20,6 @@ else
   BUILD_DIR="/root"
 fi
 
-# Create and set CCACHE DIR if not set
-if [ -z "$CCACHE_DIR" ]; then
-  export CCACHE_DIR=/root/ccache
-fi
-
 # Persist rom through builds with buildkite and enable ccache
 if [[ ! -z "${BUILDKITE}" ]]; then
   
