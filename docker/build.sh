@@ -188,10 +188,10 @@ else
   echo "Syncing sources ..."
 
   if [[ ! -z "${BUILDKITE}" ]]; then
-    repo sync -c -j$(nproc --all) --force-sync --no-clone-bundle --no-tags --quiet > /dev/null 2>&1
+    repo sync -f -c -j$(nproc --all) --force-sync --no-clone-bundle --no-tags --quiet > /dev/null 2>&1
     error_exit "repo sync"
   else
-    repo sync -c -j$(nproc --all) --force-sync --no-clone-bundle --no-tags --quiet
+    repo sync -f -c -j$(nproc --all) --force-sync --no-clone-bundle --no-tags --quiet
     error_exit "repo sync"
   fi
 
