@@ -52,6 +52,7 @@ elif [ "$(uname)" == "Darwin" ]; then
   # Install gnu sed for compatibility issues
   brew install gnu-sed > /dev/null 2>&1
   brew install coreutils > /dev/null 2>&1
+  brew install ccache
   curl https://storage.googleapis.com/git-repo-downloads/repo > /usr/local/bin/repo
   chmod +x /usr/local/bin/repo
   
