@@ -130,7 +130,7 @@ if [ "$quit" -ne 0 ]; then
 fi
 
 if [ $new -eq 0 ]; then
-  echo "--- Retrieving suplement tools and files"
+  echo "--- Retrieving supplement tools and files"
 fi
 
 # Check and get user modifications either as a url or env string
