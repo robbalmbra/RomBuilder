@@ -11,8 +11,10 @@ do
   # Retrieve last line
   line=$(tail -n 1 "$LOG_FILE")
   
+  LOG_FOLDER=$(dirname "${line}")
+
   # Exit if build is marked as complete
-  if [[ $line == "BUILD_COMPLETE" ]]; then
+  if [[ -f "$LOG_FOLDER/.finished" ]]; then
     break
   fi
 
