@@ -304,7 +304,7 @@ for DEVICE in $DEVICES; do
     # Log errors if exist
     if [[ ! -z "${BUILDKITE}" ]]; then
       if [ -f "../logs/$DEVICE/make_${DEVICE}_errors_android10.txt" ]; then
-        cd "logs/$DEVICE"
+        cd "../logs/$DEVICE"
         buildkite-agent artifact upload "make_${DEVICE}_errors_android10.txt" > /dev/null 2>&1
         cd "$CURRENT"
       fi
@@ -318,9 +318,14 @@ for DEVICE in $DEVICES; do
     maketime=$((makesend-makestart))
     echo "Build finishd for $DEVICE in $maketime minutes"
 
+    # Save folder for cd
+    CURRENT=$(pwd)
+
     # Upload log to buildkite
     if [[ ! -z "${BUILDKITE}" ]]; then
-      buildkite-agent artifact upload "../logs/$DEVICE/make_${DEVICE}_android10.txt" > /dev/null 2>&1
+      cd "../logs/$DEVICE"
+      buildkite-agent artifact upload "make_${DEVICE}_android10.txt" > /dev/null 2>&1
+      cd "$CURRENT"
     fi
   fi
 done
