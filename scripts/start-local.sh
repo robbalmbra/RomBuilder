@@ -22,8 +22,8 @@ if [ -f "/etc/lsb-release" ] && [ ! -d "/opt/build_env" ]; then
   if [ ! -z "$DOCKER_SETUP" ]; then
     apt-get install -y sudo
   fi
-  
-  echo "Pulling and installing tools"
+
+  echo "--- Pulling and installing tools"
   git clone https://github.com/akhilnarang/scripts.git /opt/build_env --depth=1
   sudo chmod +x /opt/build_env/setup/android_build_env.sh
   . /opt/build_env/setup/android_build_env.sh
@@ -55,6 +55,7 @@ elif [ "$(uname)" == "Darwin" ]; then
   fi
 
   # Install gnu sed for compatibility issues
+  echo "--- Installing gnu tools for macos"
   brew install gnu-sed > /dev/null 2>&1
   brew install coreutils > /dev/null 2>&1
   brew install ccache
@@ -125,6 +126,7 @@ fi
 # Check and get user modifications either as a url or env string
 cd "$CURRENT"
 if [[ ! -z "$USER_MODIFICATIONS" ]]; then
+  echo "--- Retrieiving user modifications"
   regex='(https?|ftp|file)://[-A-Za-z0-9\+&@#/%?=~_|!:,.;]*[-A-Za-z0-9\+&@#/%=~_|]'
   if [[ $USER_MODIFICATIONS =~ $regex ]]
   then 
