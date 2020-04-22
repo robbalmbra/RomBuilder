@@ -74,7 +74,7 @@ if [ ! -f "/etc/lsb-release" ] && [ ! -f "$BUILD_DIR/android.sparseimage" ]; the
 
   # Check for errors
   if [ $? -ne 0 ]; then
-    echo "$0 - Error, something went wrong in creating local image."
+    echo "Error, something went wrong in creating local image :bk-status-failed:"
     exit 1
   fi
 fi
@@ -112,7 +112,7 @@ quit=0
 for variable in "${variables[@]}"
 do
   if [[ -z ${!variable+x} ]]; then
-    echo "$0 - Error, $variable isn't set.";
+    echo "$0 - Error, $variable isn't set :bk-status-failed:";
     quit=1
     break
   fi
@@ -125,11 +125,11 @@ fi
 
 # Skip this if told to, git sync in host mode
 if [ -n "$SKIP_PULL" ]; then
-  echo "$0 - Using host git sync for build"
+  echo "Using host git sync for build"
 
   # Repo check
   if [ ! -d "$BUILD_DIR/rom/.repo/" ]; then
-    echo "$0 - Error failed to find repo in /rom/"
+    echo "Error failed to find repo in /rom/ :bk-status-failed:"
     exit 1
   fi
 
