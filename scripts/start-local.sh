@@ -24,7 +24,7 @@ if [ -f "/etc/lsb-release" ] && [ ! -d "/opt/build_env" ]; then
     apt-get install -y sudo
   fi
 
-  echo "--- Installing required tools"
+  echo "--- Installing required tools :toolbox:"
   echo "Installing build script"
   git clone https://github.com/akhilnarang/scripts.git /opt/build_env --depth=1
   sudo chmod +x /opt/build_env/setup/android_build_env.sh
@@ -130,7 +130,7 @@ if [ "$quit" -ne 0 ]; then
 fi
 
 if [ $new -eq 0 ]; then
-  echo "--- Retrieving supplement tools and files"
+  echo "--- Retrieving supplement tools and files :page_facing_up:"
 fi
 
 # Check and get user modifications either as a url or env string
@@ -164,7 +164,7 @@ if [[ ! -z "$USER_MODS" ]]; then
 fi
 
 # Run build
-echo "--- Initializing build environment"
+echo "--- Initializing build environment :building_construction:"
 export BUILDKITE_LOGGER="$CURRENT/buildkite_logger.sh"
 "$(pwd)/../docker/build.sh"
 error_exit "build script"
