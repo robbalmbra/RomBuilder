@@ -255,7 +255,7 @@ error_exit "ccache"
 export IFS=","
 runonce=0
 for DEVICE in $DEVICES; do
-  echo "--- Building $BUILD_NAME for $DEVICE"
+  echo "--- Building $DEVICE ($BUILD_NAME)"
 
   # Run lunch
   build_id="${BUILD_NAME}_$DEVICE-userdebug"
