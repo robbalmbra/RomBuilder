@@ -8,7 +8,7 @@ error_exit()
 {
     ret="$?"
     if [ "$ret" != "0" ]; then
-        echo "Error - '$1' failed with return code '$ret'"
+        echo "Error - '$1' failed ($ret) :bk-status-failed:"
         exit 1
     fi
 }
