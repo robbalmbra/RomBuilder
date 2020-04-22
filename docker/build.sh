@@ -68,7 +68,7 @@ rm -rf "$BUILD_DIR/logs/"
 
 # MACOS specific requirements for local usage
 if [ ! -f "/etc/lsb-release" ] && [ ! -f "$BUILD_DIR/android.sparseimage" ]; then
-  echo "Creating macos disk drive ..."
+  echo "Creating macos disk drive"
   # Create image due to macos case issues
   hdiutil create -type SPARSE -fs 'Case-sensitive Journaled HFS+' -size 150g "$BUILD_DIR/android.sparseimage" > /dev/null 2>&1
 
@@ -81,7 +81,7 @@ fi
 
 # Precautionary mount check for macos systems
 if [ -f "$BUILD_DIR/android.sparseimage" ]; then
-  echo "Mounting macos disk drive ..."
+  echo "Mounting macos disk drive"
   hdiutil detach "$BUILD_DIR/rom/" > /dev/null 2>&1
   hdiutil attach "$BUILD_DIR/android.sparseimage" -mountpoint "$BUILD_DIR/rom/" > /dev/null 2>&1
 fi
@@ -139,7 +139,7 @@ else
   if [ ! -d "$BUILD_DIR/rom/.repo/" ]; then
 
     # Pull latest sources
-    echo "Pulling sources ..."
+    echo "Pulling sources"
     mkdir "$BUILD_DIR/rom/" > /dev/null 2>&1
 
     if [[ ! -z "${BUILDKITE}" ]]; then
@@ -151,7 +151,7 @@ else
     fi
 
     # Pulling local manifests
-    echo "Pulling local manifests ..."
+    echo "Pulling local manifests"
     if [[ ! -z "${BUILDKITE}" ]]; then
       cd "$BUILD_DIR/rom/.repo/"; git clone "$LOCAL_REPO" -b "$LOCAL_BRANCH" --depth=1 > /dev/null 2>&1
       error_exit "clone local manifest"
@@ -164,7 +164,7 @@ else
   else
 
    # Clean if reprocessing
-   echo "Cleaning the build and reverting changes ..."
+   echo "Cleaning the build and reverting changes"
    cd "$BUILD_DIR/rom/"
    make clean >/dev/null 2>&1
    make clobber >/dev/null 2>&1
@@ -175,7 +175,7 @@ else
 
   # Sync sources
   cd "$BUILD_DIR/rom/"
-  echo "Syncing sources to git repo ..."
+  echo "Syncing sources to git repo"
 
   if [[ ! -z "${BUILDKITE}" ]]; then
     repo sync -d -f -c -j$(nproc --all) --force-sync --no-clone-bundle --no-tags --quiet > /dev/null 2>&1
@@ -187,7 +187,7 @@ else
 
 fi
 
-echo "Applying local modifications ..."
+echo "Applying local modifications"
 
 if [ $BOOT_LOGGING -eq 1 ]; then
 
@@ -233,7 +233,7 @@ if [ -f "$BUILD_DIR/user_modifications.sh" ]; then
 fi
 
 # Build
-echo "Environment setup ..."
+echo "Environment setup"
 cd "$BUILD_DIR/rom/"
 . build/envsetup.sh > /dev/null 2>&1
 
@@ -255,7 +255,7 @@ error_exit "ccache"
 export IFS=","
 runonce=0
 for DEVICE in $DEVICES; do
-  echo "Building $BUILD_NAME for $DEVICE ..."
+  echo "Building $BUILD_NAME for $DEVICE"
 
   # Run lunch
   build_id="${BUILD_NAME}_$DEVICE-userdebug"
@@ -336,7 +336,7 @@ for DEVICE in $DEVICES; do
 done
 
 # Upload firmware to mega
-echo "Uploading to mega ..."
+echo "Uploading to mega"
 mega-logout > /dev/null 2>&1
 mega-login $MEGA_USERNAME $MEGA_PASSWORD > /dev/null 2>&1
 error_exit "mega login"
