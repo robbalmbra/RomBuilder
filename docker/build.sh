@@ -291,9 +291,6 @@ for DEVICE in $DEVICES; do
   ret="$?"
   if [ "$ret" != "0" ]; then
     echo "Error - '$1' failed with return code '$ret'"
-    exit 1
-    break
-  else
     
     # Save folder for cd
     CURRENT=$(pwd)
@@ -310,13 +307,17 @@ for DEVICE in $DEVICES; do
       fi
     fi
     
+    exit 1
+    break
+  else
+
     # Notify logger script to stop logging to buildkite
     touch ../logs/$DEVICE/.finished
 
     # Show time of build in minutes
     makesend=`date +%s`
-    maketime=$((makesend-makestart))
-    echo "Build finishd for $DEVICE in $maketime minutes"
+    maketime=$((makesend-makestart))/60
+    echo "Build finished for $DEVICE in $maketime minutes"
 
     # Save folder for cd
     CURRENT=$(pwd)
