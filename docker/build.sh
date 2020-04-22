@@ -291,20 +291,24 @@ for DEVICE in $DEVICES; do
   ret="$?"
   if [ "$ret" != "0" ]; then
     echo "Error - '$1' failed with return code '$ret'"
-
+    exit 1
+    break
+  else
+    
+    # Save folder for cd
+    CURRENT=$(pwd)
+    
     # Extract any errors from log if exist
     grep -iE 'crash|error|fail|fatal|unknown' "../logs/$DEVICE/make_${DEVICE}_android10.txt" 2>&1 | tee "../logs/$DEVICE/make_${DEVICE}_errors_android10.txt"
 
     # Log errors if exist
     if [[ ! -z "${BUILDKITE}" ]]; then
       if [ -f "../logs/$DEVICE/make_${DEVICE}_errors_android10.txt" ]; then
-        buildkite-agent artifact upload "../logs/$DEVICE/make_${DEVICE}_errors_android10.txt" > /dev/null 2>&1
+        cd "logs/$DEVICE"
+        buildkite-agent artifact upload "make_${DEVICE}_errors_android10.txt" > /dev/null 2>&1
+        cd "$CURRENT"
       fi
     fi
-
-    exit 1
-    break
-  else
     
     # Notify logger script to stop logging to buildkite
     touch ../logs/$DEVICE/.finished
