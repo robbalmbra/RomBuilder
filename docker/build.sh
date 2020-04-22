@@ -68,6 +68,7 @@ rm -rf "$BUILD_DIR/logs/"
 
 # MACOS specific requirements for local usage
 if [ ! -f "/etc/lsb-release" ] && [ ! -f "$BUILD_DIR/android.sparseimage" ]; then
+  echo "Creating macos disk drive ..."
   # Create image due to macos case issues
   hdiutil create -type SPARSE -fs 'Case-sensitive Journaled HFS+' -size 150g "$BUILD_DIR/android.sparseimage" > /dev/null 2>&1
 
@@ -80,6 +81,7 @@ fi
 
 # Precautionary mount check for macos systems
 if [ -f "$BUILD_DIR/android.sparseimage" ]; then
+  echo "Mounting macos disk drive ..."
   hdiutil detach "$BUILD_DIR/rom/" > /dev/null 2>&1
   hdiutil attach "$BUILD_DIR/android.sparseimage" -mountpoint "$BUILD_DIR/rom/" > /dev/null 2>&1
 fi
@@ -162,7 +164,7 @@ else
   else
 
    # Clean if reprocessing
-   echo "Cleaning build ..."
+   echo "Cleaning the build and reverting changes ..."
    cd "$BUILD_DIR/rom/"
    make clean >/dev/null 2>&1
    make clobber >/dev/null 2>&1
@@ -173,7 +175,7 @@ else
 
   # Sync sources
   cd "$BUILD_DIR/rom/"
-  echo "Syncing sources ..."
+  echo "Syncing sources to git repo ..."
 
   if [[ ! -z "${BUILDKITE}" ]]; then
     repo sync -d -f -c -j$(nproc --all) --force-sync --no-clone-bundle --no-tags --quiet > /dev/null 2>&1
@@ -185,12 +187,14 @@ else
 
 fi
 
-echo "Local modifications ..."
+echo "Applying local modifications ..."
 
 if [ $BOOT_LOGGING -eq 1 ]; then
 
   isLoggingInFile=$(cat "$BUILD_DIR/rom/device/samsung/universal9810-common/rootdir/etc/init.samsung.rc" | grep -c "/system/bin/logcat")
   if [ $isLoggingInFile -eq 0 ]; then
+
+    echo "Enabling logging during boot"
 
   # Enable logging via logcat
 cat >> "$BUILD_DIR/rom/device/samsung/universal9810-common/rootdir/etc/init.samsung.rc" << EOL
@@ -251,7 +255,7 @@ error_exit "ccache"
 export IFS=","
 runonce=0
 for DEVICE in $DEVICES; do
-  echo "Building $BUILD_NAME for $DEVICE ..."
+  echo "--- Building $BUILD_NAME for $DEVICE ..."
 
   # Run lunch
   build_id="${BUILD_NAME}_$DEVICE-userdebug"
@@ -290,7 +294,7 @@ for DEVICE in $DEVICES; do
   # Upload error log to buildkite if any errors occur
   ret="$?"
   if [ "$ret" != "0" ]; then
-    echo "Error - '$1' failed with return code '$ret'"
+    echo "Error - $DEVICE build failed ('$ret')"
     
     # Save folder for cd
     CURRENT=$(pwd)
