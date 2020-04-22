@@ -15,6 +15,7 @@ error_exit()
 CURRENT="$(pwd)"
 
 # Requirements for buildkite
+new=0
 
 if [ -f "/etc/lsb-release" ] && [ ! -d "/opt/build_env" ]; then
   # Linux install
@@ -47,6 +48,7 @@ if [ -f "/etc/lsb-release" ] && [ ! -d "/opt/build_env" ]; then
 
   apt update --fix-missing
   sudo apt install -f
+  new=1
 
 elif [ "$(uname)" == "Darwin" ]; then
   # MacOS install
@@ -57,7 +59,8 @@ elif [ "$(uname)" == "Darwin" ]; then
   fi
 
   # Install gnu sed for compatibility issues
-  echo "Installing gnu tools for macos"
+  echo "--- Installing required tools"
+  echo "Installing gnu specific tools"
   brew install gnu-sed > /dev/null 2>&1
   brew install coreutils > /dev/null 2>&1
   brew install ccache
@@ -66,6 +69,7 @@ elif [ "$(uname)" == "Darwin" ]; then
   
   export PATH="/usr/local/opt/python@3.8/bin:$PATH"
   export LDFLAGS="-L/usr/local/opt/python@3.8/lib"
+  new=1
 fi
 
 # Sets vars for run script
@@ -123,6 +127,10 @@ done
 # Quit if requirements not met
 if [ "$quit" -ne 0 ]; then
   exit 1
+fi
+
+if [ $new -eq 0 ]; then
+  echo "--- Retrieving suplement tools and files"
 fi
 
 # Check and get user modifications either as a url or env string
