@@ -336,7 +336,7 @@ for DEVICE in $DEVICES; do
 done
 
 # Upload firmware to mega
-echo "Uploading to mega"
+echo "--- Uploading to mega"
 mega-logout > /dev/null 2>&1
 mega-login $MEGA_USERNAME $MEGA_PASSWORD > /dev/null 2>&1
 error_exit "mega login"
