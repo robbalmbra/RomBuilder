@@ -307,7 +307,7 @@ for DEVICE in $DEVICES; do
   else
     
     # Notify logger script to stop logging to buildkite
-    echo "BUILD_COMPLETE" > ../logs/$DEVICE/make_${DEVICE}_android10.txt
+    #echo "BUILD_COMPLETE" > ../logs/$DEVICE/make_${DEVICE}_android10.txt
 
     # Show time of build in minutes
     makesend=`date +%s`
