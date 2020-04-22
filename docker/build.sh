@@ -293,8 +293,14 @@ for DEVICE in $DEVICES; do
   
   # Upload error log to buildkite if any errors occur
   ret="$?"
+  
+  # Check for fail keyword to exit if build fails
+  if grep -q "FAILED: " "../logs/$DEVICE/make_${DEVICE}_android10.txt"; then
+    ret=1
+  fi
+  
   if [ "$ret" != "0" ]; then
-    echo "Error - $DEVICE build failed ('$ret')"
+    echo "Error - $DEVICE build failed ($ret) :bk-status-failed:"
     
     # Save folder for cd
     CURRENT=$(pwd)
