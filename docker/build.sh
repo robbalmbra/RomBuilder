@@ -255,6 +255,13 @@ fi
 ccache -M 50G > /dev/null 2>&1
 error_exit "ccache"
 
+# Check for any build parameters passed to script
+BUILD_PARAMETERS="bacon"
+
+if [ ! -z "$MKA_PARAMETERS" ]; then
+  BUILD_PARAMETERS="$MKA_PARAMETERS"
+fi
+
 # Iterate over builds
 export IFS=","
 runonce=0
@@ -290,9 +297,9 @@ for DEVICE in $DEVICES; do
 
   # Run build
   if [[ ! -z "${BUILDKITE}" ]]; then
-    mka bacon -j$(nproc --all) 2>&1 | tee "../logs/$DEVICE/make_${DEVICE}_android10.txt" > /dev/null 2>&1
+    mka $BUILD_PARAMETERS -j$(nproc --all) 2>&1 | tee "../logs/$DEVICE/make_${DEVICE}_android10.txt" > /dev/null 2>&1
   else
-    mka bacon -j$(nproc --all) 2>&1 | tee "../logs/$DEVICE/make_${DEVICE}_android10.txt"
+    mka $BUILD_PARAMETERS -j$(nproc --all) 2>&1 | tee "../logs/$DEVICE/make_${DEVICE}_android10.txt"
   fi
   
   # Upload error log to buildkite if any errors occur
