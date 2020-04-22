@@ -166,6 +166,9 @@ else
    cd "$BUILD_DIR/rom/"
    make clean >/dev/null 2>&1
    make clobber >/dev/null 2>&1
+   
+   # Pull original changes
+   repo forall -vc "git reset --hard"
   fi
 
   # Sync sources
@@ -173,7 +176,7 @@ else
   echo "Syncing sources ..."
 
   if [[ ! -z "${BUILDKITE}" ]]; then
-    repo sync -d -f -c -j$(nproc --all) --force-sync --no-clone-bundle --no-tags --quiet
+    repo sync -d -f -c -j$(nproc --all) --force-sync --no-clone-bundle --no-tags --quiet > /dev/null 2>&1
     error_exit "repo sync"
   else
     repo sync -d -f -c -j$(nproc --all) --force-sync --no-clone-bundle --no-tags --quiet
