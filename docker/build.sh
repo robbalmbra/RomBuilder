@@ -255,7 +255,7 @@ error_exit "ccache"
 export IFS=","
 runonce=0
 for DEVICE in $DEVICES; do
-  echo "--- Building $DEVICE ($BUILD_NAME)"
+  echo "--- Building $DEVICE ($BUILD_NAME) :building_construction:"
 
   # Run lunch
   build_id="${BUILD_NAME}_$DEVICE-userdebug"
@@ -336,7 +336,7 @@ for DEVICE in $DEVICES; do
 done
 
 # Upload firmware to mega
-echo "--- Uploading to mega"
+echo "--- Uploading to mega :rea:"
 mega-logout > /dev/null 2>&1
 mega-login $MEGA_USERNAME $MEGA_PASSWORD > /dev/null 2>&1
 error_exit "mega login"
