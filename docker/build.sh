@@ -315,9 +315,9 @@ for DEVICE in $DEVICES; do
     touch ../logs/$DEVICE/.finished
 
     # Show time of build in minutes
-    makesend=`date +%s`
-    maketime=$((makesend-makestart))/60
-    echo "Build finished for $DEVICE in $maketime minutes"
+    makeend=`date +%s`
+    maketime=$(((makeend-makestart)/60))
+    echo "$DEVICE was built in $maketime minutes"
 
     # Save folder for cd
     CURRENT=$(pwd)
