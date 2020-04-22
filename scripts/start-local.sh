@@ -23,7 +23,8 @@ if [ -f "/etc/lsb-release" ] && [ ! -d "/opt/build_env" ]; then
     apt-get install -y sudo
   fi
 
-  echo "--- Pulling and installing tools"
+  echo "--- Installing required tools"
+  echo "Installing build script"
   git clone https://github.com/akhilnarang/scripts.git /opt/build_env --depth=1
   sudo chmod +x /opt/build_env/setup/android_build_env.sh
   . /opt/build_env/setup/android_build_env.sh
@@ -38,6 +39,7 @@ if [ -f "/etc/lsb-release" ] && [ ! -d "/opt/build_env" ]; then
 
   # Download and build mega
   if [ ! -d "/opt/MEGAcmd/" ]; then
+    echo "Installing mega CLI"
     wget --quiet -O /opt/megasync.deb https://mega.nz/linux/MEGAsync/xUbuntu_$(lsb_release -rs)/amd64/megasync-xUbuntu_$(lsb_release -rs)_amd64.deb && ls /opt/ && dpkg -i /opt/megasync.deb
     cd /opt/ && git clone --quiet https://github.com/meganz/MEGAcmd.git
     cd /opt/MEGAcmd && git submodule update --quiet --init --recursive && sh autogen.sh > /dev/null 2>&1 && ./configure --quiet && make > /dev/null 2>&1 && make install > /dev/null 2>&1
@@ -55,7 +57,7 @@ elif [ "$(uname)" == "Darwin" ]; then
   fi
 
   # Install gnu sed for compatibility issues
-  echo "--- Installing gnu tools for macos"
+  echo "Installing gnu tools for macos"
   brew install gnu-sed > /dev/null 2>&1
   brew install coreutils > /dev/null 2>&1
   brew install ccache
@@ -126,7 +128,7 @@ fi
 # Check and get user modifications either as a url or env string
 cd "$CURRENT"
 if [[ ! -z "$USER_MODIFICATIONS" ]]; then
-  echo "--- Retrieiving user modifications"
+  echo "Retrieiving user modifications"
   regex='(https?|ftp|file)://[-A-Za-z0-9\+&@#/%?=~_|!:,.;]*[-A-Za-z0-9\+&@#/%=~_|]'
   if [[ $USER_MODIFICATIONS =~ $regex ]]
   then 
@@ -154,7 +156,7 @@ if [[ ! -z "$USER_MODS" ]]; then
 fi
 
 # Run build
-echo "Running build script"
+echo "--- Running build script"
 export BUILDKITE_LOGGER="$CURRENT/buildkite_logger.sh"
 "$(pwd)/../docker/build.sh"
 error_exit "build script"
