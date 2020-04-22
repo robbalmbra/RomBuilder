@@ -13,7 +13,7 @@ do
   line=$(tail -n 1 "$LOG_FILE")
   
   # Exit if build is marked as complete
-  if [[ -f "$LOG_FOLDER/.finished" ]]; then
+  if [ -f "$LOG_FOLDER/.finished" ]; then
     break
   fi
 
