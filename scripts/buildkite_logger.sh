@@ -4,6 +4,7 @@
 
 LOG_FILE=$1
 SLEEP_WAIT=$2
+LOG_FOLDER=$(dirname "${LOG_FILE}")
 last_line=""
 
 while [ 1 ]
@@ -11,8 +12,6 @@ do
   # Retrieve last line
   line=$(tail -n 1 "$LOG_FILE")
   
-  LOG_FOLDER=$(dirname "${line}")
-
   # Exit if build is marked as complete
   if [[ -f "$LOG_FOLDER/.finished" ]]; then
     break
