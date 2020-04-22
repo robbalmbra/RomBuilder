@@ -164,7 +164,7 @@ if [[ ! -z "$USER_MODS" ]]; then
 fi
 
 # Run build
-echo "--- Running build script"
+echo "--- Initializing build environment"
 export BUILDKITE_LOGGER="$CURRENT/buildkite_logger.sh"
 "$(pwd)/../docker/build.sh"
 error_exit "build script"
