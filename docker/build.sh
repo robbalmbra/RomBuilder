@@ -8,6 +8,7 @@ error_exit()
 {
     ret="$?"
     if [ "$ret" != "0" ]; then
+        echo "^^^ +++"
         echo "Error - '$1' failed ($ret) :bk-status-failed:"
         exit 1
     fi
@@ -74,6 +75,7 @@ if [ ! -f "/etc/lsb-release" ] && [ ! -f "$BUILD_DIR/android.sparseimage" ]; the
 
   # Check for errors
   if [ $? -ne 0 ]; then
+    echo "^^^ +++"
     echo "Error, something went wrong in creating local image :bk-status-failed:"
     exit 1
   fi
@@ -112,6 +114,7 @@ quit=0
 for variable in "${variables[@]}"
 do
   if [[ -z ${!variable+x} ]]; then
+    echo "^^^ +++"
     echo "$0 - Error, $variable isn't set :bk-status-failed:";
     quit=1
     break
@@ -129,6 +132,7 @@ if [ -n "$SKIP_PULL" ]; then
 
   # Repo check
   if [ ! -d "$BUILD_DIR/rom/.repo/" ]; then
+    echo "^^^ +++"
     echo "Error failed to find repo in /rom/ :bk-status-failed:"
     exit 1
   fi
@@ -300,6 +304,7 @@ for DEVICE in $DEVICES; do
   fi
   
   if [ "$ret" != "0" ]; then
+    echo "^^^ +++"
     echo "Error - $DEVICE build failed ($ret) :bk-status-failed:"
     
     # Save folder for cd
