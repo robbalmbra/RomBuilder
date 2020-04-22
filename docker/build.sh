@@ -257,9 +257,14 @@ error_exit "ccache"
 
 # Check for any build parameters passed to script
 BUILD_PARAMETERS="bacon"
+LUNCH_DEBUG="userdebug"
 
 if [ ! -z "$MKA_PARAMETERS" ]; then
   BUILD_PARAMETERS="$MKA_PARAMETERS"
+fi
+
+if [ ! -z "$LUNCH_VERSION" ]; then
+  LUNCH_DEBUG="$LUNCH_VERSION"
 fi
 
 # Iterate over builds
@@ -269,7 +274,7 @@ for DEVICE in $DEVICES; do
   echo "--- Building $DEVICE ($BUILD_NAME) :building_construction:"
 
   # Run lunch
-  build_id="${BUILD_NAME}_$DEVICE-userdebug"
+  build_id="${BUILD_NAME}_$DEVICE-$LUNCH_DEBUG"
   if [[ ! -z "${BUILDKITE}" ]]; then
     lunch $build_id > /dev/null 2>&1
   else
