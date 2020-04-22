@@ -168,7 +168,7 @@ else
    make clobber >/dev/null 2>&1
    
    # Pull original changes
-   repo forall -vc "git reset --hard"
+   repo forall -vc "git reset --hard" > /dev/null 2>&1
   fi
 
   # Sync sources
