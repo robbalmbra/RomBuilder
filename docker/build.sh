@@ -134,7 +134,7 @@ else
 fi
 
 # Use https for https repos
-if [[ ! ${REPO} =~ *"git://"* ]]; then
+if [[ ! ${REPO} =~ "git://" ]]; then
   echo "Setting https for repo pull"
   git config --global url."https://".insteadOf git://
 fi
