@@ -6,12 +6,17 @@ fi
 
 error_exit()
 {
-    ret="$?"
-    if [ "$ret" != "0" ]; then
-        echo "^^^ +++"
-        echo "Error - '$1' failed ($ret) :bk-status-failed:"
-        exit 1
-    fi
+  ret="$?"
+  if [ "$ret" != "0" ]; then
+    echo "^^^ +++"
+    echo "Error - '$1' failed ($ret) :bk-status-failed:"
+    exit 1
+  fi
+}
+
+log_setting()
+{
+  echo "Setting $1 to '$2'"
 }
 
 # Check for local use, not using docker
