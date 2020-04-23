@@ -40,7 +40,7 @@ if [[ ! -z "${BUILDKITE}" ]]; then
   fi
 
   # Prompt to the user the location of the build
-  echo "Setting BUILD_DIR to '$BUILD_DIR'"
+  log_setting "BUILD_DIR" "$BUILD_DIR"
 
   # Copy modifications and logger to build dir if exists
   if [ ! -z "$USER_MODS" ]; then
@@ -59,10 +59,10 @@ if [[ ! -z "${BUILDKITE}" ]]; then
     # Default to 30 seconds if hasnt been set
     export LOGGING_RATE=30
   fi
-  echo "Setting LOGGING_RATE to '$LOGGING_RATE'"
+  log_setting "LOGGING_RATE" "$LOGGING_RATE"
 else
   # Prompt to the user the location of the build
-  echo "Setting BUILD_DIR to '$BUILD_DIR'"
+  log_setting "BUILD_DIR" "$BUILD_DIR"
 fi
 
 length=${#BUILD_DIR}
@@ -132,7 +132,7 @@ fi
 
 # Override max cpus if asked to
 if [ ! -z "$MAX_CPUS" ]; then
-  echo "Setting MAX_CPUS to '$MAX_CPUS'"
+  log_setting "MAX_CPUS" "$MAX_CPUS"
   MAX_CPU="$MAX_CPUS"
 else
   MAX_CPU="$(nproc --all)"
@@ -140,7 +140,6 @@ fi
 
 # Use https for https repos
 if [[ ! "$REPO" =~ "git://" ]]; then
-  echo "Setting https for repo pull"
   git config --global url."https://".insteadOf git://
 fi
 
@@ -260,7 +259,7 @@ cd "$BUILD_DIR/rom/"
 . build/envsetup.sh > /dev/null 2>&1
 
 # Set ccache and directory
-echo "Setting CCACHE to '$BUILD_DIR/ccache'"
+log_setting "CCACHE" "$BUILD_DIR/ccache"
 export CCACHE_DIR="$BUILD_DIR/ccache"
 export USE_CCACHE=1
 
