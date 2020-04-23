@@ -95,7 +95,6 @@ cd $BUILD_DIR
 git config --global user.name robbbalmbra
 git config --global user.email robbalmbra@gmail.com
 git config --global color.ui true
-git config --global url."https://".insteadOf git://
 
 variables=(
   BUILD_NAME
@@ -124,6 +123,12 @@ done
 # Exit on failure of required variables
 if [ $quit -eq 1 ]; then
   exit 1
+fi
+
+# Use https for https repos
+if [[ ${REPO} != *"git://"* ]]; then
+  echo "Setting https for repo pull"
+  git config --global url."https://".insteadOf git://
 fi
 
 # Skip this if told to, git sync in host mode
