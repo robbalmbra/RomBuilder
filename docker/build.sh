@@ -125,6 +125,14 @@ if [ $quit -eq 1 ]; then
   exit 1
 fi
 
+# Override max cpus if asked to
+if [ ! -z "$MAX_CPUS" ]; then
+  echo "Setting max cpu count to $MAX_CPUS"
+  MAX_CPU="$MAX_CPUS"
+else
+  MAX_CPU="$(nproc --all)"
+fi
+
 # Use https for https repos
 if [[ ${REPO} != *"git://"* ]]; then
   echo "Setting https for repo pull"
@@ -187,10 +195,10 @@ else
   echo "Syncing sources to git repo"
 
   if [[ ! -z "${BUILDKITE}" ]]; then
-    repo sync -d -f -c -j$(nproc --all) --force-sync --no-clone-bundle --no-tags --quiet > /dev/null 2>&1
+    repo sync -d -f -c -j$MAX_CPU --force-sync --no-clone-bundle --no-tags --quiet > /dev/null 2>&1
     error_exit "repo sync"
   else
-    repo sync -d -f -c -j$(nproc --all) --force-sync --no-clone-bundle --no-tags --quiet
+    repo sync -d -f -c -j$MAX_CPU --force-sync --no-clone-bundle --no-tags --quiet
     error_exit "repo sync"
   fi
 
@@ -307,9 +315,9 @@ for DEVICE in $DEVICES; do
 
   # Run build
   if [[ ! -z "${BUILDKITE}" ]]; then
-    mka $BUILD_PARAMETERS -j$(nproc --all) 2>&1 | tee "../logs/$DEVICE/make_${DEVICE}_android10.txt" > /dev/null 2>&1
+    mka $BUILD_PARAMETERS -j$MAX_CPU 2>&1 | tee "../logs/$DEVICE/make_${DEVICE}_android10.txt" > /dev/null 2>&1
   else
-    mka $BUILD_PARAMETERS -j$(nproc --all) 2>&1 | tee "../logs/$DEVICE/make_${DEVICE}_android10.txt"
+    mka $BUILD_PARAMETERS -j$MAX_CPU 2>&1 | tee "../logs/$DEVICE/make_${DEVICE}_android10.txt"
   fi
   
   # Upload error log to buildkite if any errors occur
