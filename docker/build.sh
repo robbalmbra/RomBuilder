@@ -127,7 +127,7 @@ fi
 
 # Override max cpus if asked to
 if [ ! -z "$MAX_CPUS" ]; then
-  echo "Setting max cpu count to $MAX_CPUS"
+  echo "Setting MAX_CPUS to '$MAX_CPUS'"
   MAX_CPU="$MAX_CPUS"
 else
   MAX_CPU="$(nproc --all)"
