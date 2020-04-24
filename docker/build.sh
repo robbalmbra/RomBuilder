@@ -407,5 +407,6 @@ for ROM in $BUILD_DIR/rom/out/target/product/*/*.zip; do
   echo "Uploading $(basename $ROM)"
   mega-put -c $ROM ROMS/$UPLOAD_NAME/$DATE/
   error_exit "mega put"
+  sleep 5
 done
 echo "Upload complete"
