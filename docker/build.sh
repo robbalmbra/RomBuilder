@@ -69,6 +69,25 @@ length=${#BUILD_DIR}
 last_char=${BUILD_DIR:length-1:1}
 [[ $last_char == "/" ]] && BUILD_DIR=${BUILD_DIR:0:length-1}; :
 
+# Jut upload mode
+if [ ! -z "$JUST_UPLOAD" ]; then
+  # Upload firmware to mega
+  echo "--- Uploading to mega :rea:"
+  mega-logout > /dev/null 2>&1
+  mega-login $MEGA_USERNAME $MEGA_PASSWORD > /dev/null 2>&1
+  error_exit "mega login"
+
+  shopt -s nocaseglob
+  DATE=$(date '+%d-%m-%y');
+  for ROM in $BUILD_DIR/rom/out/target/product/*/*.zip; do
+    echo "Uploading $(basename $ROM)"
+    mega-put -c $ROM ROMS/$UPLOAD_NAME/$DATE/
+    error_exit "mega put"
+  done
+  echo "Upload complete"
+  exit 0
+fi
+
 # Flush logs
 rm -rf "$BUILD_DIR/logs/"
 
