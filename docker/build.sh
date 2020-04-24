@@ -74,6 +74,7 @@ if [ ! -z "$JUST_UPLOAD" ]; then
   # Upload firmware to mega
   echo "--- Uploading to mega :rea:"
   mega-logout > /dev/null 2>&1
+  echo "mega-login $MEGA_USERNAME $MEGA_PASSWORD"
   mega-login $MEGA_USERNAME $MEGA_PASSWORD > /dev/null 2>&1
   error_exit "mega login"
 
