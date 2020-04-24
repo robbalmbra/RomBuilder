@@ -84,6 +84,7 @@ if [ ! -z "$JUST_UPLOAD" ]; then
     echo "Uploading $(basename $ROM)"
     mega-put -c $ROM ROMS/$UPLOAD_NAME/$DATE/
     error_exit "mega put"
+    sleep 5
   done
   echo "Upload complete"
   exit 0
