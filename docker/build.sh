@@ -26,19 +26,13 @@ else
   BUILD_DIR="/root"
 fi
 
-# Output directory override
-if [ ! -z "$CUSTOM_OUTPUT_DIR" ]; then
-  BUILD_DIR="$CUSTOM_OUTPUT_DIR"
-fi
-
 # Persist rom through builds with buildkite and enable ccache
 if [[ ! -z "${BUILDKITE}" ]]; then
   
-  # Let the user choice to create unique build folders using environment vairables
-  if [ ! -z "$UNIQUE_BUILDS" ]; then
-    echo "Enabling unique build"
-    mkdir -p "/tmp/build/$UPLOAD_NAME-$BUILDKITE_BUILD_NUMBER" > /dev/null 2>&1
-    BUILD_DIR="/tmp/build/$UPLOAD_NAME-$BUILDKITE_BUILD_NUMBER"
+  # Output directory override
+  if [ ! -z "$CUSTOM_OUTPUT_DIR" ]; then
+    mkdir -p "$CUSTOM_OUTPUT_DIR/build/$UPLOAD_NAME" > /dev/null 2>&1
+    BUILD_DIR="$CUSTOM_OUTPUT_DIR/build/$UPLOAD_NAME"
   else
     mkdir -p "/tmp/build/$UPLOAD_NAME" > /dev/null 2>&1
     BUILD_DIR="/tmp/build/$UPLOAD_NAME"
