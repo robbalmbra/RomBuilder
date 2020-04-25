@@ -26,6 +26,11 @@ else
   BUILD_DIR="/root"
 fi
 
+# Output directory override
+if [ ! -z "$CUSTOM_OUTPUT_DIR" ]; then
+  BUILD_DIR="$CUSTOM_OUTPUT_DIR"
+fi
+
 # Persist rom through builds with buildkite and enable ccache
 if [[ ! -z "${BUILDKITE}" ]]; then
   
