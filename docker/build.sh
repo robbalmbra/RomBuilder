@@ -398,6 +398,15 @@ for DEVICE in $DEVICES; do
   fi
 done
 
+# Patch magisk
+mkdir -p /tmp/rom-magisk/
+echo "--- Patching to include magisk in ROM"
+for ROM in $BUILD_DIR/rom/out/target/product/*/*.zip; do  
+  $BUILD_DIR/patch_magisk.sh $ROM /tmp/rom-magisk
+  file_name=$(basename "$ROM")
+  mv /tmp/rom-magisk/$file_name $ROM
+done
+
 # Upload firmware to mega
 echo "--- Uploading to mega :rea:"
 mega-logout > /dev/null 2>&1
@@ -406,7 +415,7 @@ error_exit "mega login"
 
 shopt -s nocaseglob
 DATE=$(date '+%d-%m-%y');
-for ROM in $BUILD_DIR/rom/out/target/product/*/*.zip; do
+for ROM in $BUILD_DIR/rom/out/target/product/*/*.zip; do  
   echo "Uploading $(basename $ROM)"
   mega-put -c $ROM ROMS/$UPLOAD_NAME/$DATE/
   error_exit "mega put"
