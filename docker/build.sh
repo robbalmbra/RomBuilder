@@ -403,6 +403,7 @@ mkdir -p /tmp/rom-magisk/
 echo "--- Patching to include magisk in ROM"
 for ROM in $BUILD_DIR/rom/out/target/product/*/*.zip; do  
   $BUILD_DIR/patch_magisk.sh $ROM /tmp/rom-magisk
+  error_exit "magisk patch"
   file_name=$(basename "$ROM")
   mv /tmp/rom-magisk/$file_name $ROM
 done
