@@ -53,6 +53,9 @@ if [[ ! -z "${BUILDKITE}" ]]; then
   cp "$BUILDKITE_LOGGER" "$BUILD_DIR/buildkite_logger.sh" > /dev/null 2>&1
   chmod +x "$BUILD_DIR/buildkite_logger.sh"
   
+  # Copy magisk patcher to build directory
+  
+  
   # Set logging rate if hasnt been defined
   if [[ -z "${LOGGING_RATE}" ]]; then
     # Default to 30 seconds if hasnt been set
