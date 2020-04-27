@@ -370,6 +370,7 @@ for DEVICE in $DEVICES; do
       if [ -f "../logs/$DEVICE/make_${DEVICE}_errors_android10.txt" ]; then
         cd "../logs/$DEVICE"
         buildkite-agent artifact upload "make_${DEVICE}_errors_android10.txt" > /dev/null 2>&1
+        buildkite-agent artifact upload "make_${DEVICE}_android10.txt" > /dev/null 2>&1
         cd "$CURRENT"
       fi
     fi
