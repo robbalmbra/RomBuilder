@@ -59,7 +59,8 @@ wget $magisk_url -O $magisk_dir/Magisk.zip > /dev/null 2>&1
 
 # Zip folder to output directory
 rm -rf "$rom_folder_out/$file_name"
-zip -r "$rom_folder_out/$file_name" $WORK_DIR > /dev/null 2>&1
+cd $WORK_DIR/
+zip -r "$rom_folder_out/$file_name" . > /dev/null 2>&1
 echo "File saved to '$rom_folder_out/$file_name'"
 
 # Delete temporary directory
