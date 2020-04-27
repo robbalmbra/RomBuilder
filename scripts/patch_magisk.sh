@@ -2,17 +2,14 @@
 
 # Patches magisk into updater-script on selected rom 
 
-get_latest_release() {
-  magisk_url=$(curl --silent "https://api.github.com/repos/topjohnwu/Magisk/tags" | jq -r '.[0].zipball_url')
-}
-
-if [ $# -lt 2 ]; then
-  echo "USAGE: [ROM FILE] [ROM FOLDER OUT]"
+if [ $# -lt 3 ]; then
+  echo "USAGE: [ROM FILE] [ROM FOLDER OUT] [MAGISK VERSION]"
   exit 1
 fi
 
 rom_file_in=$1
 rom_folder_out=$2
+magisk_version=$3
 
 # Error checking
 
@@ -54,7 +51,8 @@ magisk_dir=$WORK_DIR/META-INF/ADD-ONS/Magisk
 mkdir -p "$magisk_dir"
 
 # Get latest magisk version
-get_latest_release
+magisk_url="https://github.com/topjohnwu/Magisk/releases/download/v$magisk_version/Magisk-v$magisk_version.zip"
+echo $magisk_url
 wget $magisk_url -O $magisk_dir/Magisk.zip > /dev/null 2>&1
 
 # Zip folder to output directory
