@@ -4,6 +4,10 @@ if [ -z "$BOOT_LOGGING" ]; then
   BOOT_LOGGING=0
 fi
 
+if [ -z "$MAGISK_VERSION" ]; then
+  MAGISK_VERSION="20.4"
+fi
+
 error_exit()
 {
   ret="$?"
@@ -403,7 +407,7 @@ done
 mkdir -p /tmp/rom-magisk/
 echo "--- Patching to include magisk in ROM"
 for ROM in $BUILD_DIR/rom/out/target/product/*/*.zip; do  
-  $BUILD_DIR/patch_magisk.sh $ROM /tmp/rom-magisk
+  $BUILD_DIR/patch_magisk.sh $ROM /tmp/rom-magisk $MAGISK_VERSION
   error_exit "magisk patch"
   file_name=$(basename "$ROM")
   mv /tmp/rom-magisk/$file_name $ROM
