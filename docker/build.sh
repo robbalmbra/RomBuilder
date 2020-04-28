@@ -259,7 +259,7 @@ if [ ! -z "$ADDITIONAL_PROPS" ]; then
       additional_props_string+=" \\\\\n"
     fi
 
-    additional_props_string+="${prop}"
+    additional_props_string+="    ${prop}"
   done
 
   # Append to device props 
