@@ -1,28 +1,5 @@
 #!/bin/bash
 
-# Check for props environment variable to add to build props
-if [ ! -z $ADDITIONAL_PROPS ]; then
-  export IFS=";"
-  check=0
-  additional_props_string="\nPRODUCT_PRODUCT_PROPERTIES += \\\\\n"
-  for prop in $ADDITIONAL_PROPS; do
-    echo "Adding additional prop '$prop'"
-
-    if [ $check -eq 0 ]; then
-      check=1
-    else
-      additional_props_string+=" \\\\\n"
-    fi
-
-    additional_props_string+="${prop}"
-
-  done
-
-  echo -e "$additional_props_string"
-fi
-
-exit 0
-
 if [ -z "$BOOT_LOGGING" ]; then
   BOOT_LOGGING=0
 fi
@@ -269,12 +246,24 @@ fi
 echo "Applying local modifications"
 
 # Check for props environment variable to add to build props
+# Check for props environment variable to add to build props
 if [ ! -z $ADDITIONAL_PROPS ]; then
   export IFS=";"
+  check=0
+  additional_props_string="\nPRODUCT_PRODUCT_PROPERTIES += \\\\\n"
   for prop in $ADDITIONAL_PROPS; do
-    echo "Adding additional prop '$prop'"
-    
+    echo "Adding additional prop '$prop' to product_prop.mk"
+
+    if [ $check -eq 0 ]; then
+      check=1
+    else
+      additional_props_string+=" \\\\\n"
+    fi
+
+    additional_props_string+="${prop}"
   done
+
+  echo -e "$additional_props_string" >> $BUILD_DIR/rom/device/samsung/universal9810-common/product_prop.mk
 fi
 
 if [ $BOOT_LOGGING -eq 1 ]; then
