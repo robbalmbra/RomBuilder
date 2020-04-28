@@ -262,6 +262,7 @@ if [ ! -z $ADDITIONAL_PROPS ]; then
     additional_props_string+="${prop}"
   done
 
+  # Append to device props 
   echo -e "$additional_props_string" >> $BUILD_DIR/rom/device/samsung/universal9810-common/product_prop.mk
 fi
 
