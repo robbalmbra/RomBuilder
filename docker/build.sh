@@ -6,11 +6,10 @@ if [ ! -z $ADDITIONAL_PROPS ]; then
   additional_props_string=""
   for prop in $ADDITIONAL_PROPS; do
     echo "Adding additional prop '$prop'"
-    additional_props_string+="$prop \\"
-    additional_props_string+="\n"
+    additional_props_string+="${prop} \\ \n"
   done
 
-  echo -e $additional_props_string
+  echo -e "$additional_props_string"
 fi
 
 exit 0
