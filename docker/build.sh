@@ -9,7 +9,7 @@ if [ ! -z $ADDITIONAL_PROPS ]; then
     additional_props_string+="$prop \\\n"
   done
 
-  echo -e $additional_props_stringa
+  echo -e $additional_props_string
 fi
 
 exit 0
