@@ -7,13 +7,14 @@ if [ ! -z $ADDITIONAL_PROPS ]; then
   for prop in $ADDITIONAL_PROPS; do
     echo "Adding additional prop '$prop'"
 
+    additional_props_string+="${prop}"
+
     if [ $check -eq 0 ]; then
       $check=1
     else
       additional_props_string+="\\\\\n"
     fi
 
-    additional_props_string+="${prop}"
   done
 
   echo -e "$additional_props_string"
