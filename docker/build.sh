@@ -4,7 +4,7 @@
 if [ ! -z $ADDITIONAL_PROPS ]; then
   export IFS=";"
   check=0
-  additional_props_string="PRODUCT_PRODUCT_PROPERTIES += \\\\\n"
+  additional_props_string="\nPRODUCT_PRODUCT_PROPERTIES += \\\\\n"
   for prop in $ADDITIONAL_PROPS; do
     echo "Adding additional prop '$prop'"
 
