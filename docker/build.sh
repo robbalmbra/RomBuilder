@@ -3,7 +3,7 @@
 # Check for props environment variable to add to build props
 if [ ! -z $ADDITIONAL_PROPS ]; then
   export IFS=";"
-  additional_props_string="PRODUCT_PRODUCT_PROPERTIES += \\\"
+  additional_props_string="PRODUCT_PRODUCT_PROPERTIES += \\\\"
   additional_props_string+="\n"
   for prop in $ADDITIONAL_PROPS; do
     echo "Adding additional prop '$prop'"
