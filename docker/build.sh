@@ -9,7 +9,7 @@ if [ ! -z $ADDITIONAL_PROPS ]; then
     echo "Adding additional prop '$prop'"
 
     if [ $check -eq 0 ]; then
-      $check=1
+      check=1
     else
       additional_props_string+="\\\\\n"
     fi
