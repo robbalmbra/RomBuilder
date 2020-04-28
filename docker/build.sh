@@ -246,7 +246,6 @@ fi
 echo "Applying local modifications"
 
 # Check for props environment variable to add to build props
-# Check for props environment variable to add to build props
 if [ ! -z $ADDITIONAL_PROPS ]; then
   export IFS=";"
   check=0
