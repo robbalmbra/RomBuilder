@@ -253,7 +253,7 @@ if [ ! -z $ADDITIONAL_PROPS ]; then
   for prop in $ADDITIONAL_PROPS; do
     echo "Adding additional prop '$prop' to product_prop.mk"
 
-    if [ $check -eq 0 ]; then
+    if [[ $check == 0 ]]; then
       check=1
     else
       additional_props_string+=" \\\\\n"
