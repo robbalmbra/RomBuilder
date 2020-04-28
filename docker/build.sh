@@ -6,11 +6,13 @@ if [ ! -z $ADDITIONAL_PROPS ]; then
   additional_props_string=""
   for prop in $ADDITIONAL_PROPS; do
     echo "Adding additional prop '$prop'"
-    additional_props_string+=$'$prop \\\n'
+    additional_props_string+="$prop \\\n"
   done
 
-  echo $additional_props_string
+  echo -e $additional_props_stringa
 fi
+
+exit 0
 
 if [ -z "$BOOT_LOGGING" ]; then
   BOOT_LOGGING=0
