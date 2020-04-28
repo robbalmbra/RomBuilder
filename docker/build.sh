@@ -1,5 +1,14 @@
 #!/bin/bash
 
+# Check for props environment variable to add to build props
+if [ ! -z $ADDITIONAL_PROPS ]; then
+  export IFS=";"
+  for prop in $ADDITIONAL_PROPS; do
+    echo "Adding additional prop '$prop'"
+    
+  done
+fi
+
 if [ -z "$BOOT_LOGGING" ]; then
   BOOT_LOGGING=0
 fi
@@ -244,6 +253,15 @@ else
 fi
 
 echo "Applying local modifications"
+
+# Check for props environment variable to add to build props
+if [ ! -z $ADDITIONAL_PROPS ]; then
+  export IFS=";"
+  for prop in $ADDITIONAL_PROPS; do
+    echo "Adding additional prop '$prop'"
+    
+  done
+fi
 
 if [ $BOOT_LOGGING -eq 1 ]; then
 
