@@ -10,7 +10,7 @@ if [ ! -z $ADDITIONAL_PROPS ]; then
     if [ $check -eq 0 ]; then
       $check=1
     else
-      additional_props_string+="\\\\n\
+      additional_props_string+="\\\\\n"
     fi
 
     additional_props_string+="${prop}"
