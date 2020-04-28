@@ -42,6 +42,9 @@ if [[ ! -z "${BUILDKITE}" ]]; then
     BUILD_DIR="/tmp/build/$UPLOAD_NAME"
   fi
 
+  # Copy supplements to local folder
+  cp -R "$SUPPLEMENTS" "$BUILD_DIR/"
+
   # Prompt to the user the location of the build
   log_setting "BUILD_DIR" "$BUILD_DIR"
 
@@ -280,6 +283,13 @@ if [ -f "$BUILD_DIR/user_modifications.sh" ]; then
   error_exit "user modifications"
 fi
 
+# Add libexynoscamera to vendor copy files
+cat <<EOT >> "$BUILD_DIR/rom/vendor/samsung/universal9810-common/universal9810-common-vendor.mk"
+
+PRODUCT_COPY_FILES += \
+    vendor/samsung/universal9810-common/proprietary/lib/libexynoscamera3.so:$(TARGET_COPY_OUT_SYSTEM)/lib/libexynoscamera3.so
+EOT
+
 # Build
 echo "Environment setup"
 cd "$BUILD_DIR/rom/"
@@ -295,8 +305,8 @@ if [[ ! -d "$CCACHE_DIR" ]]; then
   mkdir "$CCACHE_DIR" > /dev/null 2>&1
 fi
 
-# Enable ccache with 50 gigabytes
-ccache -M 50G > /dev/null 2>&1
+# Enable ccache with 60 gigabytes
+ccache -M 60G > /dev/null 2>&1
 error_exit "ccache"
 
 # Check for any build parameters passed to script
@@ -315,6 +325,10 @@ fi
 export IFS=","
 runonce=0
 for DEVICE in $DEVICES; do
+
+  # Add libexynos camera libs for each device
+  cp $BUILD_DIR/supplements/libexynoscamera3/libexynoscamera3-$DEVICE.so $BUILD_DIR/roms/vendor/samsung/universal9810-common/proprietary/lib/libexynoscamera3.so
+
   echo "--- Building $DEVICE ($BUILD_NAME) :building_construction:"
 
   # Run lunch

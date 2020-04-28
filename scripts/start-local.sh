@@ -167,5 +167,6 @@ fi
 echo "--- Initializing build environment :parcel:"
 export BUILDKITE_LOGGER="$CURRENT/buildkite_logger.sh"
 export MAGISK_PATCHER="$CURRENT/patch_magisk.sh"
+export SUPPLEMENTS="$CURRENT/../supplements/"
 "$(pwd)/../docker/build.sh"
 error_exit "build script"
