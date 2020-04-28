@@ -6,7 +6,7 @@ if [ ! -z $ADDITIONAL_PROPS ]; then
   additional_props_string="PRODUCT_PRODUCT_PROPERTIES += \\\\\n"
   for prop in $ADDITIONAL_PROPS; do
     echo "Adding additional prop '$prop'"
-    additional_props_string+="${prop} \\\n"
+    additional_props_string+="${prop} \\\\\n"
   done
 
   echo -e "$additional_props_string"
