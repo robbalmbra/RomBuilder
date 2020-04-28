@@ -266,36 +266,6 @@ if [ ! -z "$ADDITIONAL_PROPS" ]; then
   echo -e "$additional_props_string" >> $BUILD_DIR/rom/device/samsung/universal9810-common/product_prop.mk
 fi
 
-if [ $BOOT_LOGGING -eq 1 ]; then
-
-  isLoggingInFile=$(cat "$BUILD_DIR/rom/device/samsung/universal9810-common/rootdir/etc/init.samsung.rc" | grep -c "/system/bin/logcat")
-  if [ $isLoggingInFile -eq 0 ]; then
-
-    echo "Enabling logging during boot"
-
-  # Enable logging via logcat
-cat >> "$BUILD_DIR/rom/device/samsung/universal9810-common/rootdir/etc/init.samsung.rc" << EOL
-
-service logger /system/bin/logcat -b all -D -f /cache/boot_log.txt
-    # Initialize
-    class main
-    user root
-    group root system
-    disabled
-    oneshot
-
-on post-fs-data
-    # Clear existing log and start the service
-    rm /cache/boot_log.txt
-    start logger
-
-on property:sys.boot_completed=1
-    # Stop the logger service
-    stop logger
-EOL
-  fi
-fi
-
 # Execute specific user modifications and environment specific options if avaiable
 if [ -f "$BUILD_DIR/user_modifications.sh" ]; then
 
