@@ -293,7 +293,7 @@ if [ $LIBEXYNOS_CAMERA -eq 1 ]; then
 cat <<EOT >> "$BUILD_DIR/rom/vendor/samsung/universal9810-common/universal9810-common-vendor.mk"
 
 PRODUCT_COPY_FILES += \
-    vendor/samsung/universal9810-common/proprietary/lib/libexynoscamera3.so:$(TARGET_COPY_OUT_SYSTEM)/lib/libexynoscamera3.so
+    vendor/samsung/universal9810-common/proprietary/lib/libexynoscamera3.so:\$(TARGET_COPY_OUT_SYSTEM)/lib/libexynoscamera3.so
 EOT
 fi
 
