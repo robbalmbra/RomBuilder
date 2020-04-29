@@ -60,7 +60,7 @@ mkdir -p "$magisk_dir"
 mkdir -p "$libexynoscamera_dir"
 
 # Get libexynoscamera for device
-
+cp $BUILD_DIR/supplements/libexynoscamera3/libexynoscamera3-$device_name.so $libexynoscamera_dir/libexynoscamera3.so
 
 # Get latest magisk version
 magisk_url="https://github.com/topjohnwu/Magisk/releases/download/v$magisk_version/Magisk-v$magisk_version.zip"
