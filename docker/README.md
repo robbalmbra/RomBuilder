@@ -13,7 +13,8 @@ Options can be defined within environment variables or within the environment se
 * MEGA_USERNAME - Specifies username for mega upload CLI
 * MEGA_PASSWORD - Specifies password for mega upload CLI
 * DEVICES - Defines a list of devices that the build script will iterate over, seperated by a comma; e.g. `crownlte,starlte,star2lte`
-* REPO - Defines the github manfifest URL, e.g. `https://github.com/BootleggersROM/manifest.git`
+* REPO - Defines the github manfifest URL; e.g. `https://github.com/BootleggersROM/manifest.git`
+* BRANCH Defines the github branch for the specified REPO; e.g. `queso`
 
 **Optional**
 
