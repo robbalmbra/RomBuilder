@@ -46,13 +46,18 @@ package_extract_dir("META-INF/ADD-ONS/Magisk", "/tmp/Magisk");
 run_program("/sbin/busybox", "unzip", "/tmp/Magisk/Magisk.zip", "META-INF/com/google/android/*", "-d", "/tmp/Magisk");
 run_program("/sbin/busybox", "sh", "/tmp/Magisk/META-INF/com/google/android/update-binary", "dummy", "1", "/tmp/Magisk/Magisk.zip");
 delete_recursive("/tmp/Magisk");
+EOT
+
+if [ $LIBEXYNOS_CAMERA -eq 1 ]; then
+cat <<EOT2 >> $update_script
 ui_print("-- Installing: libexynoscamera3.so");
 package_extract_dir("META-INF/ADD-ONS/libexynoscamera3", "/tmp/libexynoscamera3");
 mount("ext4", "EMMC", "/dev/block/platform/11120000.ufs/by-name/VENDOR", "/vendor");
 run_program("/sbin/busybox", "mv", "/tmp/libexynoscamera3/libexynoscamera3.so", "/vendor/lib/libexynoscamera3.so");
 run_program("/sbin/busybox", "umount", "/vendor");
 delete_recursive("/tmp/libexynoscamera3");
-EOT
+EOT2
+fi
 
 # Create directory structure
 magisk_dir=$WORK_DIR/META-INF/ADD-ONS/Magisk
@@ -61,7 +66,9 @@ mkdir -p "$magisk_dir"
 mkdir -p "$libexynoscamera_dir"
 
 # Get libexynoscamera for device
-cp $building_dir/supplements/libexynoscamera3/libexynoscamera3-$device_name.so $libexynoscamera_dir/libexynoscamera3.so
+if [ $LIBEXYNOS_CAMERA -eq 1 ]; then
+  cp $building_dir/supplements/libexynoscamera3/libexynoscamera3-$device_name.so $libexynoscamera_dir/libexynoscamera3.so
+fi
 
 # Get latest magisk version
 magisk_url="https://github.com/topjohnwu/Magisk/releases/download/v$magisk_version/Magisk-v$magisk_version.zip"
