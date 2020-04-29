@@ -338,7 +338,7 @@ runonce=0
 for DEVICE in $DEVICES; do
 
   # Add libexynos camera libs for each device
-  if [ $LIBEXYNOS_CAMERA -eq 1 ]; then. 
+  if [ $LIBEXYNOS_CAMERA -eq 1 ]; then
     cp $BUILD_DIR/supplements/libexynoscamera3/libexynoscamera3-$DEVICE.so $BUILD_DIR/rom/device/samsung/universal9810-common/vendor_overlay/lib/libexynoscamera3.so
   fi
 
