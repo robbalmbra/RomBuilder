@@ -8,6 +8,12 @@ if [ -z "$MAGISK_VERSION" ]; then
   MAGISK_VERSION="20.4"
 fi
 
+# Magisk enable within rom, default is enabled
+if [ -z "$MAGISK_IN_BUILD" ]; then
+  export MAGISK_IN_BUILD=1
+fi
+
+
 # Default is on
 if [ -z "$LIBEXYNOS_CAMERA" ]; then
   export LIBEXYNOS_CAMERA=1
