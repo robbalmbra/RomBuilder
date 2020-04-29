@@ -43,8 +43,8 @@ if [[ ! -z "${BUILDKITE}" ]]; then
     mkdir -p "$CUSTOM_OUTPUT_DIR/build/$UPLOAD_NAME" > /dev/null 2>&1
     BUILD_DIR="$CUSTOM_OUTPUT_DIR/build/$UPLOAD_NAME"
   else
-    mkdir -p "/tmp/build/$UPLOAD_NAME" > /dev/null 2>&1
-    BUILD_DIR="/tmp/build/$UPLOAD_NAME"
+    mkdir -p "/var/lib/buildkite-agent/build/$UPLOAD_NAME" > /dev/null 2>&1
+    BUILD_DIR="/var/lib/buildkite-agent/build/$UPLOAD_NAME"
   fi
 
   # Copy supplements to local folder
