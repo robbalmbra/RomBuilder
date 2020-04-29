@@ -283,13 +283,13 @@ fi
 if [ $LIBEXYNOS_CAMERA -eq 1 ]; then
 cat <<EOT >> "$BUILD_DIR/rom/device/samsung/universal9810-common/vendor_overlay/Android.mk"
 
-include $(CLEAR_VARS)
+include \$(CLEAR_VARS)
 LOCAL_MODULE            := libexynoscamera3.so
 LOCAL_MODULE_TAGS       := optional
 LOCAL_MODULE_CLASS      := ETC
 LOCAL_SRC_FILES         := lib/libexynoscamera3.so
-LOCAL_MODULE_PATH       := $(TARGET_OUT_PRODUCT)/vendor_overlay/$(PRODUCT_TARGET_VNDK_VERSION)/lib
-include $(BUILD_PREBUILT)
+LOCAL_MODULE_PATH       := \$(TARGET_OUT_PRODUCT)/vendor_overlay/\$(PRODUCT_TARGET_VNDK_VERSION)/lib
+include \$(BUILD_PREBUILT)
 EOT
 
 # Add to product packages
