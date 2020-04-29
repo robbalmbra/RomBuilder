@@ -20,6 +20,8 @@ Options can be defined within environment variables or within the environment se
 
 **Optional**
 
+* MAGISK_VERSION - Specifies magisk version to include within the rom; e.g `20.4`
+
 **Other**
 
 Specific environment variables can be set prior to executing build.sh for defining specific build options
