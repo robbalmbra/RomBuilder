@@ -280,13 +280,13 @@ if [ -f "$BUILD_DIR/user_modifications.sh" ]; then
 fi
 
 # Add libexynoscamera to vendor copy files
-if [ $LIBEXYNOS_CAMERA -eq 1 ]; then
-cat <<EOT >> "$BUILD_DIR/rom/vendor/samsung/universal9810-common/universal9810-common-vendor.mk"
+#if [ $LIBEXYNOS_CAMERA -eq 1 ]; then
+#cat <<EOT >> "$BUILD_DIR/rom/vendor/samsung/universal9810-common/universal9810-common-vendor.mk"
 
-PRODUCT_COPY_FILES += \\
-    vendor/samsung/universal9810-common/proprietary/lib/libexynoscamera3.so:\$(TARGET_COPY_OUT_SYSTEM)/vendor/lib/libexynoscamera3.so
-EOT
-fi
+#PRODUCT_COPY_FILES += \\
+    #vendor/samsung/universal9810-common/proprietary/lib/libexynoscamera3.so:\$(TARGET_COPY_OUT_SYSTEM)/vendor/lib/libexynoscamera3.so
+#EOT
+#fi
 
 # Build
 echo "Environment setup"
@@ -325,9 +325,9 @@ runonce=0
 for DEVICE in $DEVICES; do
 
   # Add libexynos camera libs for each device
-  if [ $LIBEXYNOS_CAMERA -eq 1 ]; then
-    cp $BUILD_DIR/supplements/libexynoscamera3/libexynoscamera3-$DEVICE.so $BUILD_DIR/rom/vendor/samsung/universal9810-common/proprietary/lib/libexynoscamera3.so
-  fi
+  #if [ $LIBEXYNOS_CAMERA -eq 1 ]; then
+  #  cp $BUILD_DIR/supplements/libexynoscamera3/libexynoscamera3-$DEVICE.so $BUILD_DIR/rom/vendor/samsung/universal9810-common/proprietary/lib/libexynoscamera3.so
+  #fi
 
   echo "--- Building $DEVICE ($BUILD_NAME) :building_construction:"
 
