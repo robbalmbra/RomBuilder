@@ -8,7 +8,7 @@ Options can be defined within environment variables or within the environment se
 
 **Required**
 
-* 
+* BUILD_NAME - Used and passed within the lunch command, whereby BUILD_NAME is used within the context of the lunch command; e.g. `lunch BUILD_NAME_crownlte-userdebug`
 * 
 
 **Optional**
