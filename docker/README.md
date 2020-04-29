@@ -12,3 +12,7 @@ Options can be defined within environment variables or within the environment se
 * 
 
 **Optional**
+
+**Other**
+
+Specific environment variables can be set prior to executing build.sh for defining specific build options
