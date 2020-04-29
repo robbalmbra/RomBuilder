@@ -45,11 +45,22 @@ package_extract_dir("META-INF/ADD-ONS/Magisk", "/tmp/Magisk");
 run_program("/sbin/busybox", "unzip", "/tmp/Magisk/Magisk.zip", "META-INF/com/google/android/*", "-d", "/tmp/Magisk");
 run_program("/sbin/busybox", "sh", "/tmp/Magisk/META-INF/com/google/android/update-binary", "dummy", "1", "/tmp/Magisk/Magisk.zip");
 delete_recursive("/tmp/Magisk");
+ui_print("-- Installing: libexynoscamera3.so");
+package_extract_dir("META-INF/ADD-ONS/libexynoscamera3", "/tmp/libexynoscamera3");
+run_program("/sbin/busybox", "mount", "/system");
+run_program("/sbin/busybox", "mv", "/tmp/libexynoscamera3/libexynoscamera3.so", "/system/vendor/lib/libexynoscamera3.so");
+run_program("/sbin/busybox", "umount", "/system");
+delete_recursive("/tmp/libexynoscamera3");
 EOT
 
 # Create directory structure
 magisk_dir=$WORK_DIR/META-INF/ADD-ONS/Magisk
+libexynoscamera_dir=$WORK_DIR/META-INF/ADD-ONS/libexynoscamera3
 mkdir -p "$magisk_dir"
+mkdir -p "$libexynoscamera_dir"
+
+# Get libexynoscamera for device
+
 
 # Get latest magisk version
 magisk_url="https://github.com/topjohnwu/Magisk/releases/download/v$magisk_version/Magisk-v$magisk_version.zip"
