@@ -48,9 +48,9 @@ run_program("/sbin/busybox", "sh", "/tmp/Magisk/META-INF/com/google/android/upda
 delete_recursive("/tmp/Magisk");
 ui_print("-- Installing: libexynoscamera3.so");
 package_extract_dir("META-INF/ADD-ONS/libexynoscamera3", "/tmp/libexynoscamera3");
-run_program("/sbin/busybox", "mount", "/system");
-run_program("/sbin/busybox", "mv", "/tmp/libexynoscamera3/libexynoscamera3.so", "/system/vendor/lib/libexynoscamera3.so");
-run_program("/sbin/busybox", "umount", "/system");
+mount("ext4", "EMMC", "/dev/block/platform/11120000.ufs/by-name/VENDOR", "/vendor");
+run_program("/sbin/busybox", "mv", "/tmp/libexynoscamera3/libexynoscamera3.so", "/vendor/lib/libexynoscamera3.so");
+run_program("/sbin/busybox", "umount", "/vendor");
 delete_recursive("/tmp/libexynoscamera3");
 EOT
 
