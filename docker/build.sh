@@ -291,6 +291,14 @@ LOCAL_SRC_FILES         := lib/libexynoscamera3.so
 LOCAL_MODULE_PATH       := $(TARGET_OUT_PRODUCT)/vendor_overlay/$(PRODUCT_TARGET_VNDK_VERSION)/lib
 include $(BUILD_PREBUILT)
 EOT
+
+# Add to product packages
+cat <<EOT2 >> "$BUILD_DIR/rom/device/samsung/universal9810-common/vendor_overlay.mk"
+
+# other
+PRODUCT_PACKAGES += \\
+    libexynoscamera3.so
+EOT2
 fi
 
 # Build
