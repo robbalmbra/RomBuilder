@@ -13,7 +13,6 @@ if [ -z "$MAGISK_IN_BUILD" ]; then
   export MAGISK_IN_BUILD=1
 fi
 
-
 # Default is on
 if [ -z "$LIBEXYNOS_CAMERA" ]; then
   export LIBEXYNOS_CAMERA=1
