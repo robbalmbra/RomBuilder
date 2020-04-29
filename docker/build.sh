@@ -10,7 +10,7 @@ fi
 
 # Default is on
 if [ -z "$LIBEXYNOS_CAMERA" ]; then
-  LIBEXYNOS_CAMERA=1
+  export LIBEXYNOS_CAMERA=1
 fi
 
 error_exit()
@@ -279,28 +279,6 @@ if [ -f "$BUILD_DIR/user_modifications.sh" ]; then
   error_exit "user modifications"
 fi
 
-# Add libexynoscamera to vendor copy files
-#if [ $LIBEXYNOS_CAMERA -eq 1 ]; then
-#cat <<EOT >> "$BUILD_DIR/rom/device/samsung/universal9810-common/vendor_overlay/Android.mk"
-
-#include \$(CLEAR_VARS)
-#LOCAL_MODULE            := libexynoscamera3.so
-#LOCAL_MODULE_TAGS       := optional
-#LOCAL_MODULE_CLASS      := ETC
-#LOCAL_SRC_FILES         := lib/libexynoscamera3.so
-#LOCAL_MODULE_PATH       := \$(TARGET_OUT_PRODUCT)/vendor_overlay/\$(PRODUCT_TARGET_VNDK_VERSION)/lib
-#include \$(BUILD_PREBUILT)
-#EOT
-
-# Add to product packages
-#cat <<EOT2 >> "$BUILD_DIR/rom/device/samsung/universal9810-common/vendor_overlay.mk"
-
-# other
-#PRODUCT_PACKAGES += \\
-#    libexynoscamera3.so
-#EOT2
-#fi
-
 # Build
 echo "Environment setup"
 cd "$BUILD_DIR/rom/"
@@ -336,11 +314,6 @@ fi
 export IFS=","
 runonce=0
 for DEVICE in $DEVICES; do
-
-  # Add libexynos camera libs for each device
-  #if [ $LIBEXYNOS_CAMERA -eq 1 ]; then
-  #  cp $BUILD_DIR/supplements/libexynoscamera3/libexynoscamera3-$DEVICE.so $BUILD_DIR/rom/device/samsung/universal9810-common/vendor_overlay/lib/libexynoscamera3.so
-  #fi
 
   echo "--- Building $DEVICE ($BUILD_NAME) :building_construction:"
 
