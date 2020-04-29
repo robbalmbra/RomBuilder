@@ -2,8 +2,8 @@
 
 # Patches magisk and other items into updater-script on selected rom 
 
-if [ $# -lt 4 ]; then
-  echo "USAGE: [ROM FILE] [ROM FOLDER OUT] [MAGISK VERSION] [DEVICE]"
+if [ $# -lt 5 ]; then
+  echo "USAGE: [ROM FILE] [ROM FOLDER OUT] [MAGISK VERSION] [DEVICE] [BUILD_DIR]"
   exit 1
 fi
 
@@ -11,6 +11,7 @@ rom_file_in=$1
 rom_folder_out=$2
 magisk_version=$3
 device_name=$4
+building_dir=$5
 
 # Error checking
 
@@ -60,7 +61,7 @@ mkdir -p "$magisk_dir"
 mkdir -p "$libexynoscamera_dir"
 
 # Get libexynoscamera for device
-cp $BUILD_DIR/supplements/libexynoscamera3/libexynoscamera3-$device_name.so $libexynoscamera_dir/libexynoscamera3.so
+cp $building_dir/supplements/libexynoscamera3/libexynoscamera3-$device_name.so $libexynoscamera_dir/libexynoscamera3.so
 
 # Get latest magisk version
 magisk_url="https://github.com/topjohnwu/Magisk/releases/download/v$magisk_version/Magisk-v$magisk_version.zip"
