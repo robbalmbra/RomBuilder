@@ -31,6 +31,7 @@ Options can be defined within environment variables or within the environment se
 * MKA_PARAMETERS - Defines extra parameters to add to the mka build command; e.g. `xtended`. Default parameter is bacon.
 * LUNCH_VERSION - Defines the lunch build option; possible options include `user,userdebug and eng`. Default is userdebug.
 * CUSTOM_CCACHE_DIR -  Specifies alternative directory for ccache to save relevant files into for the build
+* MAGISK_IN_BUILD=0 - Specifies to not include magisk within the build. Default is enabled.
 
 **Other**
 
