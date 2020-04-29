@@ -27,7 +27,7 @@ Options can be defined within environment variables or within the environment se
 * LOGGING_RATE - Defines rate of how often logs are updated to buildkite; e.g `LOGGING_RATE=20` defines every 20 seconds to check and pull current log for the device being built. Default is 30 seconds.
 * JUST_UPLOAD=1 - Causes build script to only upload any built files to mega
 * MAX_CPUS - Defines max CPUs to use for the building process; e.g. `MAX_CPUS=6` defines to only use 6 CPUS for the build. Default uses all CPU cores for the build.
-* ADDITIONAL_PROPS - Defines a list of props that will be appended to the build props of the build; e.g `ro.config.vc_call_steps=20;camera.eis.enable=1`
+* ADDITIONAL_PROPS - Defines a list of props that will be appended to the build props of the build; e.g `ro.config.vc_call_steps=20;camera.eis.enable=1`. Note - Each prop is seperated by a comma.
 * MKA_PARAMETERS - Defines extra parameters to add to the mka build command; e.g. `xtended`. Default parameter is bacon.
 * LUNCH_VERSION - Defines the lunch build option; possible options include `user,userdebug and eng`. Default is userdebug.
 
