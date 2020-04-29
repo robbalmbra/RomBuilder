@@ -342,7 +342,7 @@ for DEVICE in $DEVICES; do
 
   # Run docs build once
   if [ "$runonce" -eq 0 ]; then
-    mka api-stubs-docs && mka hiddenapi-lists-docs && mka system-api-stubs-docs && mka test-api-stubs-docs
+    mka api-stubs-docs && mka hiddenapi-lists-docs && mka test-api-stubs-docs
     runonce=1
   fi
 
