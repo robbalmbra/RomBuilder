@@ -1,15 +1,16 @@
 #!/bin/bash
 
-# Patches magisk into updater-script on selected rom 
+# Patches magisk and other items into updater-script on selected rom 
 
-if [ $# -lt 3 ]; then
-  echo "USAGE: [ROM FILE] [ROM FOLDER OUT] [MAGISK VERSION]"
+if [ $# -lt 4 ]; then
+  echo "USAGE: [ROM FILE] [ROM FOLDER OUT] [MAGISK VERSION] [DEVICE]"
   exit 1
 fi
 
 rom_file_in=$1
 rom_folder_out=$2
 magisk_version=$3
+device_name=$4
 
 # Error checking
 
