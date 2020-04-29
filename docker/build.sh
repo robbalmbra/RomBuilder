@@ -66,8 +66,8 @@ if [[ ! -z "${BUILDKITE}" ]]; then
   chmod +x "$BUILD_DIR/buildkite_logger.sh"
   
   # Copy magisk patcher to build directory
-  cp "$MAGISK_PATCHER" "$BUILD_DIR/patch_magisk.sh" > /dev/null 2>&1
-  chmod +x "$BUILD_DIR/patch_magisk.sh"
+  cp "$ROM_PATCHER" "$BUILD_DIR/patcher.sh" > /dev/null 2>&1
+  chmod +x "$BUILD_DIR/patcher.sh"
   
   # Set logging rate if hasnt been defined
   if [[ -z "${LOGGING_RATE}" ]]; then
