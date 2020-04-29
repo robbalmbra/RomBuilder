@@ -30,6 +30,7 @@ Options can be defined within environment variables or within the environment se
 * ADDITIONAL_PROPS - Defines a list of props that will be appended to the build props of the build; e.g `ro.config.vc_call_steps=20;camera.eis.enable=1`. Note - Each prop is seperated by a semicolon.
 * MKA_PARAMETERS - Defines extra parameters to add to the mka build command; e.g. `xtended`. Default parameter is bacon.
 * LUNCH_VERSION - Defines the lunch build option; possible options include `user,userdebug and eng`. Default is userdebug.
+* CUSTOM_CCACHE_DIR -  Specifies alternative directory for ccache to save relevant files into for build
 
 **Other**
 
