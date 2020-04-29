@@ -283,9 +283,15 @@ fi
 echo "Environment setup"
 
 # Set ccache and directory
-log_setting "CCACHE" "$BUILD_DIR/ccache"
-export CCACHE_DIR="$BUILD_DIR/ccache"
 export USE_CCACHE=1
+
+if [ ! -z "$CUSTOM_CCACHE_DIR" ]; then
+  export CCACHE_DIR="$CUSTOM_CCACHE_DIR"
+else
+  export CCACHE_DIR="/var/lib/buildkite-agent/ccache"
+fi
+
+log_setting "CCACHE" "$CCACHE_DIR"
 
 # Create directory
 if [[ ! -d "$CCACHE_DIR" ]]; then
