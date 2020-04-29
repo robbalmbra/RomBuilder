@@ -281,8 +281,6 @@ fi
 
 # Build
 echo "Environment setup"
-cd "$BUILD_DIR/rom/"
-. build/envsetup.sh > /dev/null 2>&1
 
 # Set ccache and directory
 log_setting "CCACHE" "$BUILD_DIR/ccache"
@@ -297,6 +295,10 @@ fi
 # Enable ccache with 60 gigabytes
 ccache -M 60G > /dev/null 2>&1
 error_exit "ccache"
+
+# Run env script
+cd "$BUILD_DIR/rom/"
+. build/envsetup.sh > /dev/null 2>&1
 
 # Check for any build parameters passed to script
 BUILD_PARAMETERS="bacon"
