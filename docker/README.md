@@ -21,6 +21,10 @@ Options can be defined within environment variables or within the environment se
 **Optional**
 
 * MAGISK_VERSION - Specifies magisk version to include within the rom; e.g `20.4`
+* LIBEXYNOS_CAMERA=0 - Turns off libexynoscamera intergration into rom
+* CUSTOM_OUTPUT_DIR - Overrides default build directory to selected directory
+* USER_MODS - Defines location of custom modifications bash script
+* LOGGING_RATE - Defines rate of how often logs are updated to buildkite; e.g `LOGGING_RATE=20` defines every 20 seconds to check and pull current log for the device being built
 
 **Other**
 
