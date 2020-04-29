@@ -24,7 +24,7 @@ Options can be defined within environment variables or within the environment se
 * LIBEXYNOS_CAMERA=0 - Turns off libexynoscamera intergration into rom
 * CUSTOM_OUTPUT_DIR - Overrides default build directory to selected directory
 * USER_MODS - Defines location of custom modifications bash script
-* LOGGING_RATE - Defines rate of how often logs are updated to buildkite; e.g `LOGGING_RATE=20` defines every 20 seconds to check and pull current log for the device being built
+* LOGGING_RATE - Defines rate of how often logs are updated to buildkite; e.g `LOGGING_RATE=20` defines every 20 seconds to check and pull current log for the device being built. Default is 30 seconds.
 
 **Other**
 
