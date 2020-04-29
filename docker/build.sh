@@ -435,7 +435,7 @@ mkdir -p /tmp/rom-magisk/
 echo "--- Patching to include extras within ROM"
 for ROM in $BUILD_DIR/rom/out/target/product/*/*.zip; do
   PRODUCT="$(basename "$(dirname "$ROM")")"
-  $BUILD_DIR/patcher.sh $ROM /tmp/rom-magisk $MAGISK_VERSION $PRODUCT
+  $BUILD_DIR/patcher.sh $ROM /tmp/rom-magisk $MAGISK_VERSION $PRODUCT $BUILD_DIR
   error_exit "magisk patch"
   file_name=$(basename "$ROM")
   mv /tmp/rom-magisk/$file_name $ROM
