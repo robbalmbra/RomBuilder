@@ -6,12 +6,11 @@ import sys
 import datetime
 import os
 
-mega_decrypt_key="#78ahuxCgMEDmBH1pLJhzUg"
 chat_id="@test514"
 bot = telegram.Bot(token='1288685464:AAGt0u9XXPKCH8PUcN60ap3yw7tS1dcTcts')
 
-if len(sys.argv) < 7:
-  print(sys.argv[0] + " USAGE [ROM NAME] [ROM FOLDER ID] [VERSION] [FILESIZE] [CHANGELOG FILE] [NOTES FILE] ")
+if len(sys.argv) < 8:
+  print(sys.argv[0] + " USAGE [ROM NAME] [ROM FOLDER ID] [VERSION] [FILESIZE] [CHANGELOG FILE] [NOTES FILE] [MEGA DECRYPT KEY]")
   sys.exit(1)
 
 rom_name = sys.argv[1]
@@ -20,6 +19,7 @@ version = sys.argv[3]
 filesize = sys.argv[4]
 changelog = sys.argv[5]
 notes = sys.argv[6]
+mega_decrypt_key = sys.argv[7]
 
 # Check if rom mega id is valid
 if rom_folder_id == "":
