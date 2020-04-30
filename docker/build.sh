@@ -303,9 +303,16 @@ if [[ ! -d "$CCACHE_DIR" ]]; then
   mkdir "$CCACHE_DIR" > /dev/null 2>&1
 fi
 
-# Enable ccache with 60 gigabytes
-ccache -M 60G > /dev/null 2>&1
-error_exit "ccache"
+# Enable ccache with 70 gigabytes if not overrided
+if [ -z "$CCACHE_SIZE" ]; then 
+  ccache -M "70G" > /dev/null 2>&1
+  error_exit "ccache"
+  log_setting "CCACHE_SIZE" "70G"
+else
+  ccache -M "$CCACHE_SIZEG" > /dev/null 2>&1
+  error_exit "ccache"
+  log_setting "CCACHE_SIZE" "$CCACHE_SIZEG"
+fi
 
 # Run env script
 cd "$BUILD_DIR/rom/"
