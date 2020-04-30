@@ -32,6 +32,7 @@ Options can be defined within environment variables or within the environment se
 * LUNCH_VERSION - Defines the lunch build option; possible options include `user,userdebug and eng`. Default is userdebug.
 * CUSTOM_CCACHE_DIR -  Specifies alternative directory for ccache to save relevant files into for the build
 * MAGISK_IN_BUILD=0 - Specifies to not include magisk within the build. Default is enabled.
+* CCACHE_SIZE - Defines in gigabytes the size of ccache. Default is 70 gigabytes.
 
 **Other**
 
