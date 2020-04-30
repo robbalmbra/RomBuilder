@@ -155,6 +155,7 @@ variables=(
   LOCAL_REPO
   LOCAL_BRANCH
   MEGA_FOLDER_ID
+  MEGA_DECRYPT_KEY
 )
 
 # Check for required variables
@@ -464,6 +465,6 @@ echo "Upload complete"
 if [[ "$rom_count" -gt 0 ]]; then
   # Send message
   echo "Sending message to broadcast group"
-  python3 $BUILD_DIR/SendMessage.py $UPLOAD_NAME $MEGA_FOLDER_ID "ten" $file_size changelog.txt notes.txt
+  python3 $BUILD_DIR/SendMessage.py $UPLOAD_NAME $MEGA_FOLDER_ID "ten" "$file_size" changelog.txt notes.txt "$MEGA_DECRYPT_KEY"
 fi
 
