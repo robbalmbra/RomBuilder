@@ -55,6 +55,9 @@ if [[ ! -z "${BUILDKITE}" ]]; then
   # Copy supplements to local folder
   cp -R "$SUPPLEMENTS" "$BUILD_DIR/"
 
+  # Copy telegram bot script to local folder
+  cp "$TELEGRAM_BOT" "$BUILD_DIR/SendMessage.py" > /dev/null 2>&1
+
   # Prompt to the user the location of the build
   log_setting "BUILD_DIR" "$BUILD_DIR"
 
