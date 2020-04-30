@@ -309,9 +309,9 @@ if [ -z "$CCACHE_SIZE" ]; then
   error_exit "ccache"
   log_setting "CCACHE_SIZE" "70G"
 else
-  ccache -M "$CCACHE_SIZEG" > /dev/null 2>&1
+  ccache -M "${CCACHE_SIZE}G" > /dev/null 2>&1
   error_exit "ccache"
-  log_setting "CCACHE_SIZE" "$CCACHE_SIZEG"
+  log_setting "CCACHE_SIZE" "${CCACHE_SIZE}G"
 fi
 
 # Run env script
