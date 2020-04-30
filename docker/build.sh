@@ -459,5 +459,6 @@ echo "Upload complete"
 if [[ "$rom_count" -gt 0 ]]; then
   # Send message
   echo "Sending message to broadcast group"
+  python3 $BUILD_DIR/SendMessage.py $UPLOAD_NAME $MEGA_FOLDER_ID "ten" 5.4 changelog.txt notes.txt
 fi
 
