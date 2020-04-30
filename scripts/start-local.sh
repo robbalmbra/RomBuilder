@@ -167,6 +167,7 @@ fi
 echo "--- Initializing build environment :parcel:"
 export BUILDKITE_LOGGER="$CURRENT/buildkite_logger.sh"
 export ROM_PATCHER="$CURRENT/patcher.sh"
+export TELEGRAM_BOT="$CURRENT/SendMessage.py"
 export SUPPLEMENTS="$CURRENT/../supplements/"
 "$(pwd)/../docker/build.sh"
 error_exit "build script"
