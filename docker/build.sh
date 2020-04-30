@@ -450,7 +450,7 @@ rom_count=0
 for ROM in $BUILD_DIR/rom/out/target/product/*/*.zip; do  
   echo "Uploading $(basename $ROM)"
   # Get rom size for telegram group
-  file_size = $(ls -lh "$ROM" | awk '{print $5}')
+  file_size=$(ls -lh "$ROM" | awk '{print $5}')
 
   # Upload
   mega-put -c $ROM ROMS/$UPLOAD_NAME/$DATE/
