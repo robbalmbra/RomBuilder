@@ -449,6 +449,10 @@ DATE=$(date '+%d-%m-%y');
 rom_count=0
 for ROM in $BUILD_DIR/rom/out/target/product/*/*.zip; do  
   echo "Uploading $(basename $ROM)"
+  # Get rom size for telegram group
+  file_size = $(ls -lh "$ROM" | awk '{print $5}')
+
+  # Upload
   mega-put -c $ROM ROMS/$UPLOAD_NAME/$DATE/
   error_exit "mega put"
   sleep 5
@@ -460,6 +464,6 @@ echo "Upload complete"
 if [[ "$rom_count" -gt 0 ]]; then
   # Send message
   echo "Sending message to broadcast group"
-  python3 $BUILD_DIR/SendMessage.py $UPLOAD_NAME $MEGA_FOLDER_ID "ten" 5.4 changelog.txt notes.txt
+  python3 $BUILD_DIR/SendMessage.py $UPLOAD_NAME $MEGA_FOLDER_ID "ten" $file_size changelog.txt notes.txt
 fi
 
