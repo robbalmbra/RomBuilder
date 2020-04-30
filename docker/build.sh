@@ -442,10 +442,19 @@ error_exit "mega login"
 
 shopt -s nocaseglob
 DATE=$(date '+%d-%m-%y');
+rom_count=0
 for ROM in $BUILD_DIR/rom/out/target/product/*/*.zip; do  
   echo "Uploading $(basename $ROM)"
   mega-put -c $ROM ROMS/$UPLOAD_NAME/$DATE/
   error_exit "mega put"
   sleep 5
+  ((rom_count=rom_count+1))
 done
 echo "Upload complete"
+
+# Deploy message in broadcast group
+if [[ "$rom_count" -gt 0 ]]; then
+  # Send message
+  echo "Sending message to broadcast group"
+fi
+
