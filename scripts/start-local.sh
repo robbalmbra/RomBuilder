@@ -38,6 +38,9 @@ if [ -f "/etc/lsb-release" ] && [ ! -d "/opt/build_env" ]; then
   libelf-dev libncurses-dev g++-multilib gcc-multilib gperf libxml2 libxml2-utils zlib1g-dev zip yasm jq \
   squashfs-tools xsltproc schedtool rsync lzop liblz4-tool libesd0-dev lib32z1-dev lib32readline-dev libsdl1.2-dev > /dev/null 2>&1   
 
+  # Install python packages
+  pip3 install python-telegram-bot --upgrade
+
   # Download and build mega
   if [ ! -d "/opt/MEGAcmd/" ]; then
     echo "Installing mega CLI"
