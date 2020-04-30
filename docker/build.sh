@@ -154,6 +154,7 @@ variables=(
   BRANCH
   LOCAL_REPO
   LOCAL_BRANCH
+  MEGA_FOLDER_ID
 )
 
 # Check for required variables
