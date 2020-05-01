@@ -379,6 +379,9 @@ for DEVICE in $DEVICES; do
   # Upload error log to buildkite if any errors occur
   ret="$?"
   
+  # Notify logger script to stop logging to buildkite
+  touch ../logs/$DEVICE/.finished
+  
   # Check for fail keyword to exit if build fails
   if grep -q "FAILED: " "../logs/$DEVICE/make_${DEVICE}_android10.txt"; then
     ret=1
@@ -407,10 +410,7 @@ for DEVICE in $DEVICES; do
     exit 1
     break
   else
-
-    # Notify logger script to stop logging to buildkite
-    touch ../logs/$DEVICE/.finished
-
+  
     # Show time of build in minutes
     makeend=`date +%s`
     maketime=$(((makeend-makestart)/60))
