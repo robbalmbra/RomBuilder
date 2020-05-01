@@ -364,9 +364,9 @@ for DEVICE in $DEVICES; do
   if [ "$runonce" -eq 0 ]; then
     if [[ ! -z "${BUILDKITE}" ]]; then
       echo "Generating docs"
-      mka api-stubs-docs > /dev/null 2>&1 && mka hiddenapi-lists-docs > /dev/null 2>&1 && mka test-api-stubs-docs > /dev/null 2>&1
+      mka api-stubs-docs > /dev/null 2>&1; mka hiddenapi-lists-docs > /dev/null 2>&1; mka test-api-stubs-docs > /dev/null 2>&1
     else
-      mka api-stubs-docs && mka hiddenapi-lists-docs && mka test-api-stubs-docs
+      mka api-stubs-docs; mka hiddenapi-lists-docs; mka test-api-stubs-docs
     fi
     runonce=1
   fi
