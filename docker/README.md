@@ -19,6 +19,7 @@ Options can be defined within environment variables or within the environment se
 * LOCAL_BRANCH - Defines the branch for the specified LOCAL_REPO; e.g. `android-10.0`
 * MEGA_FOLDER_ID - Folder id of the build name being built
 * MEGA_DECRYPT_KEY - Decryption key for selected folder specified in MEGA_FOLDER_ID
+
 **Optional**
 
 * MAGISK_VERSION - Specifies magisk version to include within the rom; e.g `20.4`
