@@ -352,12 +352,6 @@ for DEVICE in $DEVICES; do
   error_exit "lunch"
   mkdir -p "../logs/$DEVICE/"
 
-  # Run docs build once
-  if [ "$runonce" -eq 0 ]; then
-    mka api-stubs-docs && mka hiddenapi-lists-docs && mka test-api-stubs-docs
-    runonce=1
-  fi
-
   # Flush log
   echo "" > ../logs/$DEVICE/make_${DEVICE}_android10.txt
   
@@ -365,7 +359,18 @@ for DEVICE in $DEVICES; do
   if [[ ! -z "${BUILDKITE}" ]]; then
     $BUILD_DIR/buildkite_logger.sh "../logs/$DEVICE/make_${DEVICE}_android10.txt" "$LOGGING_RATE" &
   fi
-  
+
+  # Run docs build once
+  if [ "$runonce" -eq 0 ]; then
+    if [[ ! -z "${BUILDKITE}" ]]; then
+      echo "Generating docs"
+      mka api-stubs-docs > /dev/null 2>&1 && mka hiddenapi-lists-docs > /dev/null 2>&1 && mka test-api-stubs-docs > /dev/null 2>&1
+    else
+      mka api-stubs-docs && mka hiddenapi-lists-docs && mka test-api-stubs-docs
+    fi
+    runonce=1
+  fi
+
   # Save start time of build
   makestart=`date +%s`
 
