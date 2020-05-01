@@ -241,7 +241,7 @@ else
 
   # Sync sources
   cd "$BUILD_DIR/rom/"
-  echo "Syncing sources to git repo"
+  echo "Syncing sources from repo"
 
   if [[ ! -z "${BUILDKITE}" ]]; then
     repo sync -d -f -c -j$MAX_CPU --force-sync --no-clone-bundle --no-tags --quiet > /dev/null 2>&1
