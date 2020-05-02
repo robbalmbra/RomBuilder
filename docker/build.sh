@@ -244,7 +244,7 @@ else
   echo "Syncing sources from repo"
 
   if [[ ! -z "${BUILDKITE}" ]]; then
-    repo sync -d -f -c -j$MAX_CPU --force-sync --no-clone-bundle --no-tags
+    repo sync -d -f -c -j$MAX_CPU --force-sync --no-clone-bundle --no-tags --quiet > /dev/null 2>&1
     error_exit "repo sync"
   else
     repo sync -d -f -c -j$MAX_CPU --force-sync --no-clone-bundle --no-tags --quiet
