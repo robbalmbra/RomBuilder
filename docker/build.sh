@@ -8,6 +8,10 @@ if [ -z "$MAGISK_VERSION" ]; then
   MAGISK_VERSION="20.4"
 fi
 
+if [ -z "$TEST_BUILD" ]; then
+  TEST_BUILD=0
+fi
+
 # Magisk enable within rom, default is enabled
 if [ -z "$MAGISK_IN_BUILD" ]; then
   export MAGISK_IN_BUILD=1
@@ -466,10 +470,11 @@ for ROM in $BUILD_DIR/rom/out/target/product/*/*.zip; do
 done
 echo "Upload complete"
 
-# Deploy message in broadcast group
-if [[ "$rom_count" -gt 0 ]]; then
-  # Send message
-  echo "Sending message to broadcast group"
-  python3 "$BUILD_DIR/SendMessage.py" "$UPLOAD_NAME" "$MEGA_FOLDER_ID" "ten" "$file_size" changelog.txt notes.txt "$MEGA_DECRYPT_KEY"
+# Deploy message in broadcast group only for non test builds
+if [ "$TEST_BUILD" -eq 0 ]; then
+  if [[ "$rom_count" -gt 0 ]]; then
+    # Send message
+    echo "Sending message to broadcast group"
+    python3 "$BUILD_DIR/SendMessage.py" "$UPLOAD_NAME" "$MEGA_FOLDER_ID" "ten" "$file_size" changelog.txt notes.txt "$MEGA_DECRYPT_KEY"
+  fi
 fi
-
