@@ -17,7 +17,3 @@ Files needed to deploy a build within a docker environment with the nessassary t
 ## Notes
 
 For macOS systems, install [MEGAcmd](https://github.com/meganz/MEGAcmd) and mega macos binaries to allow the upload process to function.
-
-## Status
-
-[![Build status](https://badge.buildkite.com/037c6fcc9ffac35532459f24f29234f9b1fdc7b28f7810dd1c.svg)](https://buildkite.com/rob-roms/evovx)
