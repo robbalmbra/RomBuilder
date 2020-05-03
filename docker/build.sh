@@ -308,11 +308,11 @@ if [[ ! -d "$CCACHE_DIR" ]]; then
   mkdir "$CCACHE_DIR" > /dev/null 2>&1
 fi
 
-# Enable ccache with 70 gigabytes if not overrided
+# Enable ccache with 50 gigabytes if not overrided
 if [ -z "$CCACHE_SIZE" ]; then 
-  ccache -M "70G" > /dev/null 2>&1
+  ccache -M "50G" > /dev/null 2>&1
   error_exit "ccache"
-  log_setting "CCACHE_SIZE" "70G"
+  log_setting "CCACHE_SIZE" "50G"
 else
   ccache -M "${CCACHE_SIZE}G" > /dev/null 2>&1
   error_exit "ccache"
