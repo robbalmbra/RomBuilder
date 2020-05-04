@@ -1,4 +1,4 @@
-FROM ubuntu:18.04
+FROM buildkite/agent:ubuntu
 
 ENV DEBIAN_FRONTEND noninteractive
 USER root
@@ -10,7 +10,7 @@ RUN apt-get update -q --fix-missing > /dev/null 2>&1 && \
   apt-get -y upgrade > /dev/null 2>&1 && \
   apt-get -y install make python3 git screen wget openjdk-8-jdk python-lunch lsb-core sudo curl shellcheck \
   autoconf libtool g++ libcrypto++-dev libz-dev libsqlite3-dev libssl-dev libcurl4-gnutls-dev libreadline-dev \
-  libpcre++-dev libsodium-dev libc-ares-dev libfreeimage-dev libavcodec-dev libavutil-dev libavformat-dev \
+  libpcre++-dev libsodium-dev libc-ares-dev libfreeimage-dev libavcodec-dev libavutil-dev libavformat-dev ccache python3-pip \
   libswscale-dev libmediainfo-dev libzen-dev libuv1-dev libxkbcommon-dev libxkbcommon-x11-0 zram-config > /dev/null 2>&1 && \
   rm -rf /var/lib/apt/lists/*
 
@@ -33,10 +33,9 @@ RUN if [ -d /usr/lib/jvm/java-8-openjdk-amd64/bin/ ]; then export PATH=/usr/lib/
 
 # Clone and run build tool
 RUN echo "Retreiving and installing build tools"
-RUN git clone https://github.com/akhilnarang/scripts.git build_env --quiet --depth=1
-RUN chmod +x build_env/setup/android_build_env.sh
-RUN /bin/bash build_env/setup/android_build_env.sh > /dev/null 2>&1
+RUN git clone https://github.com/akhilnarang/scripts.git /opt/build_env --quiet --depth=1
+RUN chmod +x /opt/build_env/setup/android_build_env.sh
+RUN /bin/bash /opt/build_env/setup/android_build_env.sh > /dev/null 2>&1
 
-COPY build.sh /root/build.sh
-RUN chmod +x /root/build.sh
-ENTRYPOINT ["/root/build.sh"]
+# Copy ssh
+COPY id_rsa /root/.ssh/id_rsa
