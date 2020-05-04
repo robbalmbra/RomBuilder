@@ -14,6 +14,8 @@ RUN apt-get update -q --fix-missing > /dev/null 2>&1 && \
   libswscale-dev libmediainfo-dev libzen-dev libuv1-dev libxkbcommon-dev libxkbcommon-x11-0 zram-config > /dev/null 2>&1 && \
   rm -rf /var/lib/apt/lists/*
 
+RUN pip3 install python-telegram-bot --upgrade
+
 # Specify global vars
 RUN git config --global user.name robbbalmbra
 RUN git config --global user.email robbalmbra@gmail.com
