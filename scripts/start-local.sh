@@ -224,7 +224,11 @@ if [[ ! -z "$USER_MODS" ]]; then
 fi
 
 # Run build
-echo "--- Initializing build environment :parcel:"
+if [[ $shell_lang == "it" ]]; then
+  echo "--- Inizializzazione dell'ambiente di compilazione :parcel:"
+else
+  echo "--- Initializing build environment :parcel:"
+fi
 export BUILDKITE_LOGGER="$CURRENT/buildkite_logger.sh"
 export ROM_PATCHER="$CURRENT/patcher.sh"
 export TELEGRAM_BOT="$CURRENT/SendMessage.py"
