@@ -6,13 +6,7 @@
 
 [setup-buildtools.sh](scripts/setup-buildtools.sh) - Install required build tools on a host
 
-[start-docker.sh](scripts/start-docker.sh) - Start build within a docker environment using a specified config
-
 [start-local.sh](scripts/start-local.sh) - Start build within a local environment using a specified config
-
-## Docker
-
-Files needed to deploy a build within a docker environment with the nessassary tools.
 
 ## Notes
 
