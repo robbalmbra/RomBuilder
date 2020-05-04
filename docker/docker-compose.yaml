@@ -1,23 +1,13 @@
 version: '3'
 services:
-  evox_build:
-    hostname: evox_build
-    container_name: evox_build
+  buildbot:
+    hostname: docker
+    container_name: buildbot
     build: ./
     volumes:
-      - ./../files/ccache:/ccache
-      - ./../files/rom:/root/rom
-      - ./../files/logs:/root/logs
-      - ./user_modifications.sh:/root/user_modifications.sh
+    - ./build:/var/lib/buildkite-agent/build/
+    - ./ccache:/var/lib/buildkite-agent/ccache/
+    - ./buildkite-agent.cfg:/buildkite/buildkite-agent.cfg
     environment:
-    - CCACHE_DIR=${CCACHE_DIR}
-    - BUILD_NAME=${BUILD_NAME}
-    - UPLOAD_NAME=${UPLOAD_NAME}
-    - BOOT_LOGGING=${BOOT_LOGGING}
-    - MEGA_USERNAME=${MEGA_USERNAME}
-    - MEGA_PASSWORD=${MEGA_PASSWORD}
-    - DEVICES=${DEVICES}
-    - REPO=${REPO}
-    - BRANCH=${BRANCH}
-    - SKIP_PULL=${SKIP_PULL}
+    - BUILDKITE_AGENT_TOKEN=49847013e94f61ef546c9eaa4cd75e40f91ab3367c526e52a1
     restart: unless-stopped
