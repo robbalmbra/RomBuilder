@@ -216,10 +216,18 @@ fi
 # Override if modification file exists from buildkite stage
 if [[ ! -z "$USER_MODS" ]]; then
   if [[ ! -f "$USER_MODS" ]]; then
-    echo "Error - '$USER_MODS' doesnt exist."
+    if [[ $shell_lang == "it" ]]; then
+      echo "Errore - '$USER_MODS' non esiste."
+    else
+      echo "Error - '$USER_MODS' doesnt exist."
+    fi
     exit 1
   fi
-  echo "Using '$USER_MODS' as modification script"
+  if [[ $shell_lang == "it" ]]; then
+    echo "Usando '$USER_MODS' come script di modifica"
+  else
+    echo "Using '$USER_MODS' as modification script"
+  fi
   chmod +x $USER_MODS
 fi
 
