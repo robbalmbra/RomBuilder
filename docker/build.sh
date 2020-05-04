@@ -68,11 +68,14 @@ if [[ ! -z "${BUILDKITE}" ]]; then
     BUILD_DIR="/var/lib/buildkite-agent/build/$UPLOAD_NAME"
   fi
 
+  # Create scripts directory in BUILD_DIR
+  mkdir -p "$BUILD_DIR/scripts/"
+
   # Copy supplements to local folder
   cp -R "$SUPPLEMENTS" "$BUILD_DIR/"
 
   # Copy telegram bot script to local folder
-  cp "$TELEGRAM_BOT" "$BUILD_DIR/SendMessage.py" > /dev/null 2>&1
+  cp "$TELEGRAM_BOT" "$BUILD_DIR/scripts/SendMessage.py" > /dev/null 2>&1
 
   # Prompt to the user the location of the build
   log_setting "BUILD_DIR" "$BUILD_DIR"
@@ -85,18 +88,18 @@ if [[ ! -z "${BUILDKITE}" ]]; then
       echo "Copying '$USER_MODS' to '$BUILD_DIR/user_modifications.sh'"
     fi
     
-    cp "$USER_MODS" "$BUILD_DIR/user_modifications.sh" > /dev/null 2>&1
-    chmod +x "$BUILD_DIR/user_modifications.sh"
+    cp "$USER_MODS" "$BUILD_DIR/scripts/user_modifications.sh" > /dev/null 2>&1
+    chmod +x "$BUILD_DIR/scripts/user_modifications.sh"
     rm -rf "$USER_MODS"
   fi
   
   # Copy build logger to build directory
-  cp "$BUILDKITE_LOGGER" "$BUILD_DIR/buildkite_logger.sh" > /dev/null 2>&1
-  chmod +x "$BUILD_DIR/buildkite_logger.sh"
+  cp "$BUILDKITE_LOGGER" "$BUILD_DIR/scripts/buildkite_logger.sh" > /dev/null 2>&1
+  chmod +x "$BUILD_DIR/scripts/buildkite_logger.sh"
   
   # Copy magisk patcher to build directory
-  cp "$ROM_PATCHER" "$BUILD_DIR/patcher.sh" > /dev/null 2>&1
-  chmod +x "$BUILD_DIR/patcher.sh"
+  cp "$ROM_PATCHER" "$BUILD_DIR/scripts/patcher.sh" > /dev/null 2>&1
+  chmod +x "$BUILD_DIR/scripts/patcher.sh"
   
   # Set logging rate if hasnt been defined
   if [[ -z "${LOGGING_RATE}" ]]; then
@@ -344,7 +347,7 @@ if [ ! -z "$ADDITIONAL_PROPS" ]; then
 fi
 
 # Execute specific user modifications and environment specific options if avaiable
-if [ -f "$BUILD_DIR/user_modifications.sh" ]; then
+if [ -f "$BUILD_DIR/scripts/user_modifications.sh" ]; then
 
   # Override path for sed if os is macOS
   if [ "$(uname)" == "Darwin" ]; then
@@ -357,7 +360,7 @@ if [ -f "$BUILD_DIR/user_modifications.sh" ]; then
     echo "Using user modification script"
   fi
 
-  $BUILD_DIR/user_modifications.sh "$BUILD_DIR" 1> /dev/null
+  $BUILD_DIR/scripts/user_modifications.sh "$BUILD_DIR" 1> /dev/null
   error_exit "user modifications"
 fi
 
@@ -437,7 +440,7 @@ for DEVICE in $DEVICES; do
   
   # Log to buildkite every N seconds
   if [[ ! -z "${BUILDKITE}" ]]; then
-    $BUILD_DIR/buildkite_logger.sh "../logs/$DEVICE/make_${DEVICE}_android10.txt" "$LOGGING_RATE" &
+    $BUILD_DIR/scripts/buildkite_logger.sh "$BUILD_DIR/logs/$DEVICE/make_${DEVICE}_android10.txt" "$LOGGING_RATE" &
   fi
 
   # Run docs build once
@@ -460,19 +463,19 @@ for DEVICE in $DEVICES; do
 
   # Run build
   if [[ ! -z "${BUILDKITE}" ]]; then
-    mka $BUILD_PARAMETERS -j$MAX_CPU 2>&1 | tee "../logs/$DEVICE/make_${DEVICE}_android10.txt" > /dev/null 2>&1
+    mka $BUILD_PARAMETERS -j$MAX_CPU 2>&1 | tee "$BUILD_DIR/logs/$DEVICE/make_${DEVICE}_android10.txt" > /dev/null 2>&1
   else
-    mka $BUILD_PARAMETERS -j$MAX_CPU 2>&1 | tee "../logs/$DEVICE/make_${DEVICE}_android10.txt"
+    mka $BUILD_PARAMETERS -j$MAX_CPU 2>&1 | tee "$BUILD_DIR/logs/$DEVICE/make_${DEVICE}_android10.txt"
   fi
   
   # Upload error log to buildkite if any errors occur
   ret="$?"
   
   # Notify logger script to stop logging to buildkite
-  touch ../logs/$DEVICE/.finished
+  touch "$BUILD_DIR/logs/$DEVICE/.finished"
   
   # Check for fail keyword to exit if build fails
-  if grep -q "FAILED: " "../logs/$DEVICE/make_${DEVICE}_android10.txt"; then
+  if grep -q "FAILED: " "$BUILD_DIR/logs/$DEVICE/make_${DEVICE}_android10.txt"; then
     ret=1
   fi
   
@@ -489,12 +492,12 @@ for DEVICE in $DEVICES; do
     CURRENT=$(pwd)
     
     # Extract any errors from log if exist
-    grep -iE 'crash|error|fail|fatal|unknown' "../logs/$DEVICE/make_${DEVICE}_android10.txt" 2>&1 | tee "../logs/$DEVICE/make_${DEVICE}_errors_android10.txt"
+    grep -iE 'crash|error|fail|fatal|unknown' "$BUILD_DIR/logs/$DEVICE/make_${DEVICE}_android10.txt" 2>&1 | tee "$BUILD_DIR/logs/$DEVICE/make_${DEVICE}_errors_android10.txt"
 
     # Log errors if exist
     if [[ ! -z "${BUILDKITE}" ]]; then
-      if [ -f "../logs/$DEVICE/make_${DEVICE}_errors_android10.txt" ]; then
-        cd "../logs/$DEVICE"
+      if [ -f "$BUILD_DIR/logs/$DEVICE/make_${DEVICE}_errors_android10.txt" ]; then
+        cd "$BUILD_DIR/logs/$DEVICE"
         buildkite-agent artifact upload "make_${DEVICE}_errors_android10.txt" > /dev/null 2>&1
         buildkite-agent artifact upload "make_${DEVICE}_android10.txt" > /dev/null 2>&1
         cd "$CURRENT"
@@ -520,7 +523,7 @@ for DEVICE in $DEVICES; do
 
     # Upload log to buildkite
     if [[ ! -z "${BUILDKITE}" ]]; then
-      cd "../logs/$DEVICE"
+      cd "$BUILD_DIR/logs/$DEVICE"
       buildkite-agent artifact upload "make_${DEVICE}_android10.txt" > /dev/null 2>&1
       cd "$CURRENT"
     fi
@@ -537,7 +540,7 @@ fi
   
 for ROM in $BUILD_DIR/rom/out/target/product/*/*.zip; do
   PRODUCT="$(basename "$(dirname "$ROM")")"
-  $BUILD_DIR/patcher.sh $ROM /tmp/rom-magisk $MAGISK_VERSION $PRODUCT $BUILD_DIR
+  $BUILD_DIR/scripts/patcher.sh $ROM /tmp/rom-magisk $MAGISK_VERSION $PRODUCT $BUILD_DIR
   error_exit "patches"
   file_name=$(basename "$ROM")
   mv /tmp/rom-magisk/$file_name $ROM
@@ -589,6 +592,6 @@ if [ "$TEST_BUILD" -eq 0 ]; then
     else
       echo "Sending message to broadcast group"
     fi
-    python3 "$BUILD_DIR/SendMessage.py" "$UPLOAD_NAME" "$MEGA_FOLDER_ID" "ten" "$file_size" changelog.txt notes.txt "$MEGA_DECRYPT_KEY"
+    python3 "$BUILD_DIR/scripts/SendMessage.py" "$UPLOAD_NAME" "$MEGA_FOLDER_ID" "ten" "$file_size" changelog.txt notes.txt "$MEGA_DECRYPT_KEY"
   fi
 fi
