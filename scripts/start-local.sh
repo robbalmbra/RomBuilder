@@ -2,6 +2,15 @@
 
 # Script for local build V1.0
 
+# Get lang of device
+lang=$(echo $LANG | awk -F. {'print $1'})
+
+if [[ $lang == "it_IT" ]]; then
+  shell_lang="it"
+else
+  shell_lang="en"
+fi
+
 error_exit()
 {
     ret="$?"
