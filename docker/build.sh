@@ -433,10 +433,10 @@ for DEVICE in $DEVICES; do
     lunch $build_id
   fi
   error_exit "lunch"
-  mkdir -p "../logs/$DEVICE/"
+  mkdir -p "$BUILD_DIR/logs/$DEVICE/"
 
   # Flush log
-  echo "" > ../logs/$DEVICE/make_${DEVICE}_android10.txt
+  echo "" > $BUILD_DIR/logs/$DEVICE/make_${DEVICE}_android10.txt
   
   # Log to buildkite every N seconds
   if [[ ! -z "${BUILDKITE}" ]]; then
