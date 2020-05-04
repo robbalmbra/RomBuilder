@@ -4,6 +4,10 @@ if [ -z "$BOOT_LOGGING" ]; then
   BOOT_LOGGING=0
 fi
 
+if [ -z "$BUILD_LANG" ]; then
+  export BUILD_LANG="en"
+fi
+
 if [ -z "$MAGISK_VERSION" ]; then
   MAGISK_VERSION="20.4"
 fi
