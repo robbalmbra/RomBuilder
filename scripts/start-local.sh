@@ -15,8 +15,12 @@ error_exit()
 {
     ret="$?"
     if [ "$ret" != "0" ]; then
+      if [[ $shell_lang == "it" ]]; then
+        echo "Errore - '$1' non riuscito con codice di ritorno '$ret'"
+      else
         echo "Error - '$1' failed with return code '$ret'"
-        exit 1
+      fi
+      exit 1
     fi
 }
 
@@ -33,8 +37,14 @@ if [ -f "/etc/lsb-release" ] && [ ! -d "/opt/build_env" ]; then
     apt-get install -y sudo
   fi
 
-  echo "--- Installing required tools :toolbox:"
-  echo "Installing build script"
+  if [[ $shell_lang == "it" ]]; then
+    echo "--- Installazione degli strumenti richiesti :toolbox:"
+    echo "Installazione dello script di compilazione"
+  else
+    echo "--- Installing required tools :toolbox:"
+    echo "Installing build script"
+  fi
+  
   git clone https://github.com/akhilnarang/scripts.git /opt/build_env --depth=1
   sudo chmod +x /opt/build_env/setup/android_build_env.sh
   . /opt/build_env/setup/android_build_env.sh
@@ -52,7 +62,12 @@ if [ -f "/etc/lsb-release" ] && [ ! -d "/opt/build_env" ]; then
 
   # Download and build mega
   if [ ! -d "/opt/MEGAcmd/" ]; then
-    echo "Installing mega CLI"
+    if [[ $shell_lang == "it" ]]; then
+      echo "Installazione di mega CLI"
+    else
+      echo "Installing mega CLI"
+    fi
+
     wget --quiet -O /opt/megasync.deb https://mega.nz/linux/MEGAsync/xUbuntu_$(lsb_release -rs)/amd64/megasync-xUbuntu_$(lsb_release -rs)_amd64.deb && ls /opt/ && dpkg -i /opt/megasync.deb
     cd /opt/ && git clone --quiet https://github.com/meganz/MEGAcmd.git
     cd /opt/MEGAcmd && git submodule update --quiet --init --recursive && sh autogen.sh > /dev/null 2>&1 && ./configure --quiet && make > /dev/null 2>&1 && make install > /dev/null 2>&1
@@ -66,13 +81,23 @@ elif [ "$(uname)" == "Darwin" ]; then
   # MacOS install
   # Check if brew is installed
   if ! [ -x "$(command -v brew)" ]; then
-    echo 'Error - Brew is not installed'
+    if [[ $shell_lang == "it" ]]; then
+      echo 'Errore: Brew non è installato'
+    else
+      echo 'Error - Brew is not installed'
+    fi
     exit 1
   fi
 
   # Install gnu sed for compatibility issues
-  echo "--- Installing required tools"
-  echo "Installing gnu specific tools"
+  if [[ $shell_lang == "it" ]]; then
+    echo "--- Installazione degli strumenti richiesti"
+    echo "Installazione di strumenti specifici di gnu"    
+  else
+    echo "--- Installing required tools"
+    echo "Installing gnu specific tools"
+  fi
+  
   brew install gnu-sed > /dev/null 2>&1
   brew install coreutils > /dev/null 2>&1
   brew install ccache
@@ -132,7 +157,11 @@ quit=0
 for variable in "${variables[@]}"
 do
   if [[ -z ${!variable+x} ]]; then
-    echo "$0 - Error, $variable isn't set.";
+    if [[ $shell_lang == "it" ]]; then
+      echo "$0 - Errore, $variable non è impostato.";
+    else
+      echo "$0 - Error, $variable isn't set.";
+    fi
     quit=1
     break
   fi
@@ -144,21 +173,38 @@ if [ "$quit" -ne 0 ]; then
 fi
 
 if [ $new -eq 0 ]; then
-  echo "--- Retrieving supplement tools and files :page_facing_up:"
+  if [[ $shell_lang == "it" ]]; then
+    echo "--- Recupero di strumenti e file del supplemento :page_facing_up:"
+  else
+    echo "--- Retrieving supplement tools and files :page_facing_up:"
+  fi
 fi
 
 # Check and get user modifications either as a url or env string
 cd "$CURRENT"
 if [[ ! -z "$USER_MODIFICATIONS" ]]; then
-  echo "Retrieiving user modifications"
+  if [[ $shell_lang == "it" ]]; then
+    echo "Recupero modifiche utente"
+  else
+    echo "Retrieving user modifications"
+  fi
+
   regex='(https?|ftp|file)://[-A-Za-z0-9\+&@#/%?=~_|!:,.;]*[-A-Za-z0-9\+&@#/%=~_|]'
   if [[ $USER_MODIFICATIONS =~ $regex ]]
   then 
     # Get url and save to local file
-    echo "Downloading and saving USER_MODIFICATIONS to '$CURRENT/user_modifications.sh'"
+    if [[ $shell_lang == "it" ]]; then
+      echo "Download e salvataggio di $USER_MODIFICATIONS in '$CURRENT/user_modifications.sh'"
+    else
+      echo "Downloading and saving $USER_MODIFICATIONS to '$CURRENT/user_modifications.sh'"
+    fi
     wget $USER_MODIFICATIONS -O "$CURRENT/user_modifications.sh"
   else
-    echo "Error - '$USER_MODIFICATIONS' isn't a valid url."
+    if [[ $shell_lang == "it" ]]; then
+      echo "Errore - '$USER_MODIFICATIONS' non è un URL valido."
+    else
+      echo "Error - '$USER_MODIFICATIONS' isn't a valid url."
+    fi
     exit 1
   fi
   
