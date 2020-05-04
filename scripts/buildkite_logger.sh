@@ -28,7 +28,6 @@ do
 
   if [ -n "$percent" ]; then
     last_line="$line"
-    export STAGE_PERCENT="$percent"
     echo "$line"
   fi
 
