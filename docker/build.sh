@@ -83,9 +83,9 @@ if [[ ! -z "${BUILDKITE}" ]]; then
   # Copy modifications and logger to build dir if exists
   if [ ! -z "$USER_MODS" ]; then
     if [[ $BUILD_LANG == "it" ]]; then
-      echo "Copia di '$USER_MODS' in '$BUILD_DIR/user_modifications.sh'"
+      echo "Copia di '$USER_MODS' in '$BUILD_DIR/scripts/user_modifications.sh'"
     else
-      echo "Copying '$USER_MODS' to '$BUILD_DIR/user_modifications.sh'"
+      echo "Copying '$USER_MODS' to '$BUILD_DIR/scripts/user_modifications.sh'"
     fi
     
     cp "$USER_MODS" "$BUILD_DIR/scripts/user_modifications.sh" > /dev/null 2>&1
