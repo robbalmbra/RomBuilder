@@ -254,11 +254,16 @@ else
 
     mkdir "$BUILD_DIR/rom/" > /dev/null 2>&1
 
+    INIT_OPTIONS="--no-clone-bundle --depth=1"
+    if [[ ! -z $DATE_REVERT ]]; then
+      INIT_OPTIONS=""
+    fi
+
     if [[ ! -z "${BUILDKITE}" ]]; then
-      cd "$BUILD_DIR/rom/" && repo init -u $REPO -b $BRANCH --no-clone-bundle --depth=1 > /dev/null 2>&1
+      cd "$BUILD_DIR/rom/" && repo init -u $REPO -b $BRANCH $INIT_OPTIONS > /dev/null 2>&1
       error_exit "repo init"
     else
-      cd "$BUILD_DIR/rom/" && repo init -u $REPO -b $BRANCH --no-clone-bundle --depth=1
+      cd "$BUILD_DIR/rom/" && repo init -u $REPO -b $BRANCH $INIT_OPTIONS
       error_exit "repo init"
     fi
 
@@ -304,11 +309,17 @@ else
     echo "Syncing sources from repo"
   fi
 
+  # Override for date revert
+  SYNC_OPTIONS="--no-clone-bundle --no-tags"
+  if [[ ! -z $DATE_REVERT ]]; then
+    SYNC_OPTIONS=""
+  fi
+
   if [[ ! -z "${BUILDKITE}" ]]; then
-    repo sync -d -f -c -j$MAX_CPU --force-sync --no-clone-bundle --no-tags --quiet > /dev/null 2>&1
+    repo sync -d -f -c -j$MAX_CPU --force-sync --quiet $SYNC_OPTIONS > /dev/null 2>&1
     error_exit "repo sync"
   else
-    repo sync -d -f -c -j$MAX_CPU --force-sync --no-clone-bundle --no-tags --quiet
+    repo sync -d -f -c -j$MAX_CPU --force-sync --quiet $SYNC_OPTIONS
     error_exit "repo sync"
   fi
 
@@ -316,8 +327,7 @@ fi
 
 if [[ ! -z $DATE_REVERT ]]; then
   echo "Reverting repo to date '$DATE_REVERT'"
-  #repo forall -c 'git checkout `git rev-list -n1 --before="$DATE_REVERT" HEAD`' > /dev/null 2>&1
-  repo forall -c 'git checkout `git rev-list --all -n1 --before="$DATE_REVERT"`' > /dev/null 2>&1
+  repo forall -c 'git checkout `git rev-list -n1 --before="$DATE_REVERT" HEAD`' > /dev/null 2>&1
 fi
 
 if [[ $BUILD_LANG == "it" ]]; then
