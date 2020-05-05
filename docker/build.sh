@@ -316,7 +316,7 @@ fi
 
 if [[ ! -z $DATE_REVERT ]]; then
   echo "Reverting repo to date $DATE_REVERT"
-  repo forall -c 'git checkout `git rev-list --all -n1 --before="$DATE_REVERT"`'
+  repo forall -c 'git checkout `git rev-list --all -n1 --before="$DATE_REVERT"`' > /dev/null 2>&1
 fi
 
 if [[ $BUILD_LANG == "it" ]]; then
