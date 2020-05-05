@@ -58,7 +58,7 @@ fi
 
 # Persist rom through builds with buildkite and enable ccache
 if [[ ! -z "${BUILDKITE}" ]]; then
-  
+
   # Output directory override
   if [ ! -z "$CUSTOM_OUTPUT_DIR" ]; then
     mkdir -p "$CUSTOM_OUTPUT_DIR/build/$UPLOAD_NAME" > /dev/null 2>&1
@@ -87,20 +87,20 @@ if [[ ! -z "${BUILDKITE}" ]]; then
     else
       echo "Copying '$USER_MODS' to '$BUILD_DIR/scripts/user_modifications.sh'"
     fi
-    
+
     cp "$USER_MODS" "$BUILD_DIR/scripts/user_modifications.sh" > /dev/null 2>&1
     chmod +x "$BUILD_DIR/scripts/user_modifications.sh"
     rm -rf "$USER_MODS"
   fi
-  
+
   # Copy build logger to build directory
   cp "$BUILDKITE_LOGGER" "$BUILD_DIR/scripts/buildkite_logger.sh" > /dev/null 2>&1
   chmod +x "$BUILD_DIR/scripts/buildkite_logger.sh"
-  
+
   # Copy magisk patcher to build directory
   cp "$ROM_PATCHER" "$BUILD_DIR/scripts/patcher.sh" > /dev/null 2>&1
   chmod +x "$BUILD_DIR/scripts/patcher.sh"
-  
+
   # Set logging rate if hasnt been defined
   if [[ -z "${LOGGING_RATE}" ]]; then
     # Default to 30 seconds if hasnt been set
@@ -137,7 +137,7 @@ if [ ! -z "$JUST_UPLOAD" ]; then
     else
       echo "Uploading $(basename $ROM)"
     fi
-    
+
     mega-put -c $ROM ROMS/$UPLOAD_NAME/$DATE/
     error_exit "mega put"
     sleep 5
@@ -273,7 +273,7 @@ else
     else
       echo "Pulling local manifests"
     fi
-    
+
     if [[ ! -z "${BUILDKITE}" ]]; then
       cd "$BUILD_DIR/rom/.repo/"; git clone "$LOCAL_REPO" -b "$LOCAL_BRANCH" --depth=1 > /dev/null 2>&1
       error_exit "clone local manifest"
@@ -295,14 +295,14 @@ else
    cd "$BUILD_DIR/rom/"
    make clean >/dev/null 2>&1
    make clobber >/dev/null 2>&1
-   
+
    # Pull original changes
    repo forall -c "git reset --hard" > /dev/null 2>&1
   fi
 
   # Sync sources
   cd "$BUILD_DIR/rom/"
-  
+
   if [[ $BUILD_LANG == "it" ]]; then
     echo "Sincronizzazione delle fonti dal repository"
   else
@@ -342,7 +342,7 @@ if [ ! -z "$ADDITIONAL_PROPS" ]; then
   check=0
   additional_props_string=""
   for prop in $ADDITIONAL_PROPS; do
-  
+
     if [[ $BUILD_LANG == "it" ]]; then
       echo "Aggiunta di ulteriore prop '$prop' a product_prop.mk"
     else
@@ -376,7 +376,7 @@ if [ -f "$BUILD_DIR/scripts/user_modifications.sh" ]; then
   if [ "$(uname)" == "Darwin" ]; then
     export PATH="/usr/local/opt/gnu-sed/libexec/gnubin:$PATH"
   fi
-  
+
   if [[ $BUILD_LANG == "it" ]]; then
     echo "Utilizzo dello script di modifica dell'utente"
   else
@@ -386,6 +386,14 @@ if [ -f "$BUILD_DIR/scripts/user_modifications.sh" ]; then
   $BUILD_DIR/scripts/user_modifications.sh "$BUILD_DIR" 1> /dev/null
   error_exit "user modifications"
 fi
+
+# Override ota url for each device even though build may not use the url
+export IFS=","
+runonce=0
+for DEVICE in $DEVICES; do
+  DEVICE_FILE="$BUILD_DIR/rom/device/samsung/$DEVICE/${BUILD_NAME}_$DEVICE.mk"
+  sed -i '/lineage.updater.uri/s/.*/    lineage.updater.uri=https:\/\/raw.githubusercontent.com\/robbalmbra\/OTA\/master\/$UPLOAD_NAME\/$DEVICE.json/' $DEVICE_FILE
+done
 
 # Build
 if [[ $BUILD_LANG == "it" ]]; then
@@ -411,7 +419,7 @@ if [[ ! -d "$CCACHE_DIR" ]]; then
 fi
 
 # Enable ccache with 50 gigabytes if not overrided
-if [ -z "$CCACHE_SIZE" ]; then 
+if [ -z "$CCACHE_SIZE" ]; then
   ccache -M "50G" > /dev/null 2>&1
   error_exit "ccache"
   log_setting "CCACHE_SIZE" "50G"
@@ -447,7 +455,7 @@ for DEVICE in $DEVICES; do
   else
     echo "--- Building $DEVICE ($BUILD_NAME) :building_construction:"
   fi
-  
+
   # Run lunch
   build_id="${BUILD_NAME}_$DEVICE-$LUNCH_DEBUG"
   if [[ ! -z "${BUILDKITE}" ]]; then
@@ -460,7 +468,7 @@ for DEVICE in $DEVICES; do
 
   # Flush log
   echo "" > $BUILD_DIR/logs/$DEVICE/make_${DEVICE}_android10.txt
-  
+
   # Log to buildkite every N seconds
   if [[ ! -z "${BUILDKITE}" ]]; then
     $BUILD_DIR/scripts/buildkite_logger.sh "$BUILD_DIR/logs/$DEVICE/make_${DEVICE}_android10.txt" "$LOGGING_RATE" &
@@ -470,7 +478,7 @@ for DEVICE in $DEVICES; do
   if [ "$runonce" -eq 0 ]; then
     if [[ ! -z "${BUILDKITE}" ]]; then
       if [[ $BUILD_LANG == "it" ]]; then
-        echo "Generazione di documenti"      
+        echo "Generazione di documenti"
       else
         echo "Generating docs"
       fi
@@ -490,30 +498,30 @@ for DEVICE in $DEVICES; do
   else
     mka $BUILD_PARAMETERS -j$MAX_CPU 2>&1 | tee "$BUILD_DIR/logs/$DEVICE/make_${DEVICE}_android10.txt"
   fi
-  
+
   # Upload error log to buildkite if any errors occur
   ret="$?"
-  
+
   # Notify logger script to stop logging to buildkite
   touch "$BUILD_DIR/logs/$DEVICE/.finished"
-  
+
   # Check for fail keyword to exit if build fails
   if grep -q "FAILED: " "$BUILD_DIR/logs/$DEVICE/make_${DEVICE}_android10.txt"; then
     ret=1
   fi
-  
+
   if [ "$ret" != "0" ]; then
     echo "^^^ +++"
-    
+
     if [[ $BUILD_LANG == "it" ]]; then
       echo "Errore - Creazione di $DEVICE non riuscita ($ret) :bk-status-failed:"
     else
       echo "Error - $DEVICE build failed ($ret) :bk-status-failed:"
     fi
-    
+
     # Save folder for cd
     CURRENT=$(pwd)
-    
+
     # Extract any errors from log if exist
     grep -iE 'crash|error|fail|fatal|unknown' "$BUILD_DIR/logs/$DEVICE/make_${DEVICE}_android10.txt" 2>&1 | tee "$BUILD_DIR/logs/$DEVICE/make_${DEVICE}_errors_android10.txt"
 
@@ -526,21 +534,21 @@ for DEVICE in $DEVICES; do
         cd "$CURRENT"
       fi
     fi
-    
+
     exit 1
     break
   else
-  
+
     # Show time of build in minutes
     makeend=`date +%s`
     maketime=$(((makeend-makestart)/60))
-    
+
     if [[ $BUILD_LANG == "it" ]]; then
       echo "Successo: $DEVICE è stato creato in $maketime minuti"
     else
       echo "Success - $DEVICE was built in $maketime minutes"
     fi
-    
+
     # Save folder for cd
     CURRENT=$(pwd)
 
@@ -559,8 +567,8 @@ if [[ $BUILD_LANG == "it" ]]; then
   echo "--- Patch per includere extra all'interno della ROM"
 else
   echo "--- Patching to include extras within ROM"
-fi  
-  
+fi
+
 for ROM in $BUILD_DIR/rom/out/target/product/*/*.zip; do
   PRODUCT="$(basename "$(dirname "$ROM")")"
   $BUILD_DIR/scripts/patcher.sh $ROM /tmp/rom-magisk $MAGISK_VERSION $PRODUCT $BUILD_DIR
@@ -589,8 +597,8 @@ for ROM in $BUILD_DIR/rom/out/target/product/*/*.zip; do
     echo "Caricamento $(basename $ROM)"
   else
     echo "Uploading $(basename $ROM)"
-  fi  
-    
+  fi
+
   # Get rom size for telegram group
   file_size=$(ls -lh "$ROM" | awk '{print $5}')
 
