@@ -391,8 +391,12 @@ fi
 export IFS=","
 for DEVICE in $DEVICES; do
   DEVICE_FILE="$BUILD_DIR/rom/device/samsung/$DEVICE/${BUILD_NAME}_$DEVICE.mk"
-  echo "sed -i '/lineage.updater.uri/s/.*/    lineage.updater.uri=https:\/\/raw.githubusercontent.com\/robbalmbra\/OTA\/master\/$UPLOAD_NAME\/$DEVICE.json/' $DEVICE_FILE"
-  sed -i '/lineage.updater.uri/s/.*/    lineage.updater.uri=https:\/\/raw.githubusercontent.com\/robbalmbra\/OTA\/master\/$UPLOAD_NAME\/$DEVICE.json/' $DEVICE_FILE
+
+  # Remove any ota strings
+  sed -i '/# OTA/,+2d' $DEVICE_FILE
+
+  # Dynamically create url and save to device make file for OTA apk
+  echo -e "# OTA\nPRODUCT_PROPERTY_OVERRIDES += \\\\\n    lineage.updater.uri=https://raw.githubusercontent.com/robbalmbra/OTA/master/$UPLOAD_NAME/$DEVICE.json" >> $DEVICE_FILE
 done
 
 # Build
