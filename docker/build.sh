@@ -389,7 +389,6 @@ fi
 
 # Override ota url for each device even though build may not use the url
 export IFS=","
-runonce=0
 for DEVICE in $DEVICES; do
   DEVICE_FILE="$BUILD_DIR/rom/device/samsung/$DEVICE/${BUILD_NAME}_$DEVICE.mk"
   echo "sed -i '/lineage.updater.uri/s/.*/    lineage.updater.uri=https:\/\/raw.githubusercontent.com\/robbalmbra\/OTA\/master\/$UPLOAD_NAME\/$DEVICE.json/' $DEVICE_FILE"
