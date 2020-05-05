@@ -340,7 +340,7 @@ fi
 if [ ! -z "$ADDITIONAL_PROPS" ]; then
   export IFS=";"
   check=0
-  additional_props_string="\nPRODUCT_PRODUCT_PROPERTIES += \\\\\n"
+  additional_props_string=""
   for prop in $ADDITIONAL_PROPS; do
   
     if [[ $BUILD_LANG == "it" ]]; then
@@ -358,9 +358,15 @@ if [ ! -z "$ADDITIONAL_PROPS" ]; then
     additional_props_string+="    ${prop}"
   done
 
-  # Append to device props 
-  echo -e "$additional_props_string" >> $BUILD_DIR/rom/device/samsung/universal9810-common/product_prop.mk
+  # Append to device props
+  echo -e "\nPRODUCT_PRODUCT_PROPERTIES += \\\\\n$additional_props_string" >> $BUILD_DIR/rom/device/samsung/universal9810-common/product_prop.mk
 fi
+
+# Add props to system props
+for DEVICE in $DEVICES; do
+  DEVICE_FILE="$BUILD_DIR/rom/device/samsung/$DEVICE/${BUILD_NAME}_$DEVICE.mk"
+  echo -e "\n\nPRODUCT_PROPERTY_OVERRIDES += \\\\\n$additional_props_string" >> $DEVICE_FILE
+done
 
 # Execute specific user modifications and environment specific options if avaiable
 if [ -f "$BUILD_DIR/scripts/user_modifications.sh" ]; then
