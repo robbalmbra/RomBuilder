@@ -397,14 +397,28 @@ for DEVICE in $DEVICES; do
 done
 
 # Override alterntive url in string.xml in updater git repo
-fileDir=("packages/apps/Updates/res/values/strings.xml" "packages/apps/Updater/res/values/strings.xml")
+fileDir=("packages/apps/Updates" "packages/apps/Updater")
 
 # Iterate over files
 for strFile in "${fileDir[@]}"
-  # Check if file exists
-  if [ -f "$BUILD_DIR/$strFile" ]; then
-    sed -i 's/\(<string name="updater_server_url" translatable="false">\)[^<]*\(<\/string>\)/\1https:\/\/raw.githubusercontent.com\/robbalmbra\/OTA\/master\/$UPLOAD_NAME\/{device}.json\2/g' $BUILD_DIR/$strFile
+
+  # Check if strings file exists
+  if [ -f "$BUILD_DIR/$strFile/res/values/strings.xml" ]; then
+    sed -i 's/\(<string name="updater_server_url" translatable="false">\)[^<]*\(<\/string>\)/\1https:\/\/raw.githubusercontent.com\/robbalmbra\/OTA\/master\/$UPLOAD_NAME\/{device}.json\2/g' $BUILD_DIR/$strFile/res/values/strings.xml
   fi
+
+  # Check if consts file exists for other builds
+  constants="$BUILD_DIR/$strFile/src/org/*/ota/misc/Constants.java"
+  if [ -f "$contants" ]; then
+    # Remove urls for zip and changelog
+    sed -i '/OTA_URL/d' $constants
+    sed -i '/DOWNLOAD_WEBPAGE_URL/d' $constants
+    
+    # Insert new urls into constants for changelog and zip path
+    echo "static final String OTA_URL = \"https://raw.githubusercontent.com/robbalmbra/OTA/master/$UPLOAD_NAME/%s.json\";" >> $constants
+    echo "static final String DOWNLOAD_WEBPAGE_URL = \"https://raw.githubusercontent.com/robbalmbra/OTA/master/$UPLOAD_NAME/changelogs/%s/%s.txt\";" >> $constants
+  fi
+
 done
 
 # Build
