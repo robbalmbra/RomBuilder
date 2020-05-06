@@ -416,6 +416,11 @@ for strFile in "${fileDir[@]}"; do
     # Get folder name in org directory
     org_folder="$BUILD_DIR/rom/$strFile/src/org/"
     org=$(ls -lA $org_folder | awk -F':[0-9]* ' '/:/{print $2}' 2> /dev/null)
+    
+    if [ -z $org ]; then
+      continue
+    fi
+    
     constants_file="$BUILD_DIR/rom/$strFile/src/org/$org/ota/misc/Constants.java"
     
     echo "$constants_file"
