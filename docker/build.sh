@@ -365,8 +365,8 @@ if [ ! -z "$ADDITIONAL_PROPS" ]; then
   export IFS=","
   for DEVICE in $DEVICES; do
     DEVICE_FILE="$BUILD_DIR/rom/device/samsung/$DEVICE/${BUILD_NAME}_$DEVICE.mk"
-    echo "echo -e "\n\nPRODUCT_PROPERTY_OVERRIDES += \\\\\n$additional_props_string" >> $DEVICE_FILE"
     echo -e "\n\nPRODUCT_PROPERTY_OVERRIDES += \\\\\n$additional_props_string" >> $DEVICE_FILE
+    cat $DEVICE_FILE
   done
 fi
 
