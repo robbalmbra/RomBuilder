@@ -412,6 +412,14 @@ for strFile in "${fileDir[@]}"; do
 
   # Check if consts file exists for other builds
   if compgen -G "$contants_file" > /dev/null; then
+  
+    # Get folder name in org directory
+    org_folder="$BUILD_DIR/rom/$strFile/src/org/"
+    
+    org=$(ls -lA $order_folder | awk -F':[0-9]* ' '/:/{print $2}')
+  
+    echo "$org"
+  
     # Remove urls for zip and changelog
     sed -i '/OTA_URL/d' $constants_file
     sed -i '/DOWNLOAD_WEBPAGE_URL/d' $constants_file
