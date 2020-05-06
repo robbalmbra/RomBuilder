@@ -389,7 +389,7 @@ for DEVICE in $DEVICES; do
   sed -i '/# OTA/,+2d' $DEVICE_FILE
 
   # Dynamically create url and save to device make file for OTA apk
-  echo -e "# OTA\nPRODUCT_PROPERTY_OVERRIDES += \\\\\n    lineage.updater.uri=https://raw.githubusercontent.com/robbalmbra/OTA/master/$UPLOAD_NAME/$DEVICE.json" >> $DEVICE_FILE
+  echo -e "# OTA\nPRODUCT_PROPERTY_OVERRIDES += \\\\\n    lineage.updater.uri=https://raw.githubusercontent.com/robbalmbra/OTA/$UPLOAD_NAME/$DEVICE.json" >> $DEVICE_FILE
   
   if [ ! -z "$ADDITIONAL_PROPS" ]; then
     echo -e "\n\nPRODUCT_PROPERTY_OVERRIDES += \\\\\n$additional_props_string" >> $DEVICE_FILE
@@ -407,7 +407,7 @@ for strFile in "${fileDir[@]}"; do
 
   # Check if strings file exists
   if [ -f "$string_file" ]; then
-    sed -i "s/\(<string name=\"updater_server_url\" translatable=\"false\">\)[^<]*\(<\/string>\)/\1https:\/\/raw.githubusercontent.com\/robbalmbra\/OTA\/master\/$UPLOAD_NAME\/{device}.json\2/g" "$string_file"
+    sed -i "s/\(<string name=\"updater_server_url\" translatable=\"false\">\)[^<]*\(<\/string>\)/\1https:\/\/raw.githubusercontent.com\/robbalmbra\/OTA\/$UPLOAD_NAME\/{device}.json\2/g" "$string_file"
   fi
 
   # Check if consts file exists for other builds
@@ -419,8 +419,8 @@ for strFile in "${fileDir[@]}"; do
     constants_file="$BUILD_DIR/rom/$strFile/src/org/$org/ota/misc/Constants.java"
     
     # Remove urls for zip and changelog
-    OTA_URL="https://raw.githubusercontent.com/robbalmbra/OTA/master/$UPLOAD_NAME/%s.json"
-    CH_URL="https://raw.githubusercontent.com/robbalmbra/OTA/master/$UPLOAD_NAME/changelogs/%s/%s.txt"
+    OTA_URL="https://raw.githubusercontent.com/robbalmbra/OTA/$UPLOAD_NAME/%s.json"
+    CH_URL="https://raw.githubusercontent.com/robbalmbra/OTA/$UPLOAD_NAME/changelogs/%s/%s.txt"
     sed -i 's;static final String OTA_URL = .*;static final String OTA_URL = \"'"$OTA_URL\"\;"';' $constants_file
     sed -i 's;static final String DOWNLOAD_WEBPAGE_URL = .*;static final String DOWNLOAD_WEBPAGE_URL = \"'"$CH_URL\"\;"';' $constants_file
   fi
