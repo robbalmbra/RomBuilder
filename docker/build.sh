@@ -390,16 +390,11 @@ for DEVICE in $DEVICES; do
 
   # Dynamically create url and save to device make file for OTA apk
   echo -e "# OTA\nPRODUCT_PROPERTY_OVERRIDES += \\\\\n    lineage.updater.uri=https://raw.githubusercontent.com/robbalmbra/OTA/master/$UPLOAD_NAME/$DEVICE.json" >> $DEVICE_FILE
-done
-
-if [ ! -z "$ADDITIONAL_PROPS" ]; then
-  # Add props to system props
-  export IFS=","
-  for DEVICE in $DEVICES; do
-    DEVICE_FILE="$BUILD_DIR/rom/device/samsung/$DEVICE/${BUILD_NAME}_$DEVICE.mk"
+  
+  if [ ! -z "$ADDITIONAL_PROPS" ]; then
     echo -e "\n\nPRODUCT_PROPERTY_OVERRIDES += \\\\\n$additional_props_string" >> $DEVICE_FILE
-  done
-fi
+  fi
+done
 
 # Build
 if [[ $BUILD_LANG == "it" ]]; then
