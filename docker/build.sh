@@ -162,7 +162,7 @@ if [ ! -f "/etc/lsb-release" ] && [ ! -f "$BUILD_DIR/android.sparseimage" ]; the
   # Check for errors
   if [ $? -ne 0 ]; then
     echo "^^^ +++"
-    echo "Error, something went wrong in creating local image :bk-status-failed:"
+    echo "Error, something went wrong in creating local image :exclamation:"
     exit 1
   fi
 fi
@@ -203,9 +203,9 @@ do
   if [[ -z ${!variable+x} ]]; then
     echo "^^^ +++"
     if [[ $BUILD_LANG == "it" ]]; then
-      echo "$0 - Errore, $variable non è impostato :bk-status-failed:";
+      echo "$0 - Errore, $variable non è impostato :exclamation:";
     else
-      echo "$0 - Error, $variable isn't set :bk-status-failed:";
+      echo "$0 - Error, $variable isn't set :exclamation:";
     fi
     quit=1
     break
@@ -237,7 +237,7 @@ if [ -n "$SKIP_PULL" ]; then
   # Repo check
   if [ ! -d "$BUILD_DIR/rom/.repo/" ]; then
     echo "^^^ +++"
-    echo "Error failed to find repo in /rom/ :bk-status-failed:"
+    echo "Error failed to find repo in /rom/ :exclamation:"
     exit 1
   fi
 else
