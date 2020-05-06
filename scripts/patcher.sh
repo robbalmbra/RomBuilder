@@ -55,7 +55,6 @@ mkdir -p "$magisk_dir"
 
 # Get latest magisk version
 magisk_url="https://github.com/topjohnwu/Magisk/releases/download/v$magisk_version/Magisk-v$magisk_version.zip"
-echo "Downloading $magisk_url"
 wget $magisk_url -O $magisk_dir/Magisk.zip > /dev/null 2>&1
 fi
 
