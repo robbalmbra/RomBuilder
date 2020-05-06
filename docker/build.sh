@@ -32,9 +32,9 @@ error_exit()
   if [ "$ret" != "0" ]; then
     echo "^^^ +++"
     if [[ $BUILD_LANG == "it" ]]; then
-      echo "Errore - '$1' non riuscito ($ret) :bk-status-failed:"
+      echo "Errore - '$1' non riuscito ($ret) :exclamation:"
     else
-      echo "Error - '$1' failed ($ret) :bk-status-failed:"
+      echo "Error - '$1' failed ($ret) :exclamation:"
     fi
     exit 1
   fi
