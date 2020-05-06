@@ -402,9 +402,11 @@ fileDir=("packages/apps/Updates" "packages/apps/Updater")
 # Iterate over files
 for strFile in "${fileDir[@]}"
 
+  string_file="$BUILD_DIR/$strFile/res/values/strings.xml"
+
   # Check if strings file exists
-  if [ -f "$BUILD_DIR/$strFile/res/values/strings.xml" ]; then
-    sed -i 's/\(<string name="updater_server_url" translatable="false">\)[^<]*\(<\/string>\)/\1https:\/\/raw.githubusercontent.com\/robbalmbra\/OTA\/master\/$UPLOAD_NAME\/{device}.json\2/g' $BUILD_DIR/$strFile/res/values/strings.xml
+  if [ -f "$string_file" ]; then
+    sed -i 's/\(<string name="updater_server_url" translatable="false">\)[^<]*\(<\/string>\)/\1https:\/\/raw.githubusercontent.com\/robbalmbra\/OTA\/master\/$UPLOAD_NAME\/{device}.json\2/g' $string_file
   fi
 
   # Check if consts file exists for other builds
