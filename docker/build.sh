@@ -360,14 +360,6 @@ if [ ! -z "$ADDITIONAL_PROPS" ]; then
 
   # Append to device props
   echo -e "\nPRODUCT_PRODUCT_PROPERTIES += \\\\\n$additional_props_string" >> $BUILD_DIR/rom/device/samsung/universal9810-common/product_prop.mk
-
-  # Add props to system props
-  export IFS=","
-  for DEVICE in $DEVICES; do
-    DEVICE_FILE="$BUILD_DIR/rom/device/samsung/$DEVICE/${BUILD_NAME}_$DEVICE.mk"
-    echo -e "\n\nPRODUCT_PROPERTY_OVERRIDES += \\\\\n$additional_props_string" >> $DEVICE_FILE
-    cat $DEVICE_FILE
-  done
 fi
 
 # Execute specific user modifications and environment specific options if avaiable
@@ -399,6 +391,15 @@ for DEVICE in $DEVICES; do
   # Dynamically create url and save to device make file for OTA apk
   echo -e "# OTA\nPRODUCT_PROPERTY_OVERRIDES += \\\\\n    lineage.updater.uri=https://raw.githubusercontent.com/robbalmbra/OTA/master/$UPLOAD_NAME/$DEVICE.json" >> $DEVICE_FILE
 done
+
+if [ ! -z "$ADDITIONAL_PROPS" ]; then
+  # Add props to system props
+  export IFS=","
+  for DEVICE in $DEVICES; do
+    DEVICE_FILE="$BUILD_DIR/rom/device/samsung/$DEVICE/${BUILD_NAME}_$DEVICE.mk"
+    echo -e "\n\nPRODUCT_PROPERTY_OVERRIDES += \\\\\n$additional_props_string" >> $DEVICE_FILE
+  done
+fi
 
 # Build
 if [[ $BUILD_LANG == "it" ]]; then
