@@ -574,6 +574,12 @@ else
 fi
 
 for ROM in $BUILD_DIR/rom/out/target/product/*/*.zip; do
+
+  # Skip if zip has -ota- in zip
+  if [[ $ROM == *"-ota-"* ]]; then
+    continue
+  fi
+
   PRODUCT="$(basename "$(dirname "$ROM")")"
   $BUILD_DIR/scripts/patcher.sh $ROM /tmp/rom-magisk $MAGISK_VERSION $PRODUCT $BUILD_DIR
   error_exit "patches"
@@ -596,6 +602,11 @@ shopt -s nocaseglob
 DATE=$(date '+%d-%m-%y');
 rom_count=0
 for ROM in $BUILD_DIR/rom/out/target/product/*/*.zip; do
+
+  # Skip if zip has -ota- in zip
+  if [[ $ROM == *"-ota-"* ]]; then
+    continue
+  fi
 
   if [[ $BUILD_LANG == "it" ]]; then
     echo "Caricamento $(basename $ROM)"
