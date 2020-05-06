@@ -417,6 +417,9 @@ for strFile in "${fileDir[@]}"; do
     org_folder="$BUILD_DIR/rom/$strFile/src/org/"
     org=$(ls -lA $org_folder | awk -F':[0-9]* ' '/:/{print $2}')
     constants_file="$BUILD_DIR/rom/$strFile/src/org/$org/ota/misc/Constants.java"
+    
+    echo "$constants_file"
+    echo "$org"
   
     # Remove urls for zip and changelog
     sed -i '/OTA_URL/d' $constants_file
