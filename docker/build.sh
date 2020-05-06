@@ -400,7 +400,7 @@ done
 fileDir=("packages/apps/Updates" "packages/apps/Updater")
 
 # Iterate over files
-for strFile in "${fileDir[@]}"
+for strFile in "${fileDir[@]}"; do
 
   string_file="$BUILD_DIR/$strFile/res/values/strings.xml"
 
