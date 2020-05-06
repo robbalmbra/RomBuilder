@@ -415,15 +415,15 @@ for strFile in "${fileDir[@]}"; do
   
     # Get folder name in org directory
     org_folder="$BUILD_DIR/rom/$strFile/src/org/"
-    org=$(ls -lA $org_folder | awk -F':[0-9]* ' '/:/{print $2}')
+    org=$(ls -lA $org_folder | awk -F':[0-9]* ' '/:/{print $2}' 2> /dev/null)
     constants_file="$BUILD_DIR/rom/$strFile/src/org/$org/ota/misc/Constants.java"
     
     echo "$constants_file"
     echo "$org"
   
     # Remove urls for zip and changelog
-    sed -i '/OTA_URL/d' $constants_file
-    sed -i '/DOWNLOAD_WEBPAGE_URL/d' $constants_file
+    sed -i '/OTA_URL/d' $constants_file > /dev/null 2>&1
+    sed -i '/DOWNLOAD_WEBPAGE_URL/d' $constants_file > /dev/null 2>&1
     
     # Insert new urls into constants for changelog and zip path
     echo "static final String OTA_URL = \"https://raw.githubusercontent.com/robbalmbra/OTA/master/$UPLOAD_NAME/%s.json\";" >> $constants_file
