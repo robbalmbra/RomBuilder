@@ -419,12 +419,10 @@ for strFile in "${fileDir[@]}"; do
     constants_file="$BUILD_DIR/rom/$strFile/src/org/$org/ota/misc/Constants.java"
     
     # Remove urls for zip and changelog
-    sed -i '/OTA_URL/d' $constants_file > /dev/null 2>&1
-    sed -i '/DOWNLOAD_WEBPAGE_URL/d' $constants_file > /dev/null 2>&1
-    
-    # Insert new urls into constants for changelog and zip path
-    echo "static final String OTA_URL = \"https://raw.githubusercontent.com/robbalmbra/OTA/master/$UPLOAD_NAME/%s.json\";" >> $constants_file
-    echo "static final String DOWNLOAD_WEBPAGE_URL = \"https://raw.githubusercontent.com/robbalmbra/OTA/master/$UPLOAD_NAME/changelogs/%s/%s.txt\";" >> $constants_file
+    OTA_URL="https://raw.githubusercontent.com/robbalmbra/OTA/master/$UPLOAD_NAME/%s.json"
+    CH_URL="https://raw.githubusercontent.com/robbalmbra/OTA/master/$UPLOAD_NAME/changelogs/%s/%s.txt"
+    sed -i 's;static final String OTA_URL = .*;static final String OTA_URL = \"'"$OTA_URL\"\;"';' $constants_file
+    sed -i 's;static final String DOWNLOAD_WEBPAGE_URL = .*;static final String DOWNLOAD_WEBPAGE_URL = \"'"$CH_URL\"\;"';' $constants_file
   fi
 
 done
