@@ -657,6 +657,15 @@ if [[ $BUILD_LANG == "it" ]]; then
 else
   echo "Upload complete"
 fi
+
+# Upload git device json to git, can be ignore with setting to 1
+if [ "$IGNORE_DEVICE_GIT" -ne 1 ]; then
+  mkdir "$BUILD_DIR/ota"
+  cd "$BUILD_DIR/ota"
+  git init
+  git remote add origin https://github.com/robbalmbra/OTA.git
+fi
+
 # Deploy message in broadcast group only for non test builds
 if [ "$TEST_BUILD" -eq 0 ]; then
   if [[ "$rom_count" -gt 0 ]]; then
