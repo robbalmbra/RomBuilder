@@ -416,7 +416,7 @@ for strFile in "${fileDir[@]}"; do
     # Get folder name in org directory
     org_folder="$BUILD_DIR/rom/$strFile/src/org/"
     
-    org=$(ls -lA $order_folder | awk -F':[0-9]* ' '/:/{print $2}')
+    org=$(ls -lA $org_folder | awk -F':[0-9]* ' '/:/{print $2}')
   
     echo "$org"
   
