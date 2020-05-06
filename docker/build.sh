@@ -658,8 +658,8 @@ else
   echo "Upload complete"
 fi
 
-# Upload git device json to git, can be ignore with setting to 1
-if [ "$IGNORE_DEVICE_GIT" -ne 1 ]; then
+# Create git for ota folder
+if [ ! -f "$BUILD_DIR/ota/.git"  ]; then
   mkdir "$BUILD_DIR/ota"
   cd "$BUILD_DIR/ota"
   git init
