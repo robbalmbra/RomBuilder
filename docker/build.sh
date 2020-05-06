@@ -411,7 +411,7 @@ for strFile in "${fileDir[@]}"; do
   fi
 
   # Check if consts file exists for other builds
-  if [ -f "$contants_file" ]; then
+  if compgen -G "$contants_file" > /dev/null; then
     # Remove urls for zip and changelog
     sed -i '/OTA_URL/d' $constants_file
     sed -i '/DOWNLOAD_WEBPAGE_URL/d' $constants_file
