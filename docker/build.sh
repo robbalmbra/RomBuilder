@@ -411,16 +411,11 @@ for strFile in "${fileDir[@]}"; do
   fi
 
   # Check if consts file exists for other builds
-  if compgen -G "$contants_file" > /dev/null; then
+  if compgen -G "$constants_file" > /dev/null; then
   
     # Get folder name in org directory
     org_folder="$BUILD_DIR/rom/$strFile/src/org/"
     org=$(ls -lA $org_folder | awk -F':[0-9]* ' '/:/{print $2}' 2> /dev/null)
-    
-    if [ -z $org ]; then
-      continue
-    fi
-    
     constants_file="$BUILD_DIR/rom/$strFile/src/org/$org/ota/misc/Constants.java"
     
     echo "$constants_file"
