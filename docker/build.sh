@@ -402,7 +402,9 @@ fileDir=("packages/apps/Updates" "packages/apps/Updater")
 # Iterate over files
 for strFile in "${fileDir[@]}"
 
-  string_file="$BUILD_DIR/$strFile/res/values/strings.xml"
+  string_file="${BUILD_DIR}/${strFile}/res/values/strings.xml"
+
+  echo "$string_file"
 
   # Check if strings file exists
   if [ -f "$string_file" ]; then
