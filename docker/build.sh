@@ -403,8 +403,7 @@ fileDir=("packages/apps/Updates" "packages/apps/Updater")
 for strFile in "${fileDir[@]}"; do
 
   string_file="$BUILD_DIR/$strFile/res/values/strings.xml"
-
-  echo "$string_file"
+  constants_file="$BUILD_DIR/$strFile/src/org/*/ota/misc/Constants.java"
 
   # Check if strings file exists
   if [ -f "$string_file" ]; then
@@ -412,15 +411,14 @@ for strFile in "${fileDir[@]}"; do
   fi
 
   # Check if consts file exists for other builds
-  constants="$BUILD_DIR/$strFile/src/org/*/ota/misc/Constants.java"
-  if [ -f "$contants" ]; then
+  if [ -f "$contants_file" ]; then
     # Remove urls for zip and changelog
-    sed -i '/OTA_URL/d' $constants
-    sed -i '/DOWNLOAD_WEBPAGE_URL/d' $constants
+    sed -i '/OTA_URL/d' $constants_file
+    sed -i '/DOWNLOAD_WEBPAGE_URL/d' $constants_file
     
     # Insert new urls into constants for changelog and zip path
-    echo "static final String OTA_URL = \"https://raw.githubusercontent.com/robbalmbra/OTA/master/$UPLOAD_NAME/%s.json\";" >> $constants
-    echo "static final String DOWNLOAD_WEBPAGE_URL = \"https://raw.githubusercontent.com/robbalmbra/OTA/master/$UPLOAD_NAME/changelogs/%s/%s.txt\";" >> $constants
+    echo "static final String OTA_URL = \"https://raw.githubusercontent.com/robbalmbra/OTA/master/$UPLOAD_NAME/%s.json\";" >> $constants_file
+    echo "static final String DOWNLOAD_WEBPAGE_URL = \"https://raw.githubusercontent.com/robbalmbra/OTA/master/$UPLOAD_NAME/changelogs/%s/%s.txt\";" >> $constants_file
   fi
 
 done
