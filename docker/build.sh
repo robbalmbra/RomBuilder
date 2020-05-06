@@ -407,7 +407,7 @@ for strFile in "${fileDir[@]}"; do
 
   # Check if strings file exists
   if [ -f "$string_file" ]; then
-    sed -i 's/\(<string name="updater_server_url" translatable="false">\)[^<]*\(<\/string>\)/\1https:\/\/raw.githubusercontent.com\/robbalmbra\/OTA\/master\/$UPLOAD_NAME\/{device}.json\2/g' $string_file
+    sed -i "s/\(<string name=\"updater_server_url\" translatable=\"false\">\)[^<]*\(<\/string>\)/\1https:\/\/raw.githubusercontent.com\/robbalmbra\/OTA\/master\/$UPLOAD_NAME\/{device}.json\2/g" "$string_file"
   fi
 
   # Check if consts file exists for other builds
