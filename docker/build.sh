@@ -396,6 +396,17 @@ for DEVICE in $DEVICES; do
   fi
 done
 
+# Override alterntive url in string.xml in updater git repo
+fileDir=("packages/apps/Updates/res/values/strings.xml" "packages/apps/Updater/res/values/strings.xml")
+
+# Iterate over files
+for strFile in "${fileDir[@]}"
+  # Check if file exists
+  if [ -f "$BUILD_DIR/$strFile" ]; then
+    sed -i 's/\(<string name="updater_server_url" translatable="false">\)[^<]*\(<\/string>\)/\1https:\/\/raw.githubusercontent.com\/robbalmbra\/OTA\/master\/$UPLOAD_NAME\/{device}.json\2/g' $BUILD_DIR/$strFile
+  fi
+done
+
 # Build
 if [[ $BUILD_LANG == "it" ]]; then
   echo "Impostazione dell'ambiente"
