@@ -665,8 +665,8 @@ cd "$BUILD_DIR/ota"
 
 git init > /dev/null 2>&1
 git remote add origin git@github.com:robbalmbra/OTA.git > /dev/null 2>&1
-git pull -f origin $UPLOAD_NAME
-git branch --set-upstream-to=origin/$UPLOAD_NAME master
+git pull -f origin $UPLOAD_NAME > /dev/null 2>&1
+git branch --set-upstream-to=origin/$UPLOAD_NAME master > /dev/null 2>&1
 
 # Deploy message in broadcast group only for non test builds
 if [ "$TEST_BUILD" -eq 0 ]; then
