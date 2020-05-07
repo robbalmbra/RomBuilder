@@ -469,7 +469,8 @@ cd "$BUILD_DIR/rom/"
 BUILD_PARAMETERS="bacon"
 LUNCH_DEBUG="userdebug"
 
-if [ ! -z "$MKA_PARAMETERS" ]; then
+# Check for mka parameters, can be empty 
+if [ -n "${MKA_PARAMETERS+1}" ]; then
   BUILD_PARAMETERS="$MKA_PARAMETERS"
 fi
 
