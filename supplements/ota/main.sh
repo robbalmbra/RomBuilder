@@ -27,8 +27,8 @@ fi
 
 # Check if ota handler exists for specific rom
 if [ ! -f "$rom_name.py" ]; then
-  echo "Error - '$rom_name' isn't supported in this script."
-  exit 4
+  echo "Warning - '$rom_name' doesn't support ota."
+  exit 0
 fi
 
 # Make rom directory
