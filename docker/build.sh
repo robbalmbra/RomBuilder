@@ -536,7 +536,7 @@ for DEVICE in $DEVICES; do
 
   # Run build
   if [[ ! -z "${BUILDKITE}" ]]; then
-    if [[ -! -z "$CUSTOM_MKA_COMMAND" ]]; then
+    if [[ ! -z "$CUSTOM_MKA_COMMAND" ]]; then
       custom_text="$CUSTOM_MKA_COMMAND"
       custom_text=${custom_text/\{device\}/$DEVICE}
       custom_text=${custom_text/\{user_debug\}/$LUNCH_DEBUG}
