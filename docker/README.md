@@ -37,7 +37,7 @@ Options can be defined within environment variables or within the environment se
 * CCACHE_SIZE - Defines in gigabytes the size of ccache. Default is 70 gigabytes.
 * TEST_BUILD=1 - Disable telegram automatic update to group
 * DATE_REVERT - Specifies the date that the repo will pull before the specified date; e.g `2020-03-01 00:00`
-* CUSTOM_LUNCH_COMMAND - Overrides default lunch command.
+* CUSTOM_LUNCH_COMMAND - Overrides default lunch command. Default is lunch.
 
 **Other**
 
