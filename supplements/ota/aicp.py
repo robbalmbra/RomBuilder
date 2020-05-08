@@ -38,10 +38,10 @@ json_metadata = """{
       "datetime": """ + str(os.path.getmtime(rom_file)).split(".")[0] + """,
       "filename": """ + "\"" + os.path.basename(rom_file) + "\"" + """,
       "id": """ + "\"" + str(md5(rom_file)) + "\"" + """,
-      "romtype": """ + "\"" + file_info[2].lower() + "\"" + """,
+      "romtype": """ + "\"" + file_info[2] + "\"" + """,
       "size": """ + "\"" + str(os.path.getsize(rom_file)) + "\"" + """,
       "url": """ + "\"" + str(sf_url) + "\"" + """,
-      "version": """ + "\"" + file_info[1] + "\"" + """
+      "version": """ + "\"q-" + file_info[1] + "\"" + """
     }
   ]
 }"""
