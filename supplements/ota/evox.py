@@ -45,7 +45,7 @@ with open(rom_json, 'r+') as f:
   data['maintainer'] = "Robert Balmbra"
   data['maintainer_url'] = "https://forum.xda-developers.com/member.php?u=4834466"
   data['telegram_username'] = "robbalmbra"
-  data['url'] = "https://sourceforge.net/projects/evo9810ota/files/" + rom_name + "/" + os.path.basename(rom_filename) + "/download"
+  data['url'] = "https://sourceforge.net/projects/evo9810ota/files/" + rom_name + "/" + rom_filename + "/download"
   data['filehash'] = md5(rom_file)
   
   print(json.dumps(data))
