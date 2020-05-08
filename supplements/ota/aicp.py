@@ -19,7 +19,8 @@ if len(sys.argv) < 4:
 
 rom_file=sys.argv[1]
 rom_name=sys.argv[2]
-sf_url="https://sourceforge.net/projects/evo9810ota/files/" + rom_name + "/" + os.path.dirname(rom_file) + "/" + os.path.basename(rom_file) + "/download"
+rom_date=sys.argv[3]
+sf_url="https://sourceforge.net/projects/evo9810ota/files/" + rom_name + "/" + os.path.dirname(rom_file) + "/" + rom_date + "/" + os.path.basename(rom_file) + "/download"
 
 if not os.path.exists(rom_file):
   print("Error - '" + rom_file + "' doesn't exist")
