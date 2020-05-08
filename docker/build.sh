@@ -536,7 +536,7 @@ for DEVICE in $DEVICES; do
 
   # Run build
   if [[ ! -z "${BUILDKITE}" ]]; then
-    if [[ -! -z "$CUSTOM_MKA_COMMAND" ]]; then
+    if [[ ! -z "$CUSTOM_MKA_COMMAND" ]]; then
       custom_text="$CUSTOM_MKA_COMMAND"
       custom_text=${custom_text/\{device\}/$DEVICE}
       custom_text=${custom_text/\{user_debug\}/$LUNCH_DEBUG}
@@ -545,7 +545,7 @@ for DEVICE in $DEVICES; do
       mka $BUILD_PARAMETERS -j$MAX_CPU 2>&1 | tee "$BUILD_DIR/logs/$DEVICE/make_${DEVICE}_android10.txt" > /dev/null 2>&1
     fi
   else
-    if [[ -! -z "$CUSTOM_MKA_COMMAND" ]]; then
+    if [[ ! -z "$CUSTOM_MKA_COMMAND" ]]; then
       custom_text="$CUSTOM_MKA_COMMAND"
       custom_text=${custom_text/\{device\}/$DEVICE}
       custom_text=${custom_text/\{user_debug\}/$LUNCH_DEBUG}
