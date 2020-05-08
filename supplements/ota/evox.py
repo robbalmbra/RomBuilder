@@ -11,8 +11,8 @@ def md5(fname):
             hash_md5.update(chunk)
     return hash_md5.hexdigest()
 
-if len(sys.argv) < 3:
-  print("USAGE: " + sys.argv[0] + " [ROM FILE] [ROM_NAME]")
+if len(sys.argv) < 4:
+  print("USAGE: " + sys.argv[0] + " [ROM FILE] [ROM_NAME] [DATE]")
   sys.exit(1)
 
 rom_file=sys.argv[1]
