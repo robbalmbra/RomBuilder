@@ -492,7 +492,7 @@ for DEVICE in $DEVICES; do
   # Run lunch
   build_id="${BUILD_NAME}_$DEVICE-$LUNCH_DEBUG"
   if [[ ! -z "${CUSTOM_LUNCH_COMMAND}" ]]; then
-    if [[ ! -z "${BUILDKITE}" ]]; then
+    if [[ ! -z "${BUILDKITE}" ]]; then      
       eval "${CUSTOM_LUNCH_COMMAND}" "$build_id" > /dev/null 2>&1
     else
       eval "${CUSTOM_LUNCH_COMMAND}" "$build_id"
