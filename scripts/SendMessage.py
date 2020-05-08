@@ -6,7 +6,7 @@ import sys
 import datetime
 import os
 
-chat_id="@samsung9810roms"
+chat_id="@samsungexynos9810"
 bot = telegram.Bot(token='1288685464:AAGt0u9XXPKCH8PUcN60ap3yw7tS1dcTcts')
 
 if len(sys.argv) < 8:
