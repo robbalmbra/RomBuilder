@@ -38,6 +38,7 @@ Options can be defined within environment variables or within the environment se
 * TEST_BUILD=1 - Disable telegram automatic update to group
 * DATE_REVERT - Specifies the date that the repo will pull before the specified date; e.g `2020-03-01 00:00`
 * CUSTOM_LUNCH_COMMAND - Overrides default lunch command. Default is lunch.
+* CUSTOM_MKA_COMMAND - Sets custom make command. Notes - {device} changes to device name and {user_debug} defaults to rom debug type.
 
 **Other**
 
