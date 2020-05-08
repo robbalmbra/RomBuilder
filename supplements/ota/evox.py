@@ -18,7 +18,8 @@ if len(sys.argv) < 4:
 rom_file=sys.argv[1]
 rom_name=sys.argv[2]
 rom_json=rom_file.replace(".zip",".zip.json")
-sf_url="https://sourceforge.net/projects/evo9810ota/files/" + rom_name + "/" + os.path.basename(rom_file) + "/download"
+rom_date=sys.argv[3]
+sf_url="https://sourceforge.net/projects/evo9810ota/files/" + rom_name + "/" + os.path.dirname(rom_file) + "/" + rom_date + "/" + os.path.basename(rom_file) + "/download"
 
 if not os.path.exists(rom_file):
   print("Error - '" + rom_file + "' doesn't exist")
@@ -45,7 +46,7 @@ with open(rom_json, 'r+') as f:
   data['maintainer'] = "Robert Balmbra"
   data['maintainer_url'] = "https://forum.xda-developers.com/member.php?u=4834466"
   data['telegram_username'] = "robbalmbra"
-  data['url'] = "https://sourceforge.net/projects/evo9810ota/files/" + rom_name + "/" + rom_filename + "/download"
+  data['url'] = "$sf_url"
   data['filehash'] = md5(rom_file)
   
   print(json.dumps(data))
