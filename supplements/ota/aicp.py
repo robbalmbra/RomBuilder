@@ -13,13 +13,13 @@ def md5(fname):
             hash_md5.update(chunk)
     return hash_md5.hexdigest()
 
-if len(sys.argv) < 3:
-  print("USAGE: " + sys.argv[0] + " [ROM FILE] [ROM_NAME]")
+if len(sys.argv) < 4:
+  print("USAGE: " + sys.argv[0] + " [ROM FILE] [ROM_NAME] [DATE]")
   sys.exit(1)
 
 rom_file=sys.argv[1]
 rom_name=sys.argv[2]
-sf_url="https://sourceforge.net/projects/evo9810ota/files/" + rom_name + "/" + os.path.basename(rom_file) + "/download"
+sf_url="https://sourceforge.net/projects/evo9810ota/files/" + rom_name + "/" + os.path.dirname(rom_file) + "/" + os.path.basename(rom_file) + "/download"
 
 if not os.path.exists(rom_file):
   print("Error - '" + rom_file + "' doesn't exist")
