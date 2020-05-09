@@ -3,7 +3,7 @@
 
 # Create directory on sourceforge
 function sftp_mkdir {
-  sftp -q -o "StrictHostKeyChecking no robbalmbra@frs.sourceforge.net << EOF \nmkdir $1\nEOF"
+  sftp -q -o "StrictHostKeyChecking no" robbalmbra@frs.sourceforge.net << EOF \nmkdir $1\nEOF
 }
 
 if [ $# -lt 4 ]; then
@@ -58,5 +58,5 @@ for ROM in $rom_folder/out/target/product/*/*.zip; do
   # Upload rom file to sourceforge
   rom_filename=$(basename $ROM)
   echo "Uploading '$rom_filename' to /home/frs/project/evo9810ota/$rom_name/$DEVICE/$date/"
-  scp -o "StrictHostKeyChecking no $ROM robbalmbra@frs.sourceforge.net:/home/frs/project/evo9810ota/$rom_name/$DEVICE/$date/"
+  scp -o "StrictHostKeyChecking no" $ROM robbalmbra@frs.sourceforge.net:/home/frs/project/evo9810ota/$rom_name/$DEVICE/$date/
 done
