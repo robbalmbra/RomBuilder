@@ -651,6 +651,8 @@ if [ "$SKIP_BUILD" -eq 0 ]; then
     mv /tmp/rom-magisk/$file_name $ROM
   done
 
+else
+  echo "Skipping build phase"
 fi
 
 # Upload firmware to mega
