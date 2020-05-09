@@ -653,6 +653,7 @@ if [ "$SKIP_BUILD" -eq 0 ]; then
 
 else
   echo "Skipping build phase"
+  ota_found=1
 fi
 
 # Upload firmware to mega
