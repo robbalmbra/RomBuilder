@@ -27,7 +27,7 @@ if [ ! -d $ota_folder ]; then
 fi
 
 # Check if ota handler exists for specific rom
-if [ ! -f "ota_build_dir/$rom_name.py" ]; then
+if [ ! -f "$ota_build_dir/$rom_name.py" ]; then
   echo "Warning - '$rom_name' doesn't support ota."
   exit 0
 fi
@@ -47,7 +47,7 @@ for ROM in $rom_folder/out/target/product/*/*.zip; do
 
   # Run specific build ota generation script
   date=$(date '+%d-%m-%y')
-  python3 "$rom_name.py" "$ROM" "$rom_name" "$date" 1> "$ota_folder/$DEVICE.json" 2> /dev/null
+  python3 "$ota_build_dir/$rom_name.py" "$ROM" "$rom_name" "$date" 1> "$ota_folder/$DEVICE.json" 2> /dev/null
 
   # Make device directory
   sftp_mkdir "/home/frs/project/evo9810ota/$rom_name/$DEVICE/"
