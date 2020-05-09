@@ -1,15 +1,15 @@
 #!/bin/bash
 
-if [ -z "$BOOT_LOGGING" ]; then
-  BOOT_LOGGING=0
-fi
-
 if [ -z "$BUILD_LANG" ]; then
   export BUILD_LANG="en"
 fi
 
 if [ -z "$MAGISK_VERSION" ]; then
   MAGISK_VERSION="20.4"
+fi
+
+if [ -z "$IGNORE_OTA" ]; then
+  export IGNORE_OTA=0
 fi
 
 if [ -z "$TEST_BUILD" ]; then
@@ -406,39 +406,44 @@ if [ ! -z "$PRODUCE_DEVICE_TREES" ]; then
   exit 0
 fi
 
-# Override alterntive url in string.xml in updater git repo
-fileDir=("packages/apps/Updates" "packages/apps/Updater")
+if [ "$IGNORE_OTA" -eq 0 ]; then
 
-# Iterate over files
-ota_found=0
-for strFile in "${fileDir[@]}"; do
+  # Override alterntive url in string.xml in updater git repo
+  fileDir=("packages/apps/Updates" "packages/apps/Updater")
 
-  string_file="$BUILD_DIR/rom/$strFile/res/values/strings.xml"
-  constants_file="$BUILD_DIR/rom/$strFile/src/org/*/ota/misc/Constants.java"
+  # Iterate over files
+  ota_found=0
+  for strFile in "${fileDir[@]}"; do
 
-  # Check if strings file exists
-  if [ -f "$string_file" ]; then
-    sed -i "s/\(<string name=\"updater_server_url\" translatable=\"false\">\)[^<]*\(<\/string>\)/\1https:\/\/raw.githubusercontent.com\/robbalmbra\/OTA\/$UPLOAD_NAME\/{device}.json\2/g" "$string_file"
-    ota_found=1
-  fi
+    string_file="$BUILD_DIR/rom/$strFile/res/values/strings.xml"
+    constants_file="$BUILD_DIR/rom/$strFile/src/org/*/ota/misc/Constants.java"
 
-  # Check if consts file exists for other builds
-  if compgen -G "$constants_file" > /dev/null; then
+    # Check if strings file exists
+    if [ -f "$string_file" ]; then
+      sed -i "s/\(<string name=\"updater_server_url\" translatable=\"false\">\)[^<]*\(<\/string>\)/\1https:\/\/raw.githubusercontent.com\/robbalmbra\/OTA\/$UPLOAD_NAME\/{device}.json\2/g" "$string_file"
+      ota_found=1
+    fi
+
+    # Check if consts file exists for other builds
+    if compgen -G "$constants_file" > /dev/null; then
   
-    # Get folder name in org directory
-    org_folder="$BUILD_DIR/rom/$strFile/src/org/"
-    org=$(ls -lA $org_folder | awk -F':[0-9]* ' '/:/{print $2}' 2> /dev/null)
-    constants_file="$BUILD_DIR/rom/$strFile/src/org/$org/ota/misc/Constants.java"
+      # Get folder name in org directory
+      org_folder="$BUILD_DIR/rom/$strFile/src/org/"
+      org=$(ls -lA $org_folder | awk -F':[0-9]* ' '/:/{print $2}' 2> /dev/null)
+      constants_file="$BUILD_DIR/rom/$strFile/src/org/$org/ota/misc/Constants.java"
     
-    # Remove urls for zip and changelog
-    OTA_URL="https://raw.githubusercontent.com/robbalmbra/OTA/$UPLOAD_NAME/%s.json"
-    CH_URL="https://raw.githubusercontent.com/robbalmbra/OTA/$UPLOAD_NAME/changelogs/%s/%s.txt"
-    sed -i 's;static final String OTA_URL = .*;static final String OTA_URL = \"'"$OTA_URL\"\;"';' $constants_file
-    sed -i 's;static final String DOWNLOAD_WEBPAGE_URL = .*;static final String DOWNLOAD_WEBPAGE_URL = \"'"$CH_URL\"\;"';' $constants_file
-    ota_found=1
-  fi
+      # Remove urls for zip and changelog
+      OTA_URL="https://raw.githubusercontent.com/robbalmbra/OTA/$UPLOAD_NAME/%s.json"
+      CH_URL="https://raw.githubusercontent.com/robbalmbra/OTA/$UPLOAD_NAME/changelogs/%s/%s.txt"
+      sed -i 's;static final String OTA_URL = .*;static final String OTA_URL = \"'"$OTA_URL\"\;"';' $constants_file
+      sed -i 's;static final String DOWNLOAD_WEBPAGE_URL = .*;static final String DOWNLOAD_WEBPAGE_URL = \"'"$CH_URL\"\;"';' $constants_file
+      ota_found=1
+    fi
+    
+  done
 
-done
+fi
+
 
 # Build
 if [[ $BUILD_LANG == "it" ]]; then
@@ -706,7 +711,7 @@ git pull -f origin $UPLOAD_NAME > /dev/null 2>&1
 git branch --set-upstream-to=origin/$UPLOAD_NAME master > /dev/null 2>&1
 
 # Launch OTA handler script
-if [ "$ota_found" -eq 1 ]; then
+if [ "$ota_found" -eq 1 ] && [ "$IGNORE_OTA" -eq 0 ]; then
  if [[ $BUILD_LANG == "it" ]]; then
    echo "Esecuzione di script di generazione OTA"
  else
