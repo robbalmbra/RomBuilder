@@ -701,9 +701,9 @@ git remote add origin git@github.com:robbalmbra/OTA.git > /dev/null 2>&1
 git pull -f origin $UPLOAD_NAME > /dev/null 2>&1
 git branch --set-upstream-to=origin/$UPLOAD_NAME master > /dev/null 2>&1
 
-# Launch OTA script
+# Launch OTA handler script
 if [ "$ota_found" -eq 1 ]; then
- #Process ota script - TODO
+ $BUILD_DIR/supplements/ota/main.sh "$BUILD_DIR/rom" "$BUILD_DIR/ota" "$UPLOAD_NAME"
 fi
 
 # Deploy message in broadcast group only for non test builds
