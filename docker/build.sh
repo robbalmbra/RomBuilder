@@ -714,7 +714,7 @@ if [ "$ota_found" -eq 1 ] && [ "$IGNORE_OTA" -eq 0 ]; then
  if [[ $BUILD_LANG == "it" ]]; then
    echo "Esecuzione di script di generazione OTA"
  else
-   echo "Running OTA generation script"
+   echo "--- Running OTA generation script"
  fi
  $BUILD_DIR/supplements/ota/main.sh "$BUILD_DIR/rom" "$BUILD_DIR/ota" "$UPLOAD_NAME"
 fi
