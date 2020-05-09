@@ -627,29 +627,30 @@ if [ "$SKIP_BUILD" -eq 0 ]; then
       fi
     fi
   done
-fi
 
-# Patch magisk
-mkdir -p /tmp/rom-magisk/
-if [[ $BUILD_LANG == "it" ]]; then
-  echo "--- Patch per includere extra all'interno della ROM"
-else
-  echo "--- Patching to include extras within ROM"
-fi
-
-for ROM in $BUILD_DIR/rom/out/target/product/*/*.zip; do
-
-  # Skip if zip has -ota- in zip
-  if [[ $ROM == *"-ota-"* ]]; then
-    continue
+  # Patch magisk
+  mkdir -p /tmp/rom-magisk/
+  if [[ $BUILD_LANG == "it" ]]; then
+    echo "--- Patch per includere extra all'interno della ROM"
+  else
+    echo "--- Patching to include extras within ROM"
   fi
 
-  PRODUCT="$(basename "$(dirname "$ROM")")"
-  $BUILD_DIR/scripts/patcher.sh $ROM /tmp/rom-magisk $MAGISK_VERSION $PRODUCT $BUILD_DIR
-  error_exit "patches"
-  file_name=$(basename "$ROM")
-  mv /tmp/rom-magisk/$file_name $ROM
-done
+  for ROM in $BUILD_DIR/rom/out/target/product/*/*.zip; do
+
+    # Skip if zip has -ota- in zip
+    if [[ $ROM == *"-ota-"* ]]; then
+      continue
+    fi
+
+    PRODUCT="$(basename "$(dirname "$ROM")")"
+    $BUILD_DIR/scripts/patcher.sh $ROM /tmp/rom-magisk $MAGISK_VERSION $PRODUCT $BUILD_DIR
+    error_exit "patches"
+    file_name=$(basename "$ROM")
+    mv /tmp/rom-magisk/$file_name $ROM
+  done
+
+fi
 
 # Upload firmware to mega
 if [[ $BUILD_LANG == "it" ]]; then
