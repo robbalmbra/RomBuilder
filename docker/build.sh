@@ -380,6 +380,12 @@ if [ -f "$BUILD_DIR/scripts/user_modifications.sh" ]; then
   error_exit "user modifications"
 fi
 
+# Only apply modifications and save device trees
+if [ ! -z "$PRODUCE_DEVICE_TREES" ]; then
+  echo "Warning - Device trees saved to $BUILD_DIR/rom/device/samsung"
+  exit 0
+fi
+
 # Override ota url for each device even though build may not use the url
 export IFS=","
 for DEVICE in $DEVICES; do
