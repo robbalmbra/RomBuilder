@@ -30,6 +30,8 @@ if [ -z "$LIBEXYNOS_CAMERA" ]; then
   export LIBEXYNOS_CAMERA=1
 fi
 
+ota_found=0
+
 error_exit()
 {
   ret="$?"
@@ -405,7 +407,6 @@ if [ "$SKIP_BUILD" -eq 0 ]; then
     fileDir=("packages/apps/Updates" "packages/apps/Updater")
 
     # Iterate over files
-    ota_found=0
     for strFile in "${fileDir[@]}"; do
 
       string_file="$BUILD_DIR/rom/$strFile/res/values/strings.xml"
