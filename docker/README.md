@@ -41,6 +41,7 @@ Options can be defined within environment variables or within the environment se
 * CUSTOM_MKA_COMMAND - Sets custom make command. Notes - {device} changes to device name and {user_debug} defaults to rom debug type.
 * PRODUCE_DEVICE_TREES=1 - Apply modifications and only produce device trees.
 * IGNORE_OTA=1 - Ignore ota json generation and upload to sourceforge
+* SKIP_BUILD=1 - Skip build process. Default will build.
 
 **Other**
 
