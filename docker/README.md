@@ -39,6 +39,7 @@ Options can be defined within environment variables or within the environment se
 * DATE_REVERT - Specifies the date that the repo will pull before the specified date; e.g `2020-03-01 00:00`
 * CUSTOM_LUNCH_COMMAND - Overrides default lunch command. Default is lunch.
 * CUSTOM_MKA_COMMAND - Sets custom make command. Notes - {device} changes to device name and {user_debug} defaults to rom debug type.
+* PRODUCE_DEVICE_TREES - Apply modifications and only produce device trees.
 
 **Other**
 
