@@ -406,6 +406,7 @@ done
 fileDir=("packages/apps/Updates" "packages/apps/Updater")
 
 # Iterate over files
+ota_found=0
 for strFile in "${fileDir[@]}"; do
 
   string_file="$BUILD_DIR/rom/$strFile/res/values/strings.xml"
@@ -414,6 +415,7 @@ for strFile in "${fileDir[@]}"; do
   # Check if strings file exists
   if [ -f "$string_file" ]; then
     sed -i "s/\(<string name=\"updater_server_url\" translatable=\"false\">\)[^<]*\(<\/string>\)/\1https:\/\/raw.githubusercontent.com\/robbalmbra\/OTA\/$UPLOAD_NAME\/{device}.json\2/g" "$string_file"
+    ota_found=1
   fi
 
   # Check if consts file exists for other builds
@@ -429,6 +431,7 @@ for strFile in "${fileDir[@]}"; do
     CH_URL="https://raw.githubusercontent.com/robbalmbra/OTA/$UPLOAD_NAME/changelogs/%s/%s.txt"
     sed -i 's;static final String OTA_URL = .*;static final String OTA_URL = \"'"$OTA_URL\"\;"';' $constants_file
     sed -i 's;static final String DOWNLOAD_WEBPAGE_URL = .*;static final String DOWNLOAD_WEBPAGE_URL = \"'"$CH_URL\"\;"';' $constants_file
+    ota_found=1
   fi
 
 done
@@ -697,6 +700,11 @@ git init > /dev/null 2>&1
 git remote add origin git@github.com:robbalmbra/OTA.git > /dev/null 2>&1
 git pull -f origin $UPLOAD_NAME > /dev/null 2>&1
 git branch --set-upstream-to=origin/$UPLOAD_NAME master > /dev/null 2>&1
+
+# Launch OTA script
+if [ "$ota_found" -eq 1 ]; then
+ #Process ota script - TODO
+fi
 
 # Deploy message in broadcast group only for non test builds
 if [ "$TEST_BUILD" -eq 0 ]; then
