@@ -6,14 +6,15 @@ function sftp_mkdir {
   sftp -q -o "StrictHostKeyChecking no robbalmbra@frs.sourceforge.net << EOF \nmkdir $1\nEOF"
 }
 
-if [ $# -lt 3 ]; then
-  echo "USAGE: $0 [ROM FOLDER] [OTA FOLDER] [ROM NAME]"
+if [ $# -lt 4 ]; then
+  echo "USAGE: $0 [ROM FOLDER] [OTA FOLDER] [ROM NAME] [OTA BUILD DIR]"
   exit 1
 fi
 
 rom_folder=$1
 ota_folder=$2
 rom_name=$3
+ota_build_dir=$4
 
 if [ ! -d $rom_folder ]; then
   echo "Error - '$rom_folder' doesn't exist!"
@@ -26,7 +27,7 @@ if [ ! -d $ota_folder ]; then
 fi
 
 # Check if ota handler exists for specific rom
-if [ ! -f "$rom_name.py" ]; then
+if [ ! -f "ota_build_dir/$rom_name.py" ]; then
   echo "Warning - '$rom_name' doesn't support ota."
   exit 0
 fi
