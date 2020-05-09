@@ -1,11 +1,6 @@
 #!/bin/bash
 # Handler for ota json generation and upload to sourceforge
 
-# Create directory on sourceforge
-function sftp_mkdir {
-  sftp -q -o PasswordAuthentication=no robbalmbra@frs.sourceforge.net <<< 'mkdir $1'
-}
-
 if [ $# -lt 4 ]; then
   echo "USAGE: $0 [ROM FOLDER] [OTA FOLDER] [ROM NAME] [OTA BUILD DIR]"
   exit 1
@@ -33,7 +28,7 @@ if [ ! -f "$ota_build_dir/$rom_name.py" ]; then
 fi
 
 # Make rom directory
-sftp_mkdir "/home/frs/project/evo9810ota/$rom_name/"
+sftp -q -o PasswordAuthentication=no robbalmbra@frs.sourceforge.net <<< 'mkdir /home/frs/project/evo9810ota/$rom_name/'
 
 # Iterate over devices
 for ROM in $rom_folder/out/target/product/*/*.zip; do
@@ -50,10 +45,10 @@ for ROM in $rom_folder/out/target/product/*/*.zip; do
   python3 "$ota_build_dir/$rom_name.py" "$ROM" "$rom_name" "$date" 1> "$ota_folder/$DEVICE.json" 2> /dev/null
 
   # Make device directory
-  sftp_mkdir "/home/frs/project/evo9810ota/$rom_name/$DEVICE/"
+  sftp -q -o PasswordAuthentication=no robbalmbra@frs.sourceforge.net <<< 'mkdir /home/frs/project/evo9810ota/$rom_name/$DEVICE/'
 
   # Create date directory in each device
-  sftp_mkdir "/home/frs/project/evo9810ota/$rom_name/$DEVICE/$date/"
+  sftp -q -o PasswordAuthentication=no robbalmbra@frs.sourceforge.net <<< 'mkdir /home/frs/project/evo9810ota/$rom_name/$DEVICE/$date/'
 
   # Upload rom file to sourceforge
   rom_filename=$(basename $ROM)
