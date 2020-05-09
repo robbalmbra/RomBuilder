@@ -8,6 +8,10 @@ if [ -z "$MAGISK_VERSION" ]; then
   MAGISK_VERSION="20.4"
 fi
 
+if [ -z "$SKIP_BUILD" ]; then
+  SKIP_BUILD=0
+fi
+
 if [ -z "$IGNORE_OTA" ]; then
   export IGNORE_OTA=0
 fi
@@ -230,17 +234,8 @@ if [[ ! "$REPO" =~ "git://" ]]; then
   git config --global url."https://".insteadOf git://
 fi
 
-# Skip this if told to, git sync in host mode
-if [ -n "$SKIP_PULL" ]; then
-  echo "Using host git sync for build"
-
-  # Repo check
-  if [ ! -d "$BUILD_DIR/rom/.repo/" ]; then
-    echo "^^^ +++"
-    echo "Error failed to find repo in /rom/ :exclamation:"
-    exit 1
-  fi
-else
+# Skip if told to
+if [ "$SKIP_BUILD" -eq 0 ]; then
 
   # Check if repo needs to be reporocessed or initialized
   if [ ! -d "$BUILD_DIR/rom/.repo/" ]; then
@@ -323,317 +318,316 @@ else
     error_exit "repo sync"
   fi
 
-fi
-
-if [[ ! -z $DATE_REVERT ]]; then
-  echo "Reverting repo to date '$DATE_REVERT'"
-  repo forall -c 'git checkout `git rev-list -n1 --before="$DATE_REVERT" HEAD`' > /dev/null 2>&1
-fi
-
-if [[ $BUILD_LANG == "it" ]]; then
-  echo "Applicazione di modifiche locali"
-else
-  echo "Applying local modifications"
-fi
-
-# Check for props environment variable to add to build props
-if [ ! -z "$ADDITIONAL_PROPS" ]; then
-  export IFS=";"
-  check=0
-  additional_props_string=""
-  for prop in $ADDITIONAL_PROPS; do
-
-    if [[ $BUILD_LANG == "it" ]]; then
-      echo "Aggiunta di ulteriore prop '$prop' a product_prop.mk"
-    else
-      echo "Adding additional prop '$prop' to product_prop.mk"
-    fi
-
-    if [[ $check == 0 ]]; then
-      check=1
-    else
-      additional_props_string+=" \\\\\n"
-    fi
-
-    additional_props_string+="    ${prop}"
-  done
-
-  # Append to device props
-  echo -e "\nPRODUCT_PRODUCT_PROPERTIES += \\\\\n$additional_props_string" >> $BUILD_DIR/rom/device/samsung/universal9810-common/product_prop.mk
-fi
-
-# Execute specific user modifications and environment specific options if avaiable
-if [ -f "$BUILD_DIR/scripts/user_modifications.sh" ]; then
-
-  # Override path for sed if os is macOS
-  if [ "$(uname)" == "Darwin" ]; then
-    export PATH="/usr/local/opt/gnu-sed/libexec/gnubin:$PATH"
+  if [[ ! -z $DATE_REVERT ]]; then
+    echo "Reverting repo to date '$DATE_REVERT'"
+    repo forall -c 'git checkout `git rev-list -n1 --before="$DATE_REVERT" HEAD`' > /dev/null 2>&1
   fi
 
   if [[ $BUILD_LANG == "it" ]]; then
-    echo "Utilizzo dello script di modifica dell'utente"
+    echo "Applicazione di modifiche locali"
   else
-    echo "Using user modification script"
+    echo "Applying local modifications"
   fi
 
-  $BUILD_DIR/scripts/user_modifications.sh "$BUILD_DIR" 1> /dev/null
-  error_exit "user modifications"
-fi
-
-# Override ota url for each device even though build may not use the url
-export IFS=","
-for DEVICE in $DEVICES; do
-  DEVICE_FILE="$BUILD_DIR/rom/device/samsung/$DEVICE/${BUILD_NAME}_$DEVICE.mk"
-
-  # Remove any ota strings
-  sed -i '/# OTA/,+2d' $DEVICE_FILE
-
-  # Dynamically create url and save to device make file for OTA apk
-  echo -e "# OTA\nPRODUCT_PROPERTY_OVERRIDES += \\\\\n    lineage.updater.uri=https://raw.githubusercontent.com/robbalmbra/OTA/$UPLOAD_NAME/$DEVICE.json" >> $DEVICE_FILE
-  
+  # Check for props environment variable to add to build props
   if [ ! -z "$ADDITIONAL_PROPS" ]; then
-    echo -e "\n\nPRODUCT_PROPERTY_OVERRIDES += \\\\\n$additional_props_string" >> $DEVICE_FILE
-  fi
-done
+    export IFS=";"
+    check=0
+    additional_props_string=""
+    for prop in $ADDITIONAL_PROPS; do
 
-# Only apply modifications and save device trees
-if [ ! -z "$PRODUCE_DEVICE_TREES" ]; then
-  if [[ $BUILD_LANG == "it" ]]; then
-    echo "Avviso - alberi dei dispositivi salvati in $BUILD_DIR/rom/device/samsung"
-  else
-    echo "Warning - Device trees saved to $BUILD_DIR/rom/device/samsung"
-  fi
-  exit 0
-fi
-
-if [ "$IGNORE_OTA" -eq 0 ]; then
-
-  # Override alterntive url in string.xml in updater git repo
-  fileDir=("packages/apps/Updates" "packages/apps/Updater")
-
-  # Iterate over files
-  ota_found=0
-  for strFile in "${fileDir[@]}"; do
-
-    string_file="$BUILD_DIR/rom/$strFile/res/values/strings.xml"
-    constants_file="$BUILD_DIR/rom/$strFile/src/org/*/ota/misc/Constants.java"
-
-    # Check if strings file exists
-    if [ -f "$string_file" ]; then
-      sed -i "s/\(<string name=\"updater_server_url\" translatable=\"false\">\)[^<]*\(<\/string>\)/\1https:\/\/raw.githubusercontent.com\/robbalmbra\/OTA\/$UPLOAD_NAME\/{device}.json\2/g" "$string_file"
-      ota_found=1
-    fi
-
-    # Check if consts file exists for other builds
-    if compgen -G "$constants_file" > /dev/null; then
-  
-      # Get folder name in org directory
-      org_folder="$BUILD_DIR/rom/$strFile/src/org/"
-      org=$(ls -lA $org_folder | awk -F':[0-9]* ' '/:/{print $2}' 2> /dev/null)
-      constants_file="$BUILD_DIR/rom/$strFile/src/org/$org/ota/misc/Constants.java"
-    
-      # Remove urls for zip and changelog
-      OTA_URL="https://raw.githubusercontent.com/robbalmbra/OTA/$UPLOAD_NAME/%s.json"
-      CH_URL="https://raw.githubusercontent.com/robbalmbra/OTA/$UPLOAD_NAME/changelogs/%s/%s.txt"
-      sed -i 's;static final String OTA_URL = .*;static final String OTA_URL = \"'"$OTA_URL\"\;"';' $constants_file
-      sed -i 's;static final String DOWNLOAD_WEBPAGE_URL = .*;static final String DOWNLOAD_WEBPAGE_URL = \"'"$CH_URL\"\;"';' $constants_file
-      ota_found=1
-    fi
-    
-  done
-
-fi
-
-
-# Build
-if [[ $BUILD_LANG == "it" ]]; then
-  echo "Impostazione dell'ambiente"
-else
-  echo "Environment setup"
-fi
-
-# Set ccache and directory
-export USE_CCACHE=1
-
-if [ ! -z "$CUSTOM_CCACHE_DIR" ]; then
-  export CCACHE_DIR="$CUSTOM_CCACHE_DIR"
-else
-  export CCACHE_DIR="/var/lib/buildkite-agent/ccache"
-fi
-
-log_setting "CCACHE" "$CCACHE_DIR"
-
-# Create directory
-if [[ ! -d "$CCACHE_DIR" ]]; then
-  mkdir "$CCACHE_DIR" > /dev/null 2>&1
-fi
-
-# Enable ccache with 50 gigabytes if not overrided
-if [ -z "$CCACHE_SIZE" ]; then
-  ccache -M "50G" > /dev/null 2>&1
-  error_exit "ccache"
-  log_setting "CCACHE_SIZE" "50G"
-else
-  ccache -M "${CCACHE_SIZE}G" > /dev/null 2>&1
-  error_exit "ccache"
-  log_setting "CCACHE_SIZE" "${CCACHE_SIZE}G"
-fi
-
-# Run env script
-cd "$BUILD_DIR/rom/"
-. build/envsetup.sh > /dev/null 2>&1
-
-# Check for any build parameters passed to script
-BUILD_PARAMETERS="bacon"
-LUNCH_DEBUG="userdebug"
-
-# Check for mka parameters, can be empty 
-if [ -n "${MKA_PARAMETERS+1}" ]; then
-  BUILD_PARAMETERS="$MKA_PARAMETERS"
-fi
-
-if [ ! -z "$LUNCH_VERSION" ]; then
-  LUNCH_DEBUG="$LUNCH_VERSION"
-fi
-
-# Iterate over builds
-export IFS=","
-runonce=0
-for DEVICE in $DEVICES; do
-
-  if [[ $BUILD_LANG == "it" ]]; then
-    echo "--- Creazione di $DEVICE ($BUILD_NAME) :building_construction:"
-  else
-    echo "--- Building $DEVICE ($BUILD_NAME) :building_construction:"
-  fi
-
-  # Run lunch
-  build_id="${BUILD_NAME}_$DEVICE-$LUNCH_DEBUG"
-  if [[ ! -z "${CUSTOM_LUNCH_COMMAND}" ]]; then
-    if [[ ! -z "${BUILDKITE}" ]]; then      
-      eval "${CUSTOM_LUNCH_COMMAND}" "$build_id" > /dev/null 2>&1
-    else
-      eval "${CUSTOM_LUNCH_COMMAND}" "$build_id"
-    fi
-  else
-    if [[ ! -z "${BUILDKITE}" ]]; then
-      lunch $build_id > /dev/null 2>&1
-    else
-      lunch $build_id
-    fi
-  fi
-  
-  error_exit "lunch"
-  mkdir -p "$BUILD_DIR/logs/$DEVICE/"
-
-  # Flush log
-  echo "" > $BUILD_DIR/logs/$DEVICE/make_${DEVICE}_android10.txt
-
-  # Log to buildkite every N seconds
-  if [[ ! -z "${BUILDKITE}" ]]; then
-    $BUILD_DIR/scripts/buildkite_logger.sh "$BUILD_DIR/logs/$DEVICE/make_${DEVICE}_android10.txt" "$LOGGING_RATE" &
-  fi
-
-  # Run docs build once
-  if [ "$runonce" -eq 0 ]; then
-    if [[ ! -z "${BUILDKITE}" ]]; then
       if [[ $BUILD_LANG == "it" ]]; then
-        echo "Generazione di documenti"
+        echo "Aggiunta di ulteriore prop '$prop' a product_prop.mk"
       else
-        echo "Generating docs"
+        echo "Adding additional prop '$prop' to product_prop.mk"
       fi
-      mka api-stubs-docs > /dev/null 2>&1; mka hiddenapi-lists-docs > /dev/null 2>&1; mka test-api-stubs-docs > /dev/null 2>&1
-    else
-      mka api-stubs-docs; mka hiddenapi-lists-docs; mka test-api-stubs-docs
-    fi
-    runonce=1
+
+      if [[ $check == 0 ]]; then
+        check=1
+      else
+        additional_props_string+=" \\\\\n"
+      fi
+
+      additional_props_string+="    ${prop}"
+    done
+
+    # Append to device props
+    echo -e "\nPRODUCT_PRODUCT_PROPERTIES += \\\\\n$additional_props_string" >> $BUILD_DIR/rom/device/samsung/universal9810-common/product_prop.mk
   fi
 
-  # Save start time of build
-  makestart=`date +%s`
+  # Execute specific user modifications and environment specific options if avaiable
+  if [ -f "$BUILD_DIR/scripts/user_modifications.sh" ]; then
 
-  # Run build
-  if [[ ! -z "${BUILDKITE}" ]]; then
-    if [[ ! -z "$CUSTOM_MKA_COMMAND" ]]; then
-      custom_text="$CUSTOM_MKA_COMMAND"
-      custom_text=${custom_text/\{device\}/$DEVICE}
-      custom_text=${custom_text/\{user_debug\}/$LUNCH_DEBUG}
-      eval "$custom_text" 2>&1 | tee "$BUILD_DIR/logs/$DEVICE/make_${DEVICE}_android10.txt" > /dev/null 2>&1
-    else
-      mka $BUILD_PARAMETERS -j$MAX_CPU 2>&1 | tee "$BUILD_DIR/logs/$DEVICE/make_${DEVICE}_android10.txt" > /dev/null 2>&1
+    # Override path for sed if os is macOS
+    if [ "$(uname)" == "Darwin" ]; then
+      export PATH="/usr/local/opt/gnu-sed/libexec/gnubin:$PATH"
     fi
-  else
-    if [[ ! -z "$CUSTOM_MKA_COMMAND" ]]; then
-      custom_text="$CUSTOM_MKA_COMMAND"
-      custom_text=${custom_text/\{device\}/$DEVICE}
-      custom_text=${custom_text/\{user_debug\}/$LUNCH_DEBUG}
-      eval "$custom_text" 2>&1 | tee "$BUILD_DIR/logs/$DEVICE/make_${DEVICE}_android10.txt"
-    else
-      mka $BUILD_PARAMETERS -j$MAX_CPU 2>&1 | tee "$BUILD_DIR/logs/$DEVICE/make_${DEVICE}_android10.txt"
-    fi
-  fi
-
-  # Upload error log to buildkite if any errors occur
-  ret="$?"
-
-  # Notify logger script to stop logging to buildkite
-  touch "$BUILD_DIR/logs/$DEVICE/.finished"
-
-  # Check for fail keyword to exit if build fails
-  if grep -q "FAILED: " "$BUILD_DIR/logs/$DEVICE/make_${DEVICE}_android10.txt"; then
-    ret=1
-  fi
-
-  if [ "$ret" != "0" ]; then
-    echo "^^^ +++"
 
     if [[ $BUILD_LANG == "it" ]]; then
-      echo "Errore - Creazione di $DEVICE non riuscita ($ret) :bk-status-failed:"
+      echo "Utilizzo dello script di modifica dell'utente"
     else
-      echo "Error - $DEVICE build failed ($ret) :bk-status-failed:"
+      echo "Using user modification script"
     fi
 
-    # Save folder for cd
-    CURRENT=$(pwd)
+    $BUILD_DIR/scripts/user_modifications.sh "$BUILD_DIR" 1> /dev/null
+    error_exit "user modifications"
+  fi
 
-    # Extract any errors from log if exist
-    grep -iE 'crash|error|fail|fatal|unknown' "$BUILD_DIR/logs/$DEVICE/make_${DEVICE}_android10.txt" 2>&1 | tee "$BUILD_DIR/logs/$DEVICE/make_${DEVICE}_errors_android10.txt"
+  # Override ota url for each device even though build may not use the url
+  export IFS=","
+  for DEVICE in $DEVICES; do
+    DEVICE_FILE="$BUILD_DIR/rom/device/samsung/$DEVICE/${BUILD_NAME}_$DEVICE.mk"
 
-    # Log errors if exist
+    # Remove any ota strings
+    sed -i '/# OTA/,+2d' $DEVICE_FILE
+
+    # Dynamically create url and save to device make file for OTA apk
+    echo -e "# OTA\nPRODUCT_PROPERTY_OVERRIDES += \\\\\n    lineage.updater.uri=https://raw.githubusercontent.com/robbalmbra/OTA/$UPLOAD_NAME/$DEVICE.json" >> $DEVICE_FILE
+
+    if [ ! -z "$ADDITIONAL_PROPS" ]; then
+      echo -e "\n\nPRODUCT_PROPERTY_OVERRIDES += \\\\\n$additional_props_string" >> $DEVICE_FILE
+    fi
+  done
+
+  # Only apply modifications and save device trees
+  if [ ! -z "$PRODUCE_DEVICE_TREES" ]; then
+    if [[ $BUILD_LANG == "it" ]]; then
+      echo "Avviso - alberi dei dispositivi salvati in $BUILD_DIR/rom/device/samsung"
+    else
+      echo "Warning - Device trees saved to $BUILD_DIR/rom/device/samsung"
+    fi
+    exit 0
+  fi
+
+  if [ "$IGNORE_OTA" -eq 0 ]; then
+
+    # Override alterntive url in string.xml in updater git repo
+    fileDir=("packages/apps/Updates" "packages/apps/Updater")
+
+    # Iterate over files
+    ota_found=0
+    for strFile in "${fileDir[@]}"; do
+
+      string_file="$BUILD_DIR/rom/$strFile/res/values/strings.xml"
+      constants_file="$BUILD_DIR/rom/$strFile/src/org/*/ota/misc/Constants.java"
+
+      # Check if strings file exists
+      if [ -f "$string_file" ]; then
+        sed -i "s/\(<string name=\"updater_server_url\" translatable=\"false\">\)[^<]*\(<\/string>\)/\1https:\/\/raw.githubusercontent.com\/robbalmbra\/OTA\/$UPLOAD_NAME\/{device}.json\2/g" "$string_file"
+        ota_found=1
+      fi
+
+      # Check if consts file exists for other builds
+      if compgen -G "$constants_file" > /dev/null; then
+
+        # Get folder name in org directory
+        org_folder="$BUILD_DIR/rom/$strFile/src/org/"
+        org=$(ls -lA $org_folder | awk -F':[0-9]* ' '/:/{print $2}' 2> /dev/null)
+        constants_file="$BUILD_DIR/rom/$strFile/src/org/$org/ota/misc/Constants.java"
+
+        # Remove urls for zip and changelog
+        OTA_URL="https://raw.githubusercontent.com/robbalmbra/OTA/$UPLOAD_NAME/%s.json"
+        CH_URL="https://raw.githubusercontent.com/robbalmbra/OTA/$UPLOAD_NAME/changelogs/%s/%s.txt"
+        sed -i 's;static final String OTA_URL = .*;static final String OTA_URL = \"'"$OTA_URL\"\;"';' $constants_file
+        sed -i 's;static final String DOWNLOAD_WEBPAGE_URL = .*;static final String DOWNLOAD_WEBPAGE_URL = \"'"$CH_URL\"\;"';' $constants_file
+        ota_found=1
+      fi
+
+    done
+
+  fi
+
+
+  # Build
+  if [[ $BUILD_LANG == "it" ]]; then
+    echo "Impostazione dell'ambiente"
+  else
+    echo "Environment setup"
+  fi
+
+  # Set ccache and directory
+  export USE_CCACHE=1
+
+  if [ ! -z "$CUSTOM_CCACHE_DIR" ]; then
+    export CCACHE_DIR="$CUSTOM_CCACHE_DIR"
+  else
+    export CCACHE_DIR="/var/lib/buildkite-agent/ccache"
+  fi
+
+  log_setting "CCACHE" "$CCACHE_DIR"
+
+  # Create directory
+  if [[ ! -d "$CCACHE_DIR" ]]; then
+    mkdir "$CCACHE_DIR" > /dev/null 2>&1
+  fi
+
+  # Enable ccache with 50 gigabytes if not overrided
+  if [ -z "$CCACHE_SIZE" ]; then
+    ccache -M "50G" > /dev/null 2>&1
+    error_exit "ccache"
+    log_setting "CCACHE_SIZE" "50G"
+  else
+    ccache -M "${CCACHE_SIZE}G" > /dev/null 2>&1
+    error_exit "ccache"
+    log_setting "CCACHE_SIZE" "${CCACHE_SIZE}G"
+  fi
+
+  # Run env script
+  cd "$BUILD_DIR/rom/"
+  . build/envsetup.sh > /dev/null 2>&1
+
+  # Check for any build parameters passed to script
+  BUILD_PARAMETERS="bacon"
+  LUNCH_DEBUG="userdebug"
+
+  # Check for mka parameters, can be empty 
+  if [ -n "${MKA_PARAMETERS+1}" ]; then
+    BUILD_PARAMETERS="$MKA_PARAMETERS"
+  fi
+
+  if [ ! -z "$LUNCH_VERSION" ]; then
+    LUNCH_DEBUG="$LUNCH_VERSION"
+  fi
+
+  # Iterate over builds
+  export IFS=","
+  runonce=0
+  for DEVICE in $DEVICES; do
+
+    if [[ $BUILD_LANG == "it" ]]; then
+      echo "--- Creazione di $DEVICE ($BUILD_NAME) :building_construction:"
+    else
+      echo "--- Building $DEVICE ($BUILD_NAME) :building_construction:"
+    fi
+
+    # Run lunch
+    build_id="${BUILD_NAME}_$DEVICE-$LUNCH_DEBUG"
+    if [[ ! -z "${CUSTOM_LUNCH_COMMAND}" ]]; then
+      if [[ ! -z "${BUILDKITE}" ]]; then      
+        eval "${CUSTOM_LUNCH_COMMAND}" "$build_id" > /dev/null 2>&1
+      else
+        eval "${CUSTOM_LUNCH_COMMAND}" "$build_id"
+      fi
+    else
+      if [[ ! -z "${BUILDKITE}" ]]; then
+        lunch $build_id > /dev/null 2>&1
+      else
+        lunch $build_id
+      fi
+    fi
+
+    error_exit "lunch"
+    mkdir -p "$BUILD_DIR/logs/$DEVICE/"
+
+    # Flush log
+    echo "" > $BUILD_DIR/logs/$DEVICE/make_${DEVICE}_android10.txt
+
+    # Log to buildkite every N seconds
     if [[ ! -z "${BUILDKITE}" ]]; then
-      if [ -f "$BUILD_DIR/logs/$DEVICE/make_${DEVICE}_errors_android10.txt" ]; then
+      $BUILD_DIR/scripts/buildkite_logger.sh "$BUILD_DIR/logs/$DEVICE/make_${DEVICE}_android10.txt" "$LOGGING_RATE" &
+    fi
+
+    # Run docs build once
+    if [ "$runonce" -eq 0 ]; then
+      if [[ ! -z "${BUILDKITE}" ]]; then
+        if [[ $BUILD_LANG == "it" ]]; then
+          echo "Generazione di documenti"
+        else
+          echo "Generating docs"
+        fi
+        mka api-stubs-docs > /dev/null 2>&1; mka hiddenapi-lists-docs > /dev/null 2>&1; mka test-api-stubs-docs > /dev/null 2>&1
+      else
+        mka api-stubs-docs; mka hiddenapi-lists-docs; mka test-api-stubs-docs
+      fi
+      runonce=1
+    fi
+
+    # Save start time of build
+    makestart=`date +%s`
+
+    # Run build
+    if [[ ! -z "${BUILDKITE}" ]]; then
+      if [[ ! -z "$CUSTOM_MKA_COMMAND" ]]; then
+        custom_text="$CUSTOM_MKA_COMMAND"
+        custom_text=${custom_text/\{device\}/$DEVICE}
+        custom_text=${custom_text/\{user_debug\}/$LUNCH_DEBUG}
+        eval "$custom_text" 2>&1 | tee "$BUILD_DIR/logs/$DEVICE/make_${DEVICE}_android10.txt" > /dev/null 2>&1
+      else
+        mka $BUILD_PARAMETERS -j$MAX_CPU 2>&1 | tee "$BUILD_DIR/logs/$DEVICE/make_${DEVICE}_android10.txt" > /dev/null 2>&1
+      fi
+    else
+      if [[ ! -z "$CUSTOM_MKA_COMMAND" ]]; then
+        custom_text="$CUSTOM_MKA_COMMAND"
+        custom_text=${custom_text/\{device\}/$DEVICE}
+        custom_text=${custom_text/\{user_debug\}/$LUNCH_DEBUG}
+        eval "$custom_text" 2>&1 | tee "$BUILD_DIR/logs/$DEVICE/make_${DEVICE}_android10.txt"
+      else
+        mka $BUILD_PARAMETERS -j$MAX_CPU 2>&1 | tee "$BUILD_DIR/logs/$DEVICE/make_${DEVICE}_android10.txt"
+      fi
+    fi
+
+    # Upload error log to buildkite if any errors occur
+    ret="$?"
+
+    # Notify logger script to stop logging to buildkite
+    touch "$BUILD_DIR/logs/$DEVICE/.finished"
+
+    # Check for fail keyword to exit if build fails
+    if grep -q "FAILED: " "$BUILD_DIR/logs/$DEVICE/make_${DEVICE}_android10.txt"; then
+      ret=1
+    fi
+
+    if [ "$ret" != "0" ]; then
+      echo "^^^ +++"
+
+      if [[ $BUILD_LANG == "it" ]]; then
+        echo "Errore - Creazione di $DEVICE non riuscita ($ret) :bk-status-failed:"
+      else
+        echo "Error - $DEVICE build failed ($ret) :bk-status-failed:"
+      fi
+
+      # Save folder for cd
+      CURRENT=$(pwd)
+
+      # Extract any errors from log if exist
+      grep -iE 'crash|error|fail|fatal|unknown' "$BUILD_DIR/logs/$DEVICE/make_${DEVICE}_android10.txt" 2>&1 | tee "$BUILD_DIR/logs/$DEVICE/make_${DEVICE}_errors_android10.txt"
+
+      # Log errors if exist
+      if [[ ! -z "${BUILDKITE}" ]]; then
+        if [ -f "$BUILD_DIR/logs/$DEVICE/make_${DEVICE}_errors_android10.txt" ]; then
+          cd "$BUILD_DIR/logs/$DEVICE"
+          buildkite-agent artifact upload "make_${DEVICE}_errors_android10.txt" > /dev/null 2>&1
+          buildkite-agent artifact upload "make_${DEVICE}_android10.txt" > /dev/null 2>&1
+          cd "$CURRENT"
+        fi
+      fi
+
+      exit 1
+      break
+    else
+
+      # Show time of build in minutes
+      makeend=`date +%s`
+      maketime=$(((makeend-makestart)/60))
+
+      if [[ $BUILD_LANG == "it" ]]; then
+        echo "Successo: $DEVICE è stato creato in $maketime minuti"
+      else
+        echo "Success - $DEVICE was built in $maketime minutes"
+      fi
+
+      # Save folder for cd
+      CURRENT=$(pwd)
+
+      # Upload log to buildkite
+      if [[ ! -z "${BUILDKITE}" ]]; then
         cd "$BUILD_DIR/logs/$DEVICE"
-        buildkite-agent artifact upload "make_${DEVICE}_errors_android10.txt" > /dev/null 2>&1
         buildkite-agent artifact upload "make_${DEVICE}_android10.txt" > /dev/null 2>&1
         cd "$CURRENT"
       fi
     fi
-
-    exit 1
-    break
-  else
-
-    # Show time of build in minutes
-    makeend=`date +%s`
-    maketime=$(((makeend-makestart)/60))
-
-    if [[ $BUILD_LANG == "it" ]]; then
-      echo "Successo: $DEVICE è stato creato in $maketime minuti"
-    else
-      echo "Success - $DEVICE was built in $maketime minutes"
-    fi
-
-    # Save folder for cd
-    CURRENT=$(pwd)
-
-    # Upload log to buildkite
-    if [[ ! -z "${BUILDKITE}" ]]; then
-      cd "$BUILD_DIR/logs/$DEVICE"
-      buildkite-agent artifact upload "make_${DEVICE}_android10.txt" > /dev/null 2>&1
-      cd "$CURRENT"
-    fi
-  fi
-done
+  done
+fi
 
 # Patch magisk
 mkdir -p /tmp/rom-magisk/
