@@ -3,7 +3,7 @@
 
 # Create directory on sourceforge
 function sftp_mkdir {
-  sftp -q -o "StrictHostKeyChecking no" robbalmbra@frs.sourceforge.net <<< $'mkdir $1'
+  sftp -q -o PasswordAuthentication=no robbalmbra@frs.sourceforge.net <<< $'mkdir $1'
 }
 
 if [ $# -lt 4 ]; then
