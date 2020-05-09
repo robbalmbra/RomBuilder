@@ -55,3 +55,9 @@ for ROM in $rom_folder/out/target/product/*/*.zip; do
   echo "Uploading '$rom_filename' to /home/frs/project/evo9810ota/$rom_name/$DEVICE/$date/"
   scp -o "StrictHostKeyChecking no" $ROM robbalmbra@frs.sourceforge.net:/home/frs/project/evo9810ota/$rom_name/$DEVICE/$date/
 done
+
+# Update device git repo
+cd "$ota_folder"
+git add *
+git commit -am "auto push"
+git push -f origin HEAD:$rom_name
