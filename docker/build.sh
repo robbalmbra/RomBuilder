@@ -716,7 +716,7 @@ if [ "$ota_found" -eq 1 ] && [ "$IGNORE_OTA" -eq 0 ]; then
  else
    echo "--- Running OTA generation script"
  fi
- $BUILD_DIR/supplements/ota/main.sh "$BUILD_DIR/rom" "$BUILD_DIR/ota" "$UPLOAD_NAME"
+ $BUILD_DIR/supplements/ota/main.sh "$BUILD_DIR/rom" "$BUILD_DIR/ota" "$UPLOAD_NAME" "$BUILD_DIR/supplements/ota/"
 fi
 
 # Deploy message in broadcast group only for non test builds
