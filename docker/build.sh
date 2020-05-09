@@ -703,6 +703,11 @@ git branch --set-upstream-to=origin/$UPLOAD_NAME master > /dev/null 2>&1
 
 # Launch OTA handler script
 if [ "$ota_found" -eq 1 ]; then
+ if [[ $BUILD_LANG == "it" ]]; then
+   echo "Esecuzione di script di generazione OTA"
+ else
+   echo "Running OTA generation script"
+ fi
  $BUILD_DIR/supplements/ota/main.sh "$BUILD_DIR/rom" "$BUILD_DIR/ota" "$UPLOAD_NAME"
 fi
 
