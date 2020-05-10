@@ -38,7 +38,14 @@ for ROM in $rom_folder/out/target/product/*/*.zip; do
     continue
   fi
 
+  rom_filename=$(basename $ROM)
   DEVICE="$(basename "$(dirname "$ROM")")"
+  
+  # Make changelogs folder
+  mkdir "$ota_folder/changelogs/$DEVICE/"
+
+  # Create changelog blank file
+  touch "$ota_folder/changelogs/$DEVICE/$rom_filename.txt"
 
   # Run specific build ota generation script
   date=$(date '+%d-%m-%y')
@@ -51,9 +58,8 @@ for ROM in $rom_folder/out/target/product/*/*.zip; do
   sftp -q -o PasswordAuthentication=no robbalmbra@frs.sourceforge.net <<< "mkdir /home/frs/project/evo9810ota/$rom_name/$DEVICE/$date/"
 
   # Upload rom file to sourceforge
-  rom_filename=$(basename $ROM)
   echo "Uploading '$rom_filename' to /home/frs/project/evo9810ota/$rom_name/$DEVICE/$date/"
-  scp -o "StrictHostKeyChecking no" $ROM robbalmbra@frs.sourceforge.net:/home/frs/project/evo9810ota/$rom_name/$DEVICE/$date/
+  scp -o "StrictHostKeyChecking no" $ROM robbalmbra@frs.sourceforge.net:/home/frs/project/evo9810ota/$rom_name/$DEVICE/$date/  
 done
 
 # Update device git repo
