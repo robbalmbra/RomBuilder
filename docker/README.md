@@ -42,6 +42,7 @@ Options can be defined within environment variables or within the environment se
 * PRODUCE_DEVICE_TREES=1 - Apply modifications and only produce device trees.
 * IGNORE_OTA=1 - Ignore ota json generation and upload to sourceforge
 * SKIP_BUILD=1 - Skip build process. Default will build.
+* JUST_PROCESS_OTA - Only run ota generation and upload script.
 
 **Other**
 
