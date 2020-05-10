@@ -124,6 +124,18 @@ last_char=${BUILD_DIR:length-1:1}
 
 # Just process ota
 if [ ! -z "$JUST_PROCESS_OTA" ]; then
+  # Create git for ota folder
+  rm -rf "$BUILD_DIR/ota" > /dev/null 2>&1
+  mkdir "$BUILD_DIR/ota" > /dev/null 2>&1
+  cd "$BUILD_DIR/ota"
+
+  # Assign git repo
+  git init > /dev/null 2>&1
+  git remote add origin git@github.com:robbalmbra/OTA.git > /dev/null 2>&1
+  git pull -f origin $UPLOAD_NAME > /dev/null 2>&1
+  git branch --set-upstream-to=origin/$UPLOAD_NAME master > /dev/null 2>&1
+
+  # Run handler
   $BUILD_DIR/supplements/ota/main.sh "$BUILD_DIR/rom" "$BUILD_DIR/ota" "$UPLOAD_NAME" "$BUILD_DIR/supplements/ota"
   exit 0
 fi
