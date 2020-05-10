@@ -46,7 +46,7 @@ with open(rom_json, 'r+') as f:
   data['maintainer'] = "Robert Balmbra"
   data['maintainer_url'] = "https://forum.xda-developers.com/member.php?u=4834466"
   data['telegram_username'] = "robbalmbra"
-  data['url'] = "$sf_url"
+  data['url'] = sf_url
   data['filehash'] = md5(rom_file)
   
   print(json.dumps(data))
