@@ -125,6 +125,7 @@ last_char=${BUILD_DIR:length-1:1}
 # Just process ota
 if [ ! -Z "$JUST_PROCESS_OTA" ]; then
   $BUILD_DIR/supplements/ota/main.sh "$BUILD_DIR/rom" "$BUILD_DIR/ota" "$UPLOAD_NAME" "$BUILD_DIR/supplements/ota"
+  exit 0
 fi
 
 # Jut upload mode
