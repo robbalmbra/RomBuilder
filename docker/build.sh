@@ -152,7 +152,7 @@ if [ ! -z "$JUST_UPLOAD" ]; then
 
     mega-put -c $ROM ROMS/$UPLOAD_NAME/$DATE/
     error_exit "mega put"
-    sleep 5
+    sleep 15
   done
   if [[ $BUILD_LANG == "it" ]]; then
     echo "Caricamento completato"
@@ -695,7 +695,7 @@ for ROM in $BUILD_DIR/rom/out/target/product/*/*.zip; do
   # Upload
   mega-put -c $ROM ROMS/$UPLOAD_NAME/$DATE/
   error_exit "mega put"
-  sleep 5
+  sleep 15
   ((rom_count=rom_count+1))
 done
 
