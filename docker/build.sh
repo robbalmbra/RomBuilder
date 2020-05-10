@@ -122,6 +122,11 @@ length=${#BUILD_DIR}
 last_char=${BUILD_DIR:length-1:1}
 [[ $last_char == "/" ]] && BUILD_DIR=${BUILD_DIR:0:length-1}; :
 
+# Just process ota
+if [ ! -Z "$JUST_PROCESS_OTA" ]; then
+  $BUILD_DIR/supplements/ota/main.sh "$BUILD_DIR/rom" "$BUILD_DIR/ota" "$UPLOAD_NAME" "$BUILD_DIR/supplements/ota"
+fi
+
 # Jut upload mode
 if [ ! -z "$JUST_UPLOAD" ]; then
   # Upload firmware to mega
