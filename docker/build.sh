@@ -728,7 +728,7 @@ git pull -f origin $UPLOAD_NAME > /dev/null 2>&1
 git branch --set-upstream-to=origin/$UPLOAD_NAME master > /dev/null 2>&1
 
 # Launch OTA handler script
-if [ "$ota_found" -eq 1 ] && [ "$IGNORE_OTA" -eq 0 ]; then
+if [ "$IGNORE_OTA" -eq 0 ]; then
  if [[ $BUILD_LANG == "it" ]]; then
    echo "Esecuzione di script di generazione OTA"
  else
