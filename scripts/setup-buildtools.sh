@@ -41,7 +41,7 @@ libpcre++-dev libsodium-dev libc-ares-dev libfreeimage-dev libavcodec-dev libavu
 libswscale-dev libmediainfo-dev libzen-dev libuv1-dev libxkbcommon-dev libxkbcommon-x11-0 zram-config > /dev/null 2>&1
 
 # Install python packages
-pip3 install python-telegram-bot --upgrade
+pip3 install python-telegram-bot --upgrade > /dev/null 2>&1
 
 # Install mega
 echo "Installing mega command line tools"
