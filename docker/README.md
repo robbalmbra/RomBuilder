@@ -43,6 +43,8 @@ Options can be defined within environment variables or within the environment se
 * PROCESS_OTA=1 - Generate ota json and upload to sourceforge. Default is ignored.
 * SKIP_BUILD=1 - Skip build process. Default will build.
 * JUST_PROCESS_OTA - Only run ota generation and upload script.
+* TELEGRAM_TOKEN - Specifies token for automatic group update after build has completed.
+* TELEGRAM_GROUP - Specifies telegram group name, e.g `@groupname`
 
 **Other**
 
