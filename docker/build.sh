@@ -729,7 +729,7 @@ else
 fi
 
 # Launch OTA handler script
-if [ "$IGNORE_OTA" -eq 1 ]; then
+if [[ "$IGNORE_OTA" == 1 ]]; then
   if [[ $BUILD_LANG == "it" ]]; then
     echo "Esecuzione di script di generazione OTA"
   else
