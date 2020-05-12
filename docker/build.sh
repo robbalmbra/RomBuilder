@@ -12,8 +12,8 @@ if [ -z "$SKIP_BUILD" ]; then
   SKIP_BUILD=0
 fi
 
-if [ -z "$IGNORE_OTA" ]; then
-  export IGNORE_OTA=0
+if [ -z "$PROCESS_OTA" ]; then
+  export PROCESS_OTA=0
 fi
 
 if [ -z "$TEST_BUILD" ]; then
@@ -422,7 +422,7 @@ if [ "$SKIP_BUILD" -eq 0 ]; then
     exit 0
   fi
 
-  if [ "$IGNORE_OTA" -eq 0 ]; then
+  if [ "$PROCESS_OTA" -eq 1 ]; then
 
     # Override alterntive url in string.xml in updater git repo
     fileDir=("packages/apps/Updates" "packages/apps/Updater")
@@ -721,7 +721,7 @@ else
 fi
 
 # Launch OTA handler script
-if [ "$IGNORE_OTA" -eq 0 ]; then
+if [ "$IGNORE_OTA" -eq 1 ]; then
   if [[ $BUILD_LANG == "it" ]]; then
     echo "Esecuzione di script di generazione OTA"
   else
