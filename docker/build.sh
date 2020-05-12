@@ -344,7 +344,7 @@ if [ "$SKIP_BUILD" -eq 0 ]; then
   fi
   
   # Get faceunlock addon for all roms
-  git clone git@github.com:robbalmbra/faceunlock.git "$BUILD_DIR/rom/external/moto/faceunlock/"
+  git clone git@github.com:robbalmbra/faceunlock.git "$BUILD_DIR/rom/external/motorola/faceunlock/"
 
   if [[ $BUILD_LANG == "it" ]]; then
     echo "Applicazione di modifiche locali"
