@@ -290,7 +290,7 @@ if [ "$SKIP_BUILD" -eq 0 ]; then
     fi
 
     if [[ ! -z "${BUILDKITE}" ]]; then
-      cd "$BUILD_DIR/rom/.repo/"; git clone "$LOCAL_REPO" -b "$LOCAL_BRANCH" --depth=1 > /dev/null 2>&1
+      cd "$BUILD_DIR/rom/.repo/"; git clone "$LOCAL_REPO" -b "$LOCAL_BRANCH" --depth=1
       error_exit "clone local manifest"
       cd ..
     else
@@ -331,7 +331,7 @@ if [ "$SKIP_BUILD" -eq 0 ]; then
   fi
 
   if [[ ! -z "${BUILDKITE}" ]]; then
-    repo sync -d -f -c -j$MAX_CPU --force-sync --quiet $SYNC_OPTIONS > /dev/null 2>&1
+    repo sync -d -f -c -j$MAX_CPU --force-sync --quiet $SYNC_OPTIONS
     error_exit "repo sync"
   else
     repo sync -d -f -c -j$MAX_CPU --force-sync --quiet $SYNC_OPTIONS
