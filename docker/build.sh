@@ -1,5 +1,10 @@
 #!/bin/bash
 
+if [ -z "$PRELIMINARY_SETUP" ]; then
+  echo "Error - Build script shouldn't be called directly, please run setup-local.sh"
+  exit 0
+fi
+
 if [ -z "$BUILD_LANG" ]; then
   export BUILD_LANG="en"
 fi
