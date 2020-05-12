@@ -720,24 +720,25 @@ else
   echo "Upload complete"
 fi
 
-# Create git for ota folder
-rm -rf "$BUILD_DIR/ota" > /dev/null 2>&1
-mkdir "$BUILD_DIR/ota" > /dev/null 2>&1
-cd "$BUILD_DIR/ota"
-
-git init > /dev/null 2>&1
-git remote add origin git@github.com:robbalmbra/OTA.git > /dev/null 2>&1
-git pull -f origin $UPLOAD_NAME > /dev/null 2>&1
-git branch --set-upstream-to=origin/$UPLOAD_NAME master > /dev/null 2>&1
-
 # Launch OTA handler script
 if [ "$IGNORE_OTA" -eq 0 ]; then
- if [[ $BUILD_LANG == "it" ]]; then
-   echo "Esecuzione di script di generazione OTA"
- else
-   echo "--- Running OTA generation script"
- fi
- $BUILD_DIR/supplements/ota/main.sh "$BUILD_DIR/rom" "$BUILD_DIR/ota" "$UPLOAD_NAME" "$BUILD_DIR/supplements/ota"
+  if [[ $BUILD_LANG == "it" ]]; then
+    echo "Esecuzione di script di generazione OTA"
+  else
+    echo "--- Running OTA generation script"
+  fi
+
+  # Create git for ota folder
+  rm -rf "$BUILD_DIR/ota" > /dev/null 2>&1
+  mkdir "$BUILD_DIR/ota" > /dev/null 2>&1
+  cd "$BUILD_DIR/ota"
+
+  git init > /dev/null 2>&1
+  git remote add origin git@github.com:robbalmbra/OTA.git > /dev/null 2>&1
+  git pull -f origin $UPLOAD_NAME > /dev/null 2>&1
+  git branch --set-upstream-to=origin/$UPLOAD_NAME master > /dev/null 2>&1
+
+  $BUILD_DIR/supplements/ota/main.sh "$BUILD_DIR/rom" "$BUILD_DIR/ota" "$UPLOAD_NAME" "$BUILD_DIR/supplements/ota"
 fi
 
 # Deploy message in broadcast group only for non test builds
