@@ -9,5 +9,5 @@ services:
     - ./ccache:/var/lib/buildkite-agent/ccache/
     - ./buildkite-agent.cfg:/buildkite/buildkite-agent.cfg
     environment:
-    - BUILDKITE_AGENT_TOKEN=49847013e94f61ef546c9eaa4cd75e40f91ab3367c526e52a1
+    - BUILDKITE_AGENT_TOKEN=
     restart: unless-stopped
