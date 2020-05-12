@@ -1,6 +1,6 @@
 ### Usage
 
-Run ./build.sh for help and required options. Below shows required and optional options to define build behavior, specific packages and manifest information.
+Below shows required and optional options to define build behavior, specific packages and manifest information.
 
 ### Build options in buildkite
 
