@@ -2,7 +2,7 @@
 
 if [ -z "$PRELIMINARY_SETUP" ]; then
   echo "Error - Build script shouldn't be called directly, please run setup-local.sh"
-  exit 0
+  exit 1
 fi
 
 if [ -z "$BUILD_LANG" ]; then
