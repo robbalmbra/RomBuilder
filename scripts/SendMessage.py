@@ -6,11 +6,8 @@ import sys
 import datetime
 import os
 
-chat_id="@samsungexynos9810"
-bot = telegram.Bot(token='1288685464:AAGt0u9XXPKCH8PUcN60ap3yw7tS1dcTcts')
-
-if len(sys.argv) < 8:
-  print(sys.argv[0] + " USAGE [ROM NAME] [ROM FOLDER ID] [VERSION] [FILESIZE] [CHANGELOG FILE] [NOTES FILE] [MEGA DECRYPT KEY]")
+if len(sys.argv) < 10:
+  print(sys.argv[0] + " USAGE [ROM NAME] [ROM FOLDER ID] [VERSION] [FILESIZE] [CHANGELOG FILE] [NOTES FILE] [MEGA DECRYPT KEY] [TELEGRAM TOKEN] [TELEGRAM GROUP]")
   sys.exit(1)
 
 rom_name = sys.argv[1]
@@ -20,6 +17,10 @@ filesize = sys.argv[4]
 changelog = sys.argv[5]
 notes = sys.argv[6]
 mega_decrypt_key = sys.argv[7]
+telegram_token = sys.argv[8]
+telegram_group = sys.argv[9]
+
+bot = telegram.Bot(token=telegram_token)
 
 # Check if rom mega id is valid
 if rom_folder_id == "":
@@ -73,4 +74,5 @@ Notes:
 
 #crownltexx #starltexx #star2ltexx #KeepEvolving """
 
-bot.send_message(chat_id=chat_id, text=structure)
+# Send message to group
+bot.send_message(chat_id=telegram_group, text=structure)
