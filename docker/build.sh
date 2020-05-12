@@ -1,7 +1,7 @@
 #!/bin/bash
 
 if [ -z "$PRELIMINARY_SETUP" ]; then
-  echo "Error - Build script shouldn't be called directly, please run setup-local.sh"
+  echo "Error - Build script shouldn't be called directly, please run scripts/start-local.sh"
   exit 1
 fi
 
