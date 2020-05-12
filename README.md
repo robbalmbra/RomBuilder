@@ -8,4 +8,4 @@
 
 ## Notes
 
-See [docker/](docker) for specific build options.
+See [docker](docker) for specific build options.
