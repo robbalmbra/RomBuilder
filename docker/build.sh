@@ -330,9 +330,6 @@ if [ "$SKIP_BUILD" -eq 0 ]; then
     SYNC_OPTIONS=""
   fi
 
-  # Get faceunlock addon for all roms
-  git clone git@github.com:robbalmbra/faceunlock.git "$BUILD_DIR/rom/external/moto/faceunlock/"
-
   if [[ ! -z "${BUILDKITE}" ]]; then
     repo sync -d -f -c -j$MAX_CPU --force-sync --quiet $SYNC_OPTIONS
     error_exit "repo sync"
@@ -345,6 +342,9 @@ if [ "$SKIP_BUILD" -eq 0 ]; then
     echo "Reverting repo to date '$DATE_REVERT'"
     repo forall -c 'git checkout `git rev-list -n1 --before="$DATE_REVERT" HEAD`' > /dev/null 2>&1
   fi
+  
+  # Get faceunlock addon for all roms
+  git clone git@github.com:robbalmbra/faceunlock.git "$BUILD_DIR/rom/external/moto/faceunlock/"
 
   if [[ $BUILD_LANG == "it" ]]; then
     echo "Applicazione di modifiche locali"
