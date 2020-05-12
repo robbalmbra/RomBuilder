@@ -242,5 +242,6 @@ export ROM_PATCHER="$CURRENT/patcher.sh"
 export TELEGRAM_BOT="$CURRENT/SendMessage.py"
 export SUPPLEMENTS="$CURRENT/../supplements/"
 export BUILD_LANG="$shell_lang"
+export PRELIMINARY_SETUP=1
 "$(pwd)/../docker/build.sh"
 error_exit "build script"
