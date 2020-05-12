@@ -289,8 +289,6 @@ if [ "$SKIP_BUILD" -eq 0 ]; then
       echo "Pulling local manifests"
     fi
 
-    git config --global --add url."git@github.com:".insteadOf "https://github.com/"
-
     if [[ ! -z "${BUILDKITE}" ]]; then
       cd "$BUILD_DIR/rom/.repo/"; git clone "$LOCAL_REPO" -b "$LOCAL_BRANCH" --depth=1 > /dev/null 2>&1
       error_exit "clone local manifest"
@@ -331,6 +329,9 @@ if [ "$SKIP_BUILD" -eq 0 ]; then
   if [[ ! -z $DATE_REVERT ]]; then
     SYNC_OPTIONS=""
   fi
+
+  # Get faceunlock addon for all roms
+  git clone git@github.com:robbalmbra/faceunlock.git "$BUILD_DIR/rom/external/moto/faceunlock/"
 
   if [[ ! -z "${BUILDKITE}" ]]; then
     repo sync -d -f -c -j$MAX_CPU --force-sync --quiet $SYNC_OPTIONS
