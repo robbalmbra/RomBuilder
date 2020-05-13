@@ -74,6 +74,8 @@ sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 32A37959C
 sudo apt-get update > /dev/null 2>&1 && sudo apt-get install -y buildkite-agent > /dev/null 2>&1
 sudo sed -i "s/xxx/49847013e94f61ef546c9eaa4cd75e40f91ab3367c526e52a1/g" /etc/buildkite-agent/buildkite-agent.cfg  > /dev/null 2>&1
 
+echo "tags=\"target=$user_host\"" >> /etc/buildkite-agent/buildkite-agent.cfg
+
 # Start buildkite
 sudo systemctl enable buildkite-agent > /dev/null 2>&1 && sudo systemctl start buildkite-agent > /dev/null 2>&1
 
