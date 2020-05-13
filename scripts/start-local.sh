@@ -45,6 +45,8 @@ if [ -f "/etc/lsb-release" ] && [ ! -d "/opt/build_env" ]; then
     echo "Installing build script"
   fi
   
+  apt-get install -y git curl > /dev/null 2>&1
+  
   git clone https://github.com/akhilnarang/scripts.git /opt/build_env --depth=1
   sudo chmod +x /opt/build_env/setup/android_build_env.sh
   . /opt/build_env/setup/android_build_env.sh
