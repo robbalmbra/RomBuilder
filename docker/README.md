@@ -45,6 +45,7 @@ Options can be defined within environment variables or within the environment se
 * JUST_PROCESS_OTA - Only run ota generation and upload script.
 * TELEGRAM_TOKEN - Specifies token for automatic group update after build has completed.
 * TELEGRAM_GROUP - Specifies telegram group name, e.g `@groupname`
+* DEBUG=1 - Dont flush any output to /dev/null. Default ignores output.
 
 **Other**
 
