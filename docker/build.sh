@@ -521,7 +521,7 @@ if [ "$SKIP_BUILD" -eq 0 ]; then
   LUNCH_DEBUG="userdebug"
 
   # Overrid to make if mka doesnt exist
-  if ! [ -x "$(command -v git)" ]; then
+  if ! [ -x "$(command -v mka)" ]; then
     alias mka="make"
   fi
 
