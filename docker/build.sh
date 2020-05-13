@@ -520,12 +520,6 @@ if [ "$SKIP_BUILD" -eq 0 ]; then
   BUILD_PARAMETERS="bacon"
   LUNCH_DEBUG="userdebug"
 
-  # Overrid to make if mka doesnt exist
-  if ! [ -x "$(command -v mka)" ]; then
-    echo "overriding mka to make"
-    alias mka="make"
-  fi
-
   # Check for mka parameters, can be empty 
   if [ -n "${MKA_PARAMETERS+1}" ]; then
     BUILD_PARAMETERS="$MKA_PARAMETERS"
@@ -578,9 +572,9 @@ if [ "$SKIP_BUILD" -eq 0 ]; then
         echo "Generating docs"
       fi
 
-      run mka api-stubs-docs
-      run mka hiddenapi-lists-docs
-      run mka test-api-stubs-docs
+      run make api-stubs-docs
+      run make hiddenapi-lists-docs
+      run make test-api-stubs-docs
       runonce=1
     fi
 
