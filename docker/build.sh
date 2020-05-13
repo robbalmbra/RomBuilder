@@ -9,6 +9,10 @@ if [ -z "$BUILD_LANG" ]; then
   export BUILD_LANG="en"
 fi
 
+if [ -z "$SKIP_API_DOCS" ]; then
+  export SKIP_API_DOCS=0
+fi
+
 if [ -z "$DEBUG" ]; then
   DEBUG=false
 else
@@ -572,9 +576,12 @@ if [ "$SKIP_BUILD" -eq 0 ]; then
         echo "Generating docs"
       fi
 
-      run make api-stubs-docs
-      run make hiddenapi-lists-docs
-      run make test-api-stubs-docs
+      if [[ $SKIP_API_DOCS == 0 ]]; then
+        run mka api-stubs-docs
+        run mka hiddenapi-lists-docs
+        run mka test-api-stubs-docs
+      fi
+      
       runonce=1
     fi
 
