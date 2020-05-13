@@ -314,15 +314,10 @@ if [ "$SKIP_BUILD" -eq 0 ]; then
       echo "Pulling local manifests"
     fi
 
-    if [[ ! -z "${BUILDKITE}" ]]; then
-      cd "$BUILD_DIR/rom/.repo/"; git clone "$LOCAL_REPO" -b "$LOCAL_BRANCH" --depth=1 > /dev/null 2>&1
-      error_exit "clone local manifest"
-      cd ..
-    else
-      cd "$BUILD_DIR/rom/.repo/"; git clone "$LOCAL_REPO" -b "$LOCAL_BRANCH" --depth=1
-      error_exit "clone local manifest"
-      cd ..
-    fi
+    cd "$BUILD_DIR/rom/.repo/"
+    run git clone "$LOCAL_REPO" -b "$LOCAL_BRANCH" --depth=1
+    error_exit "clone local manifest"
+    cd ..
   else
 
    # Clean if reprocessing
