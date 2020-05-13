@@ -362,9 +362,6 @@ if [ "$SKIP_BUILD" -eq 0 ]; then
   
   # Get faceunlock addon for all roms
   git clone git@github.com:robbalmbra/faceunlock.git "$BUILD_DIR/rom/external/motorola/faceunlock/"
-  
-  # Override ota
-  echo "allow uncrypt unlabeled:file { open read getattr };" > $BUILD_DIR/rom/device/samsung/universal9810-common/sepolicy/private/uncrypt.te
 
   if [[ $BUILD_LANG == "it" ]]; then
     echo "Applicazione di modifiche locali"
