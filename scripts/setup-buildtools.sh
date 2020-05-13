@@ -64,6 +64,8 @@ sudo sed -i "s/xxx/49847013e94f61ef546c9eaa4cd75e40f91ab3367c526e52a1/g" /etc/bu
 # Start buildkite
 sudo systemctl enable buildkite-agent > /dev/null 2>&1 && sudo systemctl start buildkite-agent > /dev/null 2>&1
 
+apt --fix-broken -y install > /dev/null 2>&1
+
 # Removing temp files
 rm -rf /opt/MEGAcmd/ 2> /dev/null
 rm -rf /opt/mega/ 2> /dev/null
