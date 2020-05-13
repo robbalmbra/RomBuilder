@@ -520,6 +520,11 @@ if [ "$SKIP_BUILD" -eq 0 ]; then
   BUILD_PARAMETERS="bacon"
   LUNCH_DEBUG="userdebug"
 
+  # Overrid to make if mka doesnt exist
+  if ! [ -x "$(command -v git)" ]; then
+    alias mka="make"
+  fi
+
   # Check for mka parameters, can be empty 
   if [ -n "${MKA_PARAMETERS+1}" ]; then
     BUILD_PARAMETERS="$MKA_PARAMETERS"
