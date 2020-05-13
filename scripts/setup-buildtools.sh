@@ -57,6 +57,13 @@ error_exit "mega"
 
 apt --fix-broken -y install > /dev/null 2>&1
 
+# Override python to point to python 3 on ubuntu 20.04
+u_version=$(lsb_release -r | cut -f2)
+
+if [[ "$u_version" == "20.04" ]]; then
+  apt install -y python-is-python3 > /dev/null 2>&1
+fi
+
 # Install buildkite to host
 sudo sh -c 'echo deb https://apt.buildkite.com/buildkite-agent stable main > /etc/apt/sources.list.d/buildkite-agent.list'
 sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 32A37959C2FA5C3C99EFBC32A79206696452D198
