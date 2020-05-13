@@ -549,11 +549,7 @@ if [ "$SKIP_BUILD" -eq 0 ]; then
         eval "${CUSTOM_LUNCH_COMMAND}" "$build_id"
       fi
     else
-      if [[ ! -z "${BUILDKITE}" ]]; then
-        lunch $build_id > /dev/null 2>&1
-      else
-        lunch $build_id
-      fi
+      run lunch $build_id
     fi
 
     error_exit "lunch"
