@@ -9,6 +9,10 @@ if [ -z "$BUILD_LANG" ]; then
   export BUILD_LANG="en"
 fi
 
+if [ -z "$DEBUG" ]; then
+  export DEBUG=0
+fi
+
 if [ -z "$MAGISK_VERSION" ]; then
   MAGISK_VERSION="20.4"
 fi
@@ -119,7 +123,7 @@ if [[ ! -z "${BUILDKITE}" ]]; then
 
   # Copy magisk patcher to build directory
   cp "$ROM_PATCHER" "$BUILD_DIR/scripts/patcher.sh" > /dev/null 2>&1
-  chmod +x "$BUILD_DIR/scripts/patcher.sh"
+  chmod +x "$BUILD_DIR/scripts/patcher.sh" 
 
   # Set logging rate if hasnt been defined
   if [[ -z "${LOGGING_RATE}" ]]; then
@@ -147,8 +151,7 @@ if [ ! -z "$JUST_PROCESS_OTA" ]; then
   git init > /dev/null 2>&1
   git remote add origin git@github.com:robbalmbra/OTA.git > /dev/null 2>&1
   git pull -f origin $UPLOAD_NAME > /dev/null 2>&1
-  git branch --set-upstream-to=origin/$UPLOAD_NAME master > /dev/null 2>&1
-
+  git branch --set-upstream-to=origin/$UPLOAD_NAME master 
   # Run handler
   $BUILD_DIR/supplements/ota/main.sh "$BUILD_DIR/rom" "$BUILD_DIR/ota" "$UPLOAD_NAME" "$BUILD_DIR/supplements/ota"
   exit 0
