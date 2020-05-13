@@ -23,7 +23,7 @@ fi
 
 # Install build tools
 echo "Pulling and installing build tools"
-apt-get install git -y > /dev/null 2>&1
+apt-get install git curl -y > /dev/null 2>&1
 git config --global user.name "Robert Balmbra" > /dev/null 2>&1
 git config --global user.email "robbalmbra@gmail.com" > /dev/null 2>&1
 error_exit "git config"
