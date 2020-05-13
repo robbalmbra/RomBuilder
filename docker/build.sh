@@ -357,7 +357,7 @@ if [ "$SKIP_BUILD" -eq 0 ]; then
     SYNC_OPTIONS=""
   fi
 
-  run repo sync -d -f -c -j$MAX_CPU --force-sync --quiet $SYNC_OPTIONS
+  #run repo sync -d -f -c -j$MAX_CPU --force-sync --quiet $SYNC_OPTIONS
   error_exit "repo sync"
 
   if [[ ! -z $DATE_REVERT ]]; then
