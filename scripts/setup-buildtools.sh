@@ -12,7 +12,7 @@ error_exit()
 
 # Checks
 if [ -d "/opt/build_env" ]; then
-  echo "Warning - Build scripts already exist on the system"
+  echo "Warning - Build scripts already exist on the system. Please run rm -rf /opt/build_env to remove if script failed"
   exit 1
 fi
 
@@ -31,7 +31,7 @@ error_exit "git config"
 git clone https://github.com/akhilnarang/scripts.git /opt/build_env --depth=1 > /dev/null 2>&1
 sudo chmod +x /opt/build_env/setup/android_build_env.sh > /dev/null 2>&1
 . /opt/build_env/setup/android_build_env.sh > /dev/null 2>&1
-error_exit "build script"
+error_exit "environment script"
 
 echo "Installing apt packages"
 apt-get -y upgrade > /dev/null 2>&1 && \
@@ -39,9 +39,11 @@ apt-get -y install make python3 git screen wget openjdk-8-jdk python-lunch lsb-c
 autoconf libtool g++ libcrypto++-dev libz-dev libsqlite3-dev libssl-dev libcurl4-gnutls-dev libreadline-dev \
 libpcre++-dev libsodium-dev libc-ares-dev libfreeimage-dev libavcodec-dev libavutil-dev libavformat-dev python3-pip \
 libswscale-dev libmediainfo-dev libzen-dev libuv1-dev libxkbcommon-dev libxkbcommon-x11-0 zram-config > /dev/null 2>&1
+error_exit "apt packages"
 
 # Install python packages
 pip3 install python-telegram-bot --upgrade > /dev/null 2>&1
+error_exit "pip3"
 
 # Install mega
 echo "Installing mega command line tools"
@@ -50,6 +52,7 @@ apt update --fix-missing > /dev/null 2>&1
 sudo apt install -f > /dev/null 2>&1
 cd /opt/ && git clone --quiet https://github.com/meganz/MEGAcmd.git > /dev/null 2>&1
 cd /opt/MEGAcmd && git submodule update --quiet --init --recursive && sh autogen.sh > /dev/null 2>&1 && ./configure --quiet > /dev/null 2>&1 && make > /dev/null 2>&1 && make install > /dev/null 2>&1
+error_exit "mega"
 
 # Install buildkite to host
 sudo sh -c 'echo deb https://apt.buildkite.com/buildkite-agent stable main > /etc/apt/sources.list.d/buildkite-agent.list'
