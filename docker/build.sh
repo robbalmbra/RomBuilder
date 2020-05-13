@@ -116,6 +116,9 @@ if [[ ! -z "${BUILDKITE}" ]]; then
   # Prompt to the user the location of the build
   log_setting "BUILD_DIR" "$BUILD_DIR"
 
+  # Show debug setting
+  log_setting "DEBUG" "$DEBUG"
+
   # Copy modifications and logger to build dir if exists
   if [ ! -z "$USER_MODS" ]; then
     if [[ $BUILD_LANG == "it" ]]; then
