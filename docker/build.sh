@@ -522,6 +522,7 @@ if [ "$SKIP_BUILD" -eq 0 ]; then
 
   # Overrid to make if mka doesnt exist
   if ! [ -x "$(command -v mka)" ]; then
+    echo "overriding mka to make"
     alias mka="make"
   fi
 
