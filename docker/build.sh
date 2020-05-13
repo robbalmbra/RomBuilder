@@ -10,9 +10,9 @@ if [ -z "$BUILD_LANG" ]; then
 fi
 
 if [ -z "$DEBUG" ]; then
-  DEBUG=0
+  DEBUG=false
 else
-  DEBUG=1
+  DEBUG=true
 fi
 
 run() {
