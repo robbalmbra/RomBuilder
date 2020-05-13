@@ -237,11 +237,18 @@ if [[ $shell_lang == "it" ]]; then
 else
   echo "--- Initializing build environment :parcel:"
 fi
+
+# Check os
+if [[ "$OSTYPE" == "darwin"* ]]; then
+  export MACOS=1
+fi
+
 export BUILDKITE_LOGGER="$CURRENT/buildkite_logger.sh"
 export ROM_PATCHER="$CURRENT/patcher.sh"
 export TELEGRAM_BOT="$CURRENT/SendMessage.py"
 export SUPPLEMENTS="$CURRENT/../supplements/"
 export BUILD_LANG="$shell_lang"
 export PRELIMINARY_SETUP=1
+
 "$(pwd)/../docker/build.sh"
 error_exit "build script"
