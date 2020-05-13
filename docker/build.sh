@@ -590,7 +590,7 @@ if [ "$SKIP_BUILD" -eq 0 ]; then
         custom_text="$CUSTOM_MKA_COMMAND"
         custom_text=${custom_text/\{device\}/$DEVICE}
         custom_text=${custom_text/\{user_debug\}/$LUNCH_DEBUG}
-        eval "$custom_text" 2>&1 | tee "$BUILD_DIR/logs/$DEVICE/make_${DEVICE}_android10.txt" > /dev/null 2>&1
+        run eval "$custom_text"
       else
         mka $BUILD_PARAMETERS -j$MAX_CPU 2>&1 | tee "$BUILD_DIR/logs/$DEVICE/make_${DEVICE}_android10.txt" > /dev/null 2>&1
       fi
