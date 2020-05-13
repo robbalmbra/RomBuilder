@@ -79,7 +79,7 @@ if [[ ! -z "${BUILDKITE}" ]]; then
     mkdir -p "$CUSTOM_OUTPUT_DIR/build/$UPLOAD_NAME" > /dev/null 2>&1
     BUILD_DIR="$CUSTOM_OUTPUT_DIR/build/$UPLOAD_NAME"
   else
-    if [[ "$MACOS" == 1 ]];
+    if [[ "$MACOS" == 1 ]]; then
       mkdir -p "/usr/local/var/buildkite-agent/build/$UPLOAD_NAME" > /dev/null 2>&1
       BUILD_DIR="/usr/local/var/buildkite-agent/build/$UPLOAD_NAME"
     else
