@@ -10,7 +10,9 @@ if [ -z "$BUILD_LANG" ]; then
 fi
 
 if [ -z "$DEBUG" ]; then
-  export DEBUG=0
+  DEBUG=0
+else
+  DEBUG=1
 fi
 
 run() {
