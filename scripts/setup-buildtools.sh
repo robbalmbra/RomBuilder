@@ -21,6 +21,10 @@ if [[ $EUID -ne 0 ]]; then
   exit 1
 fi
 
+# Get hostname for buildkite tag
+echo "Please enter a hostname for buildkite to use:"
+read user_host
+
 # Install build tools
 echo "Pulling and installing build tools"
 apt-get install git curl -y > /dev/null 2>&1
