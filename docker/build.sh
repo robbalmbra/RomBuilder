@@ -16,7 +16,6 @@ else
 fi
 
 run() {
-        echo $DEBUG
         if $DEBUG; then
                 v=$(exec 2>&1 && set -x && set -- "$@")
                 echo "#${v#*--}"
