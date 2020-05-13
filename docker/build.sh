@@ -567,13 +567,14 @@ if [ "$SKIP_BUILD" -eq 0 ]; then
     # Run docs build once
     if [ "$runonce" -eq 0 ]; then
 
-      if [[ $BUILD_LANG == "it" ]]; then
-        echo "Generazione di documenti"
-      else
-        echo "Generating docs"
-      fi
-
       if [[ $SKIP_API_DOCS == 0 ]]; then
+      
+        if [[ $BUILD_LANG == "it" ]]; then
+          echo "Generazione di documenti"
+        else
+          echo "Generating docs"
+        fi
+
         run mka api-stubs-docs
         run mka hiddenapi-lists-docs
         run mka test-api-stubs-docs
