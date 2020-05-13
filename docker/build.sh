@@ -1,5 +1,15 @@
 #!/bin/bash
 
+run() {
+        if $DEBUG; then
+                v=$(exec 2>&1 && set -x && set -- "$@")
+                echo "#${v#*--}"
+                "$@"
+        else
+                "$@" >/dev/null 2>&1
+        fi
+}
+
 if [ -z "$PRELIMINARY_SETUP" ]; then
   echo "Error - Build script shouldn't be called directly, please run scripts/start-local.sh"
   exit 1
