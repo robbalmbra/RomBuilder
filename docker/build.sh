@@ -586,6 +586,9 @@ if [ "$SKIP_BUILD" -eq 0 ]; then
     # Save start time of build
     makestart=`date +%s`
 
+    # Make sure script is running in rom directory
+    cd $BUILD_DIR/rom/
+
     # Run build
     if [[ ! -z "${BUILDKITE}" ]]; then
       if [[ ! -z "$CUSTOM_MKA_COMMAND" ]]; then
