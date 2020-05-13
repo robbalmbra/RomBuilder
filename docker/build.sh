@@ -13,7 +13,7 @@ if [ -z "$MAGISK_VERSION" ]; then
   MAGISK_VERSION="20.4"
 fi
 
-if [ -z "$MACOS" ];
+if [ -z "$MACOS" ]; then
   MACOS=0
 fi
 
