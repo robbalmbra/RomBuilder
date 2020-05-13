@@ -92,7 +92,7 @@ if [[ ! -z "${BUILDKITE}" ]]; then
   mkdir -p "$BUILD_DIR/scripts/"
 
   # Copy supplements to local folder
-  cp -R "$SUPPLEMENTS/" "$BUILD_DIR/"
+  cp -R "$SUPPLEMENTS" "$BUILD_DIR/supplements/"
 
   # Copy telegram bot script to local folder
   cp "$TELEGRAM_BOT" "$BUILD_DIR/scripts/SendMessage.py" > /dev/null 2>&1
