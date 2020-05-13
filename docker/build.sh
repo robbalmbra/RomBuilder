@@ -13,6 +13,10 @@ if [ -z "$MAGISK_VERSION" ]; then
   MAGISK_VERSION="20.4"
 fi
 
+if [ -z "$MACOS" ];
+  MACOS=0
+fi
+
 if [ -z "$SKIP_BUILD" ]; then
   SKIP_BUILD=0
 fi
@@ -75,8 +79,13 @@ if [[ ! -z "${BUILDKITE}" ]]; then
     mkdir -p "$CUSTOM_OUTPUT_DIR/build/$UPLOAD_NAME" > /dev/null 2>&1
     BUILD_DIR="$CUSTOM_OUTPUT_DIR/build/$UPLOAD_NAME"
   else
-    mkdir -p "/var/lib/buildkite-agent/build/$UPLOAD_NAME" > /dev/null 2>&1
-    BUILD_DIR="/var/lib/buildkite-agent/build/$UPLOAD_NAME"
+    if [[ "$MACOS" == 1 ]];
+      mkdir -p "/usr/local/var/buildkite-agent/build/$UPLOAD_NAME" > /dev/null 2>&1
+      BUILD_DIR="/usr/local/var/buildkite-agent/build/$UPLOAD_NAME"
+    else
+      mkdir -p "/var/lib/buildkite-agent/build/$UPLOAD_NAME" > /dev/null 2>&1
+      BUILD_DIR="/var/lib/buildkite-agent/build/$UPLOAD_NAME"
+    fi
   fi
 
   # Create scripts directory in BUILD_DIR
