@@ -301,13 +301,9 @@ if [ "$SKIP_BUILD" -eq 0 ]; then
       INIT_OPTIONS=""
     fi
 
-    if [[ ! -z "${BUILDKITE}" ]]; then
-      cd "$BUILD_DIR/rom/" && repo init -u $REPO -b $BRANCH $INIT_OPTIONS > /dev/null 2>&1
-      error_exit "repo init"
-    else
-      cd "$BUILD_DIR/rom/" && repo init -u $REPO -b $BRANCH $INIT_OPTIONS
-      error_exit "repo init"
-    fi
+    cd "$BUILD_DIR/rom/"
+    run repo init -u $REPO -b $BRANCH $INIT_OPTIONS
+    error_exit "repo init"
 
     # Pulling local manifests
     if [[ $BUILD_LANG == "it" ]]; then
