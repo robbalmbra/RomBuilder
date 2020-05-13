@@ -350,13 +350,8 @@ if [ "$SKIP_BUILD" -eq 0 ]; then
     SYNC_OPTIONS=""
   fi
 
-  if [[ ! -z "${BUILDKITE}" ]]; then
-    repo sync -d -f -c -j$MAX_CPU --force-sync --quiet $SYNC_OPTIONS > /dev/null 2>&1
-    error_exit "repo sync"
-  else
-    repo sync -d -f -c -j$MAX_CPU --force-sync --quiet $SYNC_OPTIONS
-    error_exit "repo sync"
-  fi
+  run repo sync -d -f -c -j$MAX_CPU --force-sync --quiet $SYNC_OPTIONS
+  error_exit "repo sync"
 
   if [[ ! -z $DATE_REVERT ]]; then
     echo "Reverting repo to date '$DATE_REVERT'"
@@ -364,7 +359,7 @@ if [ "$SKIP_BUILD" -eq 0 ]; then
   fi
   
   # Get faceunlock addon for all roms
-  git clone git@github.com:robbalmbra/faceunlock.git "$BUILD_DIR/rom/external/motorola/faceunlock/"
+  run git clone git@github.com:robbalmbra/faceunlock.git "$BUILD_DIR/rom/external/motorola/faceunlock/"
 
   if [[ $BUILD_LANG == "it" ]]; then
     echo "Applicazione di modifiche locali"
