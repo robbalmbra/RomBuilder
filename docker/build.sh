@@ -339,7 +339,7 @@ if [ "$SKIP_BUILD" -eq 0 ]; then
    make clobber >/dev/null 2>&1
 
    # Pull original changes
-   #repo forall -c "git reset --hard" > /dev/null 2>&1
+   repo forall -c "git reset --hard" > /dev/null 2>&1
   fi
 
   # Sync sources
@@ -357,8 +357,8 @@ if [ "$SKIP_BUILD" -eq 0 ]; then
     SYNC_OPTIONS=""
   fi
 
-  #run repo sync -d -f -c -j$MAX_CPU --force-sync --quiet $SYNC_OPTIONS
-  #error_exit "repo sync"
+  run repo sync -d -f -c -j$MAX_CPU --force-sync --quiet $SYNC_OPTIONS
+  error_exit "repo sync"
 
   if [[ ! -z $DATE_REVERT ]]; then
     echo "Reverting repo to date '$DATE_REVERT'"
