@@ -28,6 +28,7 @@ if [ ! -f "$ota_build_dir/$rom_name.py" ]; then
 fi
 
 # Add sourceforge to hosts
+cat ~/.ssh/known_hosts
 if [ -z "$(ssh-keygen -F frs.sourceforge.net)" ]; then
   ssh-keyscan -H frs.sourceforge.net >> ~/.ssh/known_hosts
 fi
