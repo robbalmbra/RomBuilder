@@ -112,7 +112,7 @@ if [[ ! -z "${BUILDKITE}" ]]; then
   mkdir -p "$BUILD_DIR/scripts/"
 
   # Copy supplements to local folder
-  cp -R "$SUPPLEMENTS" "$BUILD_DIR/supplements/"
+  cp -R "$SUPPLEMENTS" "$BUILD_DIR/"
 
   # Copy telegram bot script to local folder
   cp "$TELEGRAM_BOT" "$BUILD_DIR/scripts/SendMessage.py" > /dev/null 2>&1
@@ -162,9 +162,6 @@ last_char=${BUILD_DIR:length-1:1}
 # Just process ota
 if [ ! -z "$JUST_PROCESS_OTA" ]; then
 
-  ls $BUILD_DIR/supplements/
-  exit 0
-
   # Create git for ota folder
   rm -rf "$BUILD_DIR/ota" > /dev/null 2>&1
   mkdir "$BUILD_DIR/ota" > /dev/null 2>&1
@@ -174,10 +171,9 @@ if [ ! -z "$JUST_PROCESS_OTA" ]; then
   git init > /dev/null 2>&1
   git remote add origin git@github.com:robbalmbra/OTA.git > /dev/null 2>&1
   git pull -f origin $UPLOAD_NAME > /dev/null 2>&1
-  git branch --set-upstream-to=origin/$UPLOAD_NAME master 
+  git branch --set-upstream-to=origin/$UPLOAD_NAME master
+
   # Run handler
-  
-  cat $BUILD_DIR/supplements/ota/main.sh
   $BUILD_DIR/supplements/ota/main.sh "$BUILD_DIR/rom" "$BUILD_DIR/ota" "$UPLOAD_NAME" "$BUILD_DIR/supplements/ota"
   exit 0
 fi
