@@ -161,6 +161,10 @@ last_char=${BUILD_DIR:length-1:1}
 
 # Just process ota
 if [ ! -z "$JUST_PROCESS_OTA" ]; then
+
+  ls $BUILD_DIR/supplements/
+  exit 0
+
   # Create git for ota folder
   rm -rf "$BUILD_DIR/ota" > /dev/null 2>&1
   mkdir "$BUILD_DIR/ota" > /dev/null 2>&1
