@@ -28,7 +28,7 @@ if [ ! -f "$ota_build_dir/$rom_name.py" ]; then
 fi
 
 # Make rom directory
-sftp -q -o PasswordAuthentication=no robbalmbra@frs.sourceforge.net <<< "mkdir /home/frs/project/evo9810ota/$rom_name/"
+sftp -q -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no robbalmbra@frs.sourceforge.net <<< "mkdir /home/frs/project/evo9810ota/$rom_name/"
 
 # Iterate over devices
 for ROM in $rom_folder/out/target/product/*/*.zip; do
@@ -54,14 +54,14 @@ o StrictHostKeyChecking no
   python3 "$ota_build_dir/$rom_name.py" "$ROM" "$rom_name" "$date" 1> "$ota_folder/$DEVICE.json" 2> /dev/null
 
   # Make device directory
-  sftp -q -o StrictHostKeyChecking=no robbalmbra@frs.sourceforge.net <<< "mkdir /home/frs/project/evo9810ota/$rom_name/$DEVICE/"
+  sftp -q -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no robbalmbra@frs.sourceforge.net <<< "mkdir /home/frs/project/evo9810ota/$rom_name/$DEVICE/"
 
   # Create date directory in each device
-  sftp -q -o StrictHostKeyChecking=no robbalmbra@frs.sourceforge.net <<< "mkdir /home/frs/project/evo9810ota/$rom_name/$DEVICE/$date/"
+  sftp -q -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no robbalmbra@frs.sourceforge.net <<< "mkdir /home/frs/project/evo9810ota/$rom_name/$DEVICE/$date/"
 
   # Upload rom file to sourceforge
   echo "Uploading '$rom_filename' to /home/frs/project/evo9810ota/$rom_name/$DEVICE/$date/"
-  scp -o StrictHostKeyChecking=no $ROM robbalmbra@frs.sourceforge.net:/home/frs/project/evo9810ota/$rom_name/$DEVICE/$date/  
+  scp -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no $ROM robbalmbra@frs.sourceforge.net:/home/frs/project/evo9810ota/$rom_name/$DEVICE/$date/  
 done
 
 # Update device git repo
