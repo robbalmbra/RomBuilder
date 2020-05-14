@@ -25,6 +25,10 @@ fi
 echo "Please enter a hostname for buildkite to use:"
 read user_host
 
+# Get hostname for buildkite tag
+echo "Please enter the buildkite token to use:"
+read user_token
+
 # Install build tools
 echo "Pulling and installing build tools"
 apt-get install git curl -y > /dev/null 2>&1
@@ -72,7 +76,7 @@ fi
 sudo sh -c 'echo deb https://apt.buildkite.com/buildkite-agent stable main > /etc/apt/sources.list.d/buildkite-agent.list'
 sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 32A37959C2FA5C3C99EFBC32A79206696452D198
 sudo apt-get update > /dev/null 2>&1 && sudo apt-get install -y buildkite-agent > /dev/null 2>&1
-sudo sed -i "s/xxx/49847013e94f61ef546c9eaa4cd75e40f91ab3367c526e52a1/g" /etc/buildkite-agent/buildkite-agent.cfg  > /dev/null 2>&1
+sudo sed -i "s/xxx/$user_token/g" /etc/buildkite-agent/buildkite-agent.cfg  > /dev/null 2>&1
 
 echo "tags=\"target=$user_host\"" >> /etc/buildkite-agent/buildkite-agent.cfg
 
