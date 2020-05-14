@@ -172,6 +172,8 @@ if [ ! -z "$JUST_PROCESS_OTA" ]; then
   git pull -f origin $UPLOAD_NAME > /dev/null 2>&1
   git branch --set-upstream-to=origin/$UPLOAD_NAME master 
   # Run handler
+  
+  cat $BUILD_DIR/supplements/ota/main.sh
   $BUILD_DIR/supplements/ota/main.sh "$BUILD_DIR/rom" "$BUILD_DIR/ota" "$UPLOAD_NAME" "$BUILD_DIR/supplements/ota"
   exit 0
 fi
