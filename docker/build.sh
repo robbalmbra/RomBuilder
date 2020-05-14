@@ -518,7 +518,7 @@ if [ "$SKIP_BUILD" -eq 0 ]; then
 
   # Run env script
   cd "$BUILD_DIR/rom/"
-  bash build/envsetup.sh > /dev/null 2>&1
+  . build/envsetup.sh > /dev/null 2>&1
   
   # Check for any build parameters passed to script
   BUILD_PARAMETERS="bacon"
