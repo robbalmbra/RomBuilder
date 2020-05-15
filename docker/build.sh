@@ -121,8 +121,12 @@ if [[ ! -z "${BUILDKITE}" ]]; then
   log_setting "BUILD_DIR" "$BUILD_DIR"
 
   # Show debug setting
-  log_setting "DEBUG" "$DEBUG"
-
+  if [[ $BUILD_LANG == "it" ]]; then
+    log_setting "DEBUG" "falso"
+  else
+    log_setting "DEBUG" "$DEBUG"
+  fi
+  
   # Copy modifications and logger to build dir if exists
   if [ ! -z "$USER_MODS" ]; then
     if [[ $BUILD_LANG == "it" ]]; then
@@ -300,7 +304,7 @@ if [ "$SKIP_BUILD" -eq 0 ]; then
 
     # Pull latest sources
     if [[ $BUILD_LANG == "it" ]]; then
-      echo "Tirare le fonti"
+      echo "Recuperando le fonti"
     else
       echo "Pulling sources"
     fi
@@ -318,7 +322,7 @@ if [ "$SKIP_BUILD" -eq 0 ]; then
 
     # Pulling local manifests
     if [[ $BUILD_LANG == "it" ]]; then
-      echo "Tirando manifest locali"
+      echo "Recuperando i manifest locali"
     else
       echo "Pulling local manifests"
     fi
