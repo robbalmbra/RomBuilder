@@ -731,6 +731,11 @@ for ROM in $BUILD_DIR/rom/out/target/product/*/*.zip; do
   # Upload
   mega-put -c $ROM ROMS/$UPLOAD_NAME/$DATE/
   error_exit "mega put"
+  
+  # Create md5 of file
+  file_md5=`md5sum ${ROM} | awk '{ print $1 }'`
+  device_name="$(basename "$(dirname "$ROM")")"
+  echo "$device_name - $file_md5" >> "$BUILD_DIR/.hashes"
   sleep 15
   ((rom_count=rom_count+1))
 done
@@ -772,8 +777,7 @@ if [ "$TEST_BUILD" -eq 0 ]; then
       else
         echo "Sending message to broadcast group"
       fi
-      cd "$BUILD_DIR/"
-      python3 "$BUILD_DIR/scripts/SendMessage.py" "$UPLOAD_NAME" "$MEGA_FOLDER_ID" "ten" "$file_size" changelog.txt notes.txt "$MEGA_DECRYPT_KEY" "$TELEGRAM_TOKEN" "$TELEGRAM_GROUP" ".hashes"
+      python3 "$BUILD_DIR/scripts/SendMessage.py" "$UPLOAD_NAME" "$MEGA_FOLDER_ID" "ten" "$file_size" changelog.txt notes.txt "$MEGA_DECRYPT_KEY" "$TELEGRAM_TOKEN" "$TELEGRAM_GROUP" "$BUILD_DIR/.hashes"
     fi
   fi
 fi
