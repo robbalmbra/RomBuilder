@@ -590,7 +590,7 @@ if [ "$SKIP_BUILD" -eq 0 ]; then
       runonce=1
     else
         # Clean between builds
-        # TODO
+        echo "Cleaning build"
     fi
 
     # Save start time of build
