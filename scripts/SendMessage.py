@@ -72,6 +72,10 @@ structure = """ ROM: """ + rom_name + """
 
 """ + mega_folder_link + """
 
+📃 ROM hashes 📃
+
+""" + rom_md5_txt + """
+
 📃 Changelog 📃
 
 - Synced to latest """ + rom_name + """ sources
