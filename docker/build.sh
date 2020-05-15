@@ -544,6 +544,8 @@ if [ "$SKIP_BUILD" -eq 0 ]; then
   runonce=0
   for DEVICE in $DEVICES; do
 
+    cd "$BUILD_DIR/rom/"
+
     if [[ $BUILD_LANG == "it" ]]; then
       echo "--- Creazione di $DEVICE ($BUILD_NAME) :building_construction:"
     else
@@ -588,7 +590,7 @@ if [ "$SKIP_BUILD" -eq 0 ]; then
       runonce=1
     else
         # Clean between builds
-        make installclean
+        # TODO
     fi
 
     # Save start time of build
