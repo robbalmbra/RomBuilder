@@ -78,7 +78,7 @@ error_exit()
 log_setting()
 {
   if [[ $BUILD_LANG == "it" ]]; then
-    echo "Impostazione da $1 a '$2'"
+    echo "Impostazione di $1 a '$2'"
   else
     echo "Setting $1 to '$2'"
   fi
