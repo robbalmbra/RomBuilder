@@ -576,9 +576,9 @@ if [ "$SKIP_BUILD" -eq 0 ]; then
           echo "Generating docs"
         fi
 
-        run mka api-stubs-docs
-        run mka hiddenapi-lists-docs
-        run mka test-api-stubs-docs
+        run mka -j$MAX_CPU api-stubs-docs
+        run mka -j$MAX_CPU hiddenapi-lists-docs
+        run mka -j$MAX_CPU test-api-stubs-docs
       fi
       
       runonce=1
