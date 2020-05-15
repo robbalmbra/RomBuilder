@@ -6,8 +6,8 @@ import sys
 import datetime
 import os
 
-if len(sys.argv) < 10:
-  print(sys.argv[0] + " USAGE [ROM NAME] [ROM FOLDER ID] [VERSION] [FILESIZE] [CHANGELOG FILE] [NOTES FILE] [MEGA DECRYPT KEY] [TELEGRAM TOKEN] [TELEGRAM GROUP]")
+if len(sys.argv) < 11:
+  print(sys.argv[0] + " USAGE [ROM NAME] [ROM FOLDER ID] [VERSION] [FILESIZE] [CHANGELOG FILE] [NOTES FILE] [MEGA DECRYPT KEY] [TELEGRAM TOKEN] [TELEGRAM GROUP] [MD5 HASHES]")
   sys.exit(1)
 
 rom_name = sys.argv[1]
@@ -19,6 +19,7 @@ notes = sys.argv[6]
 mega_decrypt_key = sys.argv[7]
 telegram_token = sys.argv[8]
 telegram_group = sys.argv[9]
+rom_md5 = sys.argv[10]
 
 bot = telegram.Bot(token=telegram_token)
 
@@ -27,6 +28,14 @@ if rom_folder_id == "":
   print("Error - ROM FOLDER ID is invalid")
   sys.exit(2)
 
+# Check if md5 file exist
+if not os.path.isfile(sys.argv[10]):
+  print("Warning - md5 file doesn't exist")
+  rom_md5_txt = "Error retrieving md5 hashes"
+else:
+  with open(rom_md5, 'r') as file:
+    rom_md5_txt = file.read()
+  
 # Check if changelog file exists
 if not os.path.isfile(sys.argv[5]):
   print("Warning - change log file doesn't exist")
