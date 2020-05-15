@@ -586,6 +586,9 @@ if [ "$SKIP_BUILD" -eq 0 ]; then
       fi
       
       runonce=1
+    else
+        # Clean between builds
+        make installclean
     fi
 
     # Save start time of build
