@@ -371,8 +371,10 @@ if [ "$SKIP_BUILD" -eq 0 ]; then
     repo forall -c 'git checkout `git rev-list -n1 --before="$DATE_REVERT" HEAD`' > /dev/null 2>&1
   fi
   
-  # Get faceunlock addon for all roms
-  run git clone git@github.com:robbalmbra/faceunlock.git "$BUILD_DIR/rom/external/motorola/faceunlock/"
+  # Run extra commands after sync if any
+  if [[ ! -z "$EXTRA_COMMANDS" ]]; then
+    eval $EXTRA_COMMANDS > /dev/null
+  fi
 
   if [[ $BUILD_LANG == "it" ]]; then
     echo "Applicazione di modifiche locali"
@@ -605,7 +607,7 @@ if [ "$SKIP_BUILD" -eq 0 ]; then
         custom_text="$CUSTOM_MKA_COMMAND"
         custom_text=${custom_text/\{device\}/$DEVICE}
         custom_text=${custom_text/\{user_debug\}/$LUNCH_DEBUG}
-        eval "$custom_text"
+        eval "$custom_text" > /dev/null 2>&1
       else
         mka $BUILD_PARAMETERS -j$MAX_CPU 2>&1 | tee "$BUILD_DIR/logs/$DEVICE/make_${DEVICE}_android10.txt" > /dev/null 2>&1
       fi
