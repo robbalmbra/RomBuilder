@@ -1,5 +1,7 @@
 # RomBuilder
 
+To use this script to build roms, include the repo in a buildkite build instance.
+
 ## Scripts
 
 [setup-buildtools.sh](scripts/setup-buildtools.sh) - Install required build tools on the host
