@@ -593,6 +593,7 @@ if [ "$SKIP_BUILD" -eq 0 ]; then
     else
         # Clean between builds
         echo "Cleaning build"
+        make installclean > /dev/null 2>&1
     fi
 
     # Save start time of build
