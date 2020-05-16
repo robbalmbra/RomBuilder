@@ -693,7 +693,7 @@ if [ "$SKIP_BUILD" -eq 0 ]; then
     fi
 
     PRODUCT="$(basename "$(dirname "$ROM")")"
-    $BUILD_DIR/scripts/patcher.sh $ROM /tmp/rom-magisk $MAGISK_VERSION $PRODUCT $BUILD_DIR
+    $BUILD_DIR/scripts/patcher.sh $ROM /tmp/rom-magisk $MAGISK_VERSION $PRODUCT $BUILD_DIR $MAGISK_IN_BUILD
     error_exit "patches"
     file_name=$(basename "$ROM")
     mv /tmp/rom-magisk/$file_name $ROM
