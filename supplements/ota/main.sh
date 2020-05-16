@@ -42,7 +42,7 @@ for ROM in $rom_folder/out/target/product/*/*.zip; do
   DEVICE="$(basename "$(dirname "$ROM")")"
   
   # Make changelogs folder
-  mkdir "$ota_folder/changelogs/$DEVICE/"
+  mkdir -p "$ota_folder/changelogs/$DEVICE/"
 
   # Create changelog blank file
   touch "$ota_folder/changelogs/$DEVICE/$rom_filename.txt"
