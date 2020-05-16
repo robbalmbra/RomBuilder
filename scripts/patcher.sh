@@ -2,8 +2,8 @@
 
 # Patches magisk and other items into updater-script on selected rom 
 
-if [ $# -lt 5 ]; then
-  echo "USAGE: [ROM FILE] [ROM FOLDER OUT] [MAGISK VERSION] [DEVICE] [BUILD_DIR]"
+if [ $# -lt 6 ]; then
+  echo "USAGE: [ROM FILE] [ROM FOLDER OUT] [MAGISK VERSION] [DEVICE] [BUILD_DIR] [MAGISK_IN_BUILD]"
   exit 1
 fi
 
@@ -12,6 +12,7 @@ rom_folder_out=$2
 magisk_version=$3
 device_name=$4
 building_dir=$5
+magisk_in_build=$6
 
 # Error checking
 
@@ -40,7 +41,7 @@ unzip $rom_file_in -d $WORK_DIR > /dev/null 2>&1
 # Add magisk to updater script
 update_script="$WORK_DIR/META-INF/com/google/android/updater-script"
 
-if [ $MAGISK_IN_BUILD -eq 1 ]; then
+if [ $magisk_in_build -eq 1 ]; then
 cat <<EOT >> $update_script
 ui_print("-- Installing: Magisk");
 package_extract_dir("META-INF/ADD-ONS/Magisk", "/tmp/Magisk");
