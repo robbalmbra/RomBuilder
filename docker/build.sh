@@ -548,6 +548,12 @@ if [ "$SKIP_BUILD" -eq 0 ]; then
 
     cd "$BUILD_DIR/rom/"
 
+    if [ "$runonce" -ne 0 ]; then
+      # Clean between builds
+      echo "Cleaning build"
+      make installclean > /dev/null 2>&1
+    fi
+    
     if [[ $BUILD_LANG == "it" ]]; then
       echo "--- Creazione di $DEVICE ($BUILD_NAME) :building_construction:"
     else
@@ -588,12 +594,7 @@ if [ "$SKIP_BUILD" -eq 0 ]; then
         run mka -j$MAX_CPU hiddenapi-lists-docs
         run mka -j$MAX_CPU test-api-stubs-docs
       fi
-      
       runonce=1
-    else
-        # Clean between builds
-        echo "Cleaning build"
-        make installclean > /dev/null 2>&1
     fi
 
     # Save start time of build
