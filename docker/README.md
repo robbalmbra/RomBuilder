@@ -46,6 +46,7 @@ Options can be defined within environment variables or within the environment se
 * TELEGRAM_TOKEN - Specifies token for automatic group update after build has completed.
 * TELEGRAM_GROUP - Specifies telegram group name, e.g `@groupname`
 * DEBUG=1 - Dont flush any output to /dev/null. Default ignores output.
+* EXTRA_COMMANDS - Run user commands after sync has finished. Default is ignored.
 
 **Other**
 
