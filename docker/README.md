@@ -25,7 +25,7 @@ Options can be defined within environment variables or within the environment se
 * MAGISK_VERSION - Specifies magisk version to include within the rom; e.g `20.4`
 * LIBEXYNOS_CAMERA=0 - Turns off libexynoscamera intergration into rom
 * CUSTOM_OUTPUT_DIR - Overrides default build directory to selected directory
-* USER_MODS - Defines location of custom modifications bash script
+* USER_MODS - Defines location of custom modifications bash script to alter sources after being pulled
 * LOGGING_RATE - Defines rate of how often logs are updated to buildkite; e.g `LOGGING_RATE=20` defines every 20 seconds to check and pull current log for the device being built. Default is 30 seconds.
 * JUST_UPLOAD=1 - Causes build script to only upload any built files to mega
 * MAX_CPUS - Defines max CPUs to use for the building process; e.g. `MAX_CPUS=6` defines to only use 6 CPUS for the build. Default uses all CPU cores for the build.
