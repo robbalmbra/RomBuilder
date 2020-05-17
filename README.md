@@ -10,4 +10,4 @@ To use this script to build roms, include the repo in a buildkite build instance
 
 ## Notes
 
-See [docker](docker) for specific build options.
+See [docker](docker) for specific build options and [https://github.com/robbalmbra/RomBuilder/wiki](https://github.com/robbalmbra/RomBuilder/wiki) for a buildkite setup guide.
