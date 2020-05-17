@@ -24,7 +24,9 @@ error_exit()
 # Checks
 if [ -d "/opt/build_env" ]; then
   if promptyn "Warning - Build scripts already exist on the system. Do you want to reinstall? y/n"; then
-    echo "yes"
+    rm -rf /opt/build_env > /dev/null 2>&1
+    apt-get purge -y buildkite-agent  > /dev/null 2>&1
+    rm -rf /opt/MEGAcmd > /dev/null 2>&1
   else
     exit 0
   fi
