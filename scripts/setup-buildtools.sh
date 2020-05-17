@@ -1,6 +1,17 @@
 #!/bin/bash
 # Setup script for build tools for buildkite
 
+promptyn () {
+    while true; do
+        read -p "$1 " yn
+        case $yn in
+            [Yy]* ) return 0;;
+            [Nn]* ) return 1;;
+            * ) echo "Please answer yes or no.";;
+        esac
+    done
+}
+
 error_exit()
 {
     ret="$?"
@@ -12,11 +23,11 @@ error_exit()
 
 # Checks
 if [ -d "/opt/build_env" ]; then
-  while true
-  do
-    echo "Warning - Build scripts already exist on the system. Do you want to reinstall? y/n"
-    read user_install
-  done
+  if promptyn "Warning - Build scripts already exist on the system. Do you want to reinstall? y/n"; then
+    echo "yes"
+  else
+    exit 0
+  fi
 fi
 
 if [[ $EUID -ne 0 ]]; then
