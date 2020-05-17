@@ -12,8 +12,11 @@ error_exit()
 
 # Checks
 if [ -d "/opt/build_env" ]; then
-  echo "Warning - Build scripts already exist on the system. Please run rm -rf /opt/build_env to remove if script failed"
-  exit 1
+  while true
+  do
+    echo "Warning - Build scripts already exist on the system. Do you want to reinstall? y/n"
+    read user_install
+  done
 fi
 
 if [[ $EUID -ne 0 ]]; then
