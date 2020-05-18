@@ -567,7 +567,7 @@ if [ "$SKIP_BUILD" -eq 0 ]; then
       eval "${CUSTOM_LUNCH_COMMAND}" "$build_id" > /dev/null 2>&1
     else
       echo "lunch $build_id"
-      run lunch $build_id
+      run lunch "$build_id"
     fi
 
     error_exit "lunch"
