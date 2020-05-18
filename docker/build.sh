@@ -561,7 +561,7 @@ if [ "$SKIP_BUILD" -eq 0 ]; then
     fi
 
     # Run lunch
-    build_id="${BUILD_NAME}_$DEVICE-$LUNCH_DEBUG"
+    build_id="${BUILD_NAME}_$DEVICE-${LUNCH_DEBUG}"
     if [[ ! -z "${CUSTOM_LUNCH_COMMAND}" ]]; then
       eval "${CUSTOM_LUNCH_COMMAND}" "$build_id" > /dev/null 2>&1
     else
