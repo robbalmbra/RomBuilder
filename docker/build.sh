@@ -426,6 +426,7 @@ if [ "$SKIP_BUILD" -eq 0 ]; then
 
   # Override ota url for each device even though build may not use the url
   if [ "$PROCESS_OTA" -eq 1 ]; then
+    echo "Overriding OTA"
     export IFS=","
     for DEVICE in $DEVICES; do
       DEVICE_FILE="$BUILD_DIR/rom/device/samsung/$DEVICE/${BUILD_NAME}_$DEVICE.mk"
