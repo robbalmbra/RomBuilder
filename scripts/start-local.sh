@@ -150,8 +150,6 @@ variables=(
   BRANCH
   LOCAL_REPO
   LOCAL_BRANCH
-  MEGA_FOLDER_ID
-  MEGA_DECRYPT_KEY
 )
 
 # Check if required variables are set
@@ -172,6 +170,20 @@ done
 # Quit if requirements not met
 if [ "$quit" -ne 0 ]; then
   exit 1
+fi
+
+if [ -z "$TEST_BUILD" ]; then
+  if [ -z "$MEGA_FOLDER_ID" ]; then
+    echo "$0 - Error, MEGA_FOLDER_ID isn't set."
+    exit 1
+  fi
+  
+  if [ -z "$MEGA_DECRYPT_KEY" ]; then
+    echo "$0 - Error, MEGA_DECRYPT_KEY isn't set."
+    exit 1
+  fi
+
+  TEST_BUILD=0
 fi
 
 if [ $new -eq 0 ]; then
