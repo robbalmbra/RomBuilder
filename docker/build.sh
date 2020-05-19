@@ -42,7 +42,7 @@ if [ -z "$SKIP_BUILD" ]; then
 fi
 
 if [ -z "$PROCESS_OTA" ]; then
-  export PROCESS_OTA=0
+  PROCESS_OTA=0
 fi
 
 if [ -z "$TEST_BUILD" ]; then
