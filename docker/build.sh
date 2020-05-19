@@ -707,51 +707,55 @@ else
 fi
 
 # Upload firmware to mega
-if [[ $BUILD_LANG == "it" ]]; then
-  echo "--- Caricamento su mega :rea:"
-else
-  echo "--- Uploading to mega :rea:"
-fi
-
-mega-logout > /dev/null 2>&1
-mega-login $MEGA_USERNAME $MEGA_PASSWORD > /dev/null 2>&1
-error_exit "mega login"
-
-shopt -s nocaseglob
-DATE=$(date '+%d-%m-%y');
-rom_count=0
-for ROM in $BUILD_DIR/rom/out/target/product/*/*.zip; do
-
-  # Skip if zip has -ota- in zip
-  if [[ $ROM == *"-ota-"* ]]; then
-    continue
-  fi
+if [ "$TEST_BUILD" -eq 0 ]; then
 
   if [[ $BUILD_LANG == "it" ]]; then
-    echo "Caricamento $(basename $ROM)"
+    echo "--- Caricamento su mega :rea:"
   else
-    echo "Uploading $(basename $ROM)"
+    echo "--- Uploading to mega :rea:"
   fi
 
-  # Get rom size for telegram group
-  file_size=$(ls -lh "$ROM" | awk '{print $5}')
+  mega-logout > /dev/null 2>&1
+  mega-login $MEGA_USERNAME $MEGA_PASSWORD > /dev/null 2>&1
+  error_exit "mega login"
 
-  # Upload
-  mega-put -c $ROM ROMS/$UPLOAD_NAME/$DATE/
-  error_exit "mega put"
-  
-  # Create md5 of file
-  file_md5=`md5sum ${ROM} | awk '{ print $1 }'`
-  device_name="$(basename "$(dirname "$ROM")")"
-  echo "$device_name - $file_md5" >> "$BUILD_DIR/.hashes"
-  sleep 15
-  ((rom_count=rom_count+1))
-done
+  shopt -s nocaseglob
+  DATE=$(date '+%d-%m-%y');
+  rom_count=0
+  for ROM in $BUILD_DIR/rom/out/target/product/*/*.zip; do
 
-if [[ $BUILD_LANG == "it" ]]; then
-  echo "Caricamento completato"
-else
-  echo "Upload complete"
+    # Skip if zip has -ota- in zip
+    if [[ $ROM == *"-ota-"* ]]; then
+      continue
+    fi
+
+    if [[ $BUILD_LANG == "it" ]]; then
+      echo "Caricamento $(basename $ROM)"
+    else
+      echo "Uploading $(basename $ROM)"
+    fi
+
+    # Get rom size for telegram group
+    file_size=$(ls -lh "$ROM" | awk '{print $5}')
+
+    # Upload
+    mega-put -c $ROM ROMS/$UPLOAD_NAME/$DATE/
+    error_exit "mega put"
+
+    # Create md5 of file
+    file_md5=`md5sum ${ROM} | awk '{ print $1 }'`
+    device_name="$(basename "$(dirname "$ROM")")"
+    echo "$device_name - $file_md5" >> "$BUILD_DIR/.hashes"
+    sleep 15
+    ((rom_count=rom_count+1))
+  done
+
+  if [[ $BUILD_LANG == "it" ]]; then
+    echo "Caricamento completato"
+  else
+    echo "Upload complete"
+  fi
+
 fi
 
 # Launch OTA handler script
