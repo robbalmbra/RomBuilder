@@ -17,8 +17,8 @@ Options can be defined within environment variables or within the environment se
 * BRANCH Defines the github branch for the specified REPO; e.g. `queso`
 * LOCAL_REPO - Defines the URL of the local manifest; e.g. `https://github.com/robbalmbra/local_manifests.git`
 * LOCAL_BRANCH - Defines the branch for the specified LOCAL_REPO; e.g. `android-10.0`
-* MEGA_FOLDER_ID - Folder id of the build name being built
-* MEGA_DECRYPT_KEY - Decryption key for selected folder specified in MEGA_FOLDER_ID
+* MEGA_FOLDER_ID - Folder id of the build name being built, needed for non test builds
+* MEGA_DECRYPT_KEY - Decryption key for selected folder specified in MEGA_FOLDER_ID, needed for non test builds
 
 **Optional**
 
@@ -35,7 +35,7 @@ Options can be defined within environment variables or within the environment se
 * CUSTOM_CCACHE_DIR -  Specifies alternative directory for ccache to save relevant files into for the build
 * MAGISK_IN_BUILD=0 - Specifies to not include magisk within the build. Default is enabled.
 * CCACHE_SIZE - Defines in gigabytes the size of ccache. Default is 70 gigabytes.
-* TEST_BUILD=1 - Disable telegram automatic update to group
+* TEST_BUILD=1 - Disable telegram automatic update to group and mega upload.
 * DATE_REVERT - Specifies the date that the repo will pull before the specified date; e.g `2020-03-01 00:00`
 * CUSTOM_LUNCH_COMMAND - Overrides default lunch command. Default is lunch.
 * CUSTOM_MKA_COMMAND - Sets custom make command. Notes - {device} changes to device name and {user_debug} defaults to rom debug type.
