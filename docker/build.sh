@@ -258,8 +258,6 @@ variables=(
   BRANCH
   LOCAL_REPO
   LOCAL_BRANCH
-  MEGA_FOLDER_ID
-  MEGA_DECRYPT_KEY
 )
 
 # Check for required variables
