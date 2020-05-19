@@ -425,20 +425,22 @@ if [ "$SKIP_BUILD" -eq 0 ]; then
   fi
 
   # Override ota url for each device even though build may not use the url
-  export IFS=","
-  for DEVICE in $DEVICES; do
-    DEVICE_FILE="$BUILD_DIR/rom/device/samsung/$DEVICE/${BUILD_NAME}_$DEVICE.mk"
+  if [ "$PROCESS_OTA" -eq 1 ]; then
+    export IFS=","
+    for DEVICE in $DEVICES; do
+      DEVICE_FILE="$BUILD_DIR/rom/device/samsung/$DEVICE/${BUILD_NAME}_$DEVICE.mk"
 
-    # Remove any ota strings
-    sed -i '/# OTA/,+2d' $DEVICE_FILE
+      # Remove any ota strings
+      sed -i '/# OTA/,+2d' $DEVICE_FILE
 
-    # Dynamically create url and save to device make file for OTA apk
-    echo -e "# OTA\nPRODUCT_PROPERTY_OVERRIDES += \\\\\n    lineage.updater.uri=https://raw.githubusercontent.com/robbalmbra/OTA/$UPLOAD_NAME/$DEVICE.json" >> $DEVICE_FILE
+      # Dynamically create url and save to device make file for OTA apk
+      echo -e "# OTA\nPRODUCT_PROPERTY_OVERRIDES += \\\\\n    lineage.updater.uri=https://raw.githubusercontent.com/robbalmbra/OTA/$UPLOAD_NAME/$DEVICE.json" >> $DEVICE_FILE
 
-    if [ ! -z "$ADDITIONAL_PROPS" ]; then
-      echo -e "\n\nPRODUCT_PROPERTY_OVERRIDES += \\\\\n$additional_props_string" >> $DEVICE_FILE
-    fi
-  done
+      if [ ! -z "$ADDITIONAL_PROPS" ]; then
+        echo -e "\n\nPRODUCT_PROPERTY_OVERRIDES += \\\\\n$additional_props_string" >> $DEVICE_FILE
+      fi
+    done
+  fi
 
   # Only apply modifications and save device trees
   if [ ! -z "$PRODUCE_DEVICE_TREES" ]; then
