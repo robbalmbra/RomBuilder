@@ -4,4 +4,6 @@
 
 [ec2.sh](ec2.sh) - Deploy buildkite build script and tools to ec2. Configuration is adjustable. 
 
+## Usage
+
 USAGE: ./ec2.sh [NAME] [BUILDKITE TOKEN]
