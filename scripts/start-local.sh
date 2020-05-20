@@ -50,7 +50,7 @@ if [ -f "/etc/lsb-release" ] && [ ! -d "/opt/build_env" ]; then
   git config --global user.email "robbalmbra@gmail.com" > /dev/null 2>&1
   error_exit "git config"
   
-  git clone https://github.com/akhilnarang/scripts.git /opt/build_env --depth=1 
+  git clone https://github.com/akhilnarang/scripts.git /opt/build_env --depth=1 > /dev/null 2>&1
   sudo chmod +x /opt/build_env/setup/android_build_env.sh
   . /opt/build_env/setup/android_build_env.sh > /dev/null 2>&1
 
@@ -78,8 +78,8 @@ if [ -f "/etc/lsb-release" ] && [ ! -d "/opt/build_env" ]; then
     cd /opt/MEGAcmd && git submodule update --quiet --init --recursive && sh autogen.sh > /dev/null 2>&1 && ./configure --quiet && make > /dev/null 2>&1 && make install > /dev/null 2>&1
   fi
 
-  apt update -y --fix-missing
-  sudo apt install -y -f
+  apt update -y --fix-missing > /dev/null 2>&1
+  sudo apt install -y -f  > /dev/null 2>&1
   new=1
 
 elif [ "$(uname)" == "Darwin" ]; then
