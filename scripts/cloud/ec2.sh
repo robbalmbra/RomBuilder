@@ -94,10 +94,15 @@ export BTOKEN="$BUILD_TOKEN"
 EOF
 
 # Create Instance
-aws ec2 run-instances --count 1 \
+instance=$(aws ec2 run-instances --count 1 \
                       --security-groups "buildkite" \
                       --key-name "buildkite-key" \
                       --image-id "ami-0701e7be9b2a77600" \
                       --block-device-mappings file://mapping.json \
                       --instance-type "$BUNDLE" \
-                      --user-data file://user-data.txt > /dev/null 2>&1
+                      --user-data file://user-data.txt 2>&1)
+
+# Something went wrong, return error
+if [ $? -ne 0 ]; then
+  echo $instance
+fi
