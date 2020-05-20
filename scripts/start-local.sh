@@ -78,8 +78,8 @@ if [ -f "/etc/lsb-release" ] && [ ! -d "/opt/build_env" ]; then
     cd /opt/MEGAcmd && git submodule update --quiet --init --recursive && sh autogen.sh > /dev/null 2>&1 && ./configure --quiet && make > /dev/null 2>&1 && make install > /dev/null 2>&1
   fi
 
-  apt update --fix-missing
-  sudo apt install -f
+  apt update -y --fix-missing
+  sudo apt install -y -f
   new=1
 
 elif [ "$(uname)" == "Darwin" ]; then
