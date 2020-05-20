@@ -49,7 +49,7 @@ if [ -f "/etc/lsb-release" ] && [ ! -d "/opt/build_env" ]; then
   
   git clone https://github.com/akhilnarang/scripts.git /opt/build_env --depth=1 
   sudo chmod +x /opt/build_env/setup/android_build_env.sh
-  . /opt/build_env/setup/android_build_env.sh
+  . /opt/build_env/setup/android_build_env.sh > /dev/null 2>&1
 
   apt-get -y upgrade > /dev/null 2>&1 && \
   apt-get -y install make python3 bc bison git screen wget openjdk-8-jdk lsb-core sudo curl shellcheck \
@@ -60,7 +60,7 @@ if [ -f "/etc/lsb-release" ] && [ ! -d "/opt/build_env" ]; then
   squashfs-tools xsltproc schedtool rsync lzop liblz4-tool libesd0-dev lib32z1-dev lib32readline-dev libsdl1.2-dev > /dev/null 2>&1   
 
   # Install python packages
-  pip3 install python-telegram-bot --upgrade
+  pip3 install python-telegram-bot --upgrade > /dev/null 2>&1  
 
   # Download and build mega
   if [ ! -d "/opt/MEGAcmd/" ]; then
