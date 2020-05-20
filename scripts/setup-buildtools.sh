@@ -38,12 +38,20 @@ if [[ $EUID -ne 0 ]]; then
 fi
 
 # Get hostname for buildkite tag
-echo "Please enter a hostname for buildkite to use:"
-read user_host
+if [ -z "$BHOST" ]; then
+  echo "Please enter a hostname for buildkite to use:"
+  read user_host
+else
+  user_host="$BHOST"
+fi
 
 # Get hostname for buildkite tag
-echo "Please enter the buildkite token to use:"
-read user_token
+if [ -z "$BTOKEN" ]; then
+  echo "Please enter the buildkite token to use:"
+  read user_token
+else
+  user_token="$BTOKEN"
+fi
 
 # Install build tools
 echo "Pulling and installing build tools"
