@@ -6,6 +6,11 @@ if ! [ -x "$(command -v aws)" ]; then
   exit 1
 fi
 
+if ! [ -x "$(command -v aws configure get region)" ]; then
+  echo '$0 - Error: aws is not configured.' >&2
+  exit 1
+fi
+
 if ! [ -x "$(command -v jq)" ]; then
   echo '$0 - Error: jq is not installed.' >&2
   exit 1
