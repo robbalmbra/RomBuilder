@@ -1,4 +1,4 @@
-## Programs
+## Scripts
 
 [SendMessage.py](SendMessage.py) - Sends update message to telegram group
 
