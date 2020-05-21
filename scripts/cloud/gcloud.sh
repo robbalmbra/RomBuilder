@@ -41,7 +41,7 @@ fi
 VM_OS_PROJECT="ubuntu-os-cloud"
 VM_OS_FAMILY="ubuntu-1804-lts"
 VM_SIZE="250GB"
-VM_MACHINE="n1-standard-2"
+VM_MACHINE="c2-standard-8"
 VM_NAME="buildkite-$((1 + RANDOM % 10000000))"
 
 # Check projects - iterate over projects
