@@ -102,6 +102,7 @@ fi
 # Create build startup script
 cat >run.sh <<EOL
 echo "Running custom startup script"
+export CLOUD=1
 export BHOST="$VM_NAME"
 export BTOKEN="$TOKEN"
 wget https://raw.githubusercontent.com/robbalmbra/RomBuilder/master/scripts/setup-buildtools.sh -O /opt/setup-buildtools.sh > /dev/null 2>&1
