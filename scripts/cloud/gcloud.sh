@@ -92,8 +92,12 @@ if [ ! -z $4 ]; then
   fi
 fi
 
-# Get build file from github
-wget https://raw.githubusercontent.com/robbalmbra/RomBuilder/master/scripts/setup-buildtools.sh -O setup-buildtools.sh > /dev/null 2>&1
+# Create build startup script
+cat >run.sh <<EOL
+export BHOST="$PROJECT_NAME"
+export BTOKEN="$TOKEN"
+wget https://raw.githubusercontent.com/robbalmbra/RomBuilder/master/scripts/setup-buildtools.sh -O /opt/setup-buildtools.sh > /dev/null 2>&1
+EOT
 
 # Create instance
-gcloud compute instances create "$VM_NAME" --machine-type="$VM_MACHINE" --zone="$ZONE" --image-family="$VM_OS_FAMILY" --image-project="$VM_OS_PROJECT" --boot-disk-size="$VM_SIZE" --metadata-from-file startup-script=setup-buildtools.sh
+gcloud compute instances create "$VM_NAME" --machine-type="$VM_MACHINE" --zone="$ZONE" --image-family="$VM_OS_FAMILY" --image-project="$VM_OS_PROJECT" --boot-disk-size="$VM_SIZE" --metadata-from-file startup-script=run.sh
