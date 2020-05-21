@@ -6,8 +6,8 @@ import sys
 import datetime
 import os
 
-if len(sys.argv) < 11:
-  print(sys.argv[0] + " USAGE [ROM NAME] [ROM FOLDER ID] [VERSION] [FILESIZE] [CHANGELOG FILE] [NOTES FILE] [MEGA DECRYPT KEY] [TELEGRAM TOKEN] [TELEGRAM GROUP] [MD5 HASHES]")
+if len(sys.argv) < 12:
+  print(sys.argv[0] + " USAGE [ROM NAME] [ROM FOLDER ID] [VERSION] [FILESIZE] [CHANGELOG FILE] [NOTES FILE] [MEGA DECRYPT KEY] [TELEGRAM TOKEN] [TELEGRAM GROUP] [MD5 HASHES] [AUTHORS]")
   sys.exit(1)
 
 rom_name = sys.argv[1]
@@ -20,6 +20,7 @@ mega_decrypt_key = sys.argv[7]
 telegram_token = sys.argv[8]
 telegram_group = sys.argv[9]
 rom_md5 = sys.argv[10]
+authors = sys.argv[11]
 
 bot = telegram.Bot(token=telegram_token)
 
@@ -62,7 +63,7 @@ date = x.strftime("%Y %B %d %H:%M")
 structure = """ ROM: """ + rom_name + """
 
 📲 New builds available for Galaxy S9 (starltexx), Galaxy S9 Plus (star2ltexx) and Galaxy Note 9 (crownltexx)
-👤 by TinyRob & Blast
+👤 by """ + authors + """
 
 ℹ️ Version: """ + version + """
 📅 Build date: """ + date + """

@@ -103,6 +103,11 @@ sudo sed -i "s/xxx/$user_token/g" /etc/buildkite-agent/buildkite-agent.cfg  > /d
 
 echo "tags=\"target=$user_host\"" >> /etc/buildkite-agent/buildkite-agent.cfg
 
+# Override hostname, remove number after buildkite name
+if [ ! -z "$BHOST" ]; then
+ sudo sed -i "s/%hostname-%n/$user_host/g" /etc/buildkite-agent/buildkite-agent.cfg  > /dev/null 2>&1
+fi
+
 # Start buildkite
 sudo systemctl enable buildkite-agent > /dev/null 2>&1 && sudo systemctl start buildkite-agent > /dev/null 2>&1
 ret=$?
