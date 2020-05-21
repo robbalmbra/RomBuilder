@@ -47,7 +47,7 @@ BUNDLE="t2.2xlarge"
 REGION=$(aws configure get region)
 
 # Check bundle
-if [ -n "$3" ]; then
+if [ -n "$2" ]; then
   bundles=($(aws ec2 describe-instance-types | jq -r '.InstanceTypes[] | select(.ProcessorInfo.SupportedArchitectures[] | contains("x86_64")) .InstanceType'))
   if [[ ! " ${bundles[@]} " =~ " $3 " ]]; then
     echo "$0 - Error: BUNDLE '$3' is invalid"
@@ -67,7 +67,7 @@ if [ -n "$3" ]; then
     echo $bundles_string
     exit 4
   fi
-  BUNDLE=$3
+  BUNDLE=$2
 fi
 
 # Create security group to allow ssh from port 22
