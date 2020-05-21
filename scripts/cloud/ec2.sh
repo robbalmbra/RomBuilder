@@ -21,15 +21,23 @@ if [ ! -f ~/.ssh/id_rsa ]; then
   cat /dev/zero | ssh-keygen -q -N ""
 fi
 
-if [ $# -lt 2 ]; then
-  echo "USAGE: $0 [NAME] [TOKEN] [[BUNDLE]]"
+if [ $# -lt 1 ]; then
+  echo "USAGE: $0 [TOKEN] [[BUNDLE]]"
   exit 1
 fi
 
 # Input checks
 if [ -z $1 ]; then
-  echo "$0 - Error: NAME is invalid"
+  echo "$0 - Error: TOKEN is invalid"
   exit 2
+fi
+
+TOKEN=$1
+token_size=${#TOKEN}
+
+if [ $token_size -ne 50 ]; then
+  echo "Error - TOKEN is invalid"
+  exit 6
 fi
 
 # Set default bundle
@@ -83,8 +91,8 @@ cat > mapping.json <<EOL
 ]
 EOL
 
-BUILD_HOST="$1"
-BUILD_TOKEN="$2"
+BUILD_HOST="buildkite-$((1 + RANDOM % 10000000))"
+BUILD_TOKEN="$1"
 
 # Create startup file for instance
 cat > user-data.txt <<EOF
