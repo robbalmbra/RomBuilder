@@ -105,6 +105,7 @@ echo "tags=\"target=$user_host\"" >> /etc/buildkite-agent/buildkite-agent.cfg
 
 # Start buildkite
 sudo systemctl enable buildkite-agent > /dev/null 2>&1 && sudo systemctl start buildkite-agent > /dev/null 2>&1
+ret=$?
 
 # Removing temp files
 rm -rf /opt/MEGAcmd/ 2> /dev/null
@@ -113,3 +114,8 @@ rm -rf /opt/megasync.deb 2> /dev/null
 
 # ld for libs
 ldconfig > /dev/null 2>&1
+
+# Start in foreground if systemctl fails
+if [ $ret -ne 0 ]; then
+  buildkite-agent start
+fi
