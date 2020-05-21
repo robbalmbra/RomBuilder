@@ -102,7 +102,7 @@ chmod 700 /opt/setup-buildtools.sh
 EOL
 
 # Create instance
-gcloud compute instances create "$VM_NAME" --machine-type="$VM_MACHINE" --zone="$ZONE" --image-family="$VM_OS_FAMILY" --image-project="$VM_OS_PROJECT" --boot-disk-size="$VM_SIZE" --metadata-from-file startup-script=run.sh
+gcloud compute instances create "$VM_NAME" --boot-disk-type=pd-ssd --machine-type="$VM_MACHINE" --zone="$ZONE" --image-family="$VM_OS_FAMILY" --image-project="$VM_OS_PROJECT" --boot-disk-size="$VM_SIZE" --metadata-from-file startup-script=run.sh
 
 # Remove temp files
 rm -rf run.sh > /dev/null 2>&1
