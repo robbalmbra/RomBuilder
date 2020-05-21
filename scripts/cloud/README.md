@@ -7,3 +7,9 @@
 ## Usage
 
 USAGE: ./ec2.sh [NAME] [BUILDKITE TOKEN]
+
+USAGE: ./gcloud.sh [TOKEN] [PROJECT NAME] [ZONE] [[MACHINE TYPE]]
+
+## Notes
+
+Double braces indicate an optional parameter
