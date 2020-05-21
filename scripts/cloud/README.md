@@ -12,7 +12,6 @@ USAGE: ./ec2.sh [BUILDKITE TOKEN] [[BUNDLE]]
 
 Example: ./ec2.sh "token" t2.2xlarge
 
-&nbsp;
 
 **gcloud.sh**
 
