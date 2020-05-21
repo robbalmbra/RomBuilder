@@ -6,11 +6,6 @@ if ! [ -x "$(command -v gcloud)" ]; then
   exit 1
 fi
 
-# Check if user has a ssh private key to import to ec2
-if [ ! -f ~/.ssh/id_rsa ]; then
-  cat /dev/zero | ssh-keygen -q -N ""
-fi
-
 if [ $# -lt 3 ]; then
   echo "USAGE: $0 [TOKEN] [PROJECT NAME] [ZONE] [[MACHINE TYPE]]"
   exit 2
@@ -90,7 +85,7 @@ if [ ! -z $4 ]; then
     fi
   done
 
-  # Error if failed to find machine typee
+  # Error if failed to find machine type
   if [ $found -eq 0 ]; then
     echo "Error - Failed to find machine type '$VM_MACHINE'. Use 'gcloud compute machine-types list' to list valid configurations."
     exit 8
