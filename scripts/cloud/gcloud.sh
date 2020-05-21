@@ -30,10 +30,17 @@ TOKEN=$1
 PROJECT_NAME=$2
 ZONE=$3
 
+token_size=${#TOKEN}
+
+if [ $token_size -ne 50 ]; then
+  echo "Error - TOKEN is invalid"
+  exit 6
+fi
+
 # Change here to alter vm default attributes
 VM_OS_PROJECT="ubuntu-os-cloud"
 VM_OS_FAMILY="ubuntu-1804-lts"
-VM_SIZE="300GB"
+VM_SIZE="250GB"
 VM_MACHINE="n1-standard-2"
 VM_NAME="buildkite-$((1 + RANDOM % 10000000))"
 
@@ -52,7 +59,7 @@ done <<< "$PROJECTS"
 # Error if failed to find project
 if [ $found -eq 0 ]; then
   echo "Error - Failed to find project name '$PROJECT_NAME'."
-  exit 6
+  exit 7
 fi
 
 # Check zones
@@ -69,7 +76,7 @@ done
 # Error if failed to find zone
 if [ $found -eq 0 ]; then
   echo "Error - Failed to find zone '$ZONE'. Use 'gcloud compute zones list' to list valid configurations."
-  exit 7
+  exit 8
 fi
 
 # Check machine types if specified
@@ -88,7 +95,7 @@ if [ ! -z $4 ]; then
   # Error if failed to find machine type
   if [ $found -eq 0 ]; then
     echo "Error - Failed to find machine type '$VM_MACHINE'. Use 'gcloud compute machine-types list' to list valid configurations."
-    exit 8
+    exit 9
   fi
 fi
 
