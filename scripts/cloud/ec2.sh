@@ -93,7 +93,6 @@ hostname "$BUILD_HOST"
 apt install -y git curl wget
 wget https://raw.githubusercontent.com/robbalmbra/RomBuilder/master/scripts/setup-buildtools.sh -O /tmp/setup-buildtools.sh
 chmod 700 /tmp/setup-buildtools.sh
-export CLOUD=1
 export BHOST="$BUILD_HOST"
 export BTOKEN="$BUILD_TOKEN"
 /tmp/setup-buildtools.sh
