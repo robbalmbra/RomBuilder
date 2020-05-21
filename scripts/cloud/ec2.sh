@@ -110,4 +110,6 @@ instance=$(aws ec2 run-instances --count 1 \
 # Something went wrong, return error
 if [ $? -ne 0 ]; then
   echo $instance
+else
+  echo "Warning - Machine has been launched"
 fi
