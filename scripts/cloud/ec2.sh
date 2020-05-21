@@ -37,7 +37,7 @@ token_size=${#TOKEN}
 
 if [ $token_size -ne 50 ]; then
   echo "Error - TOKEN is invalid"
-  exit 6
+  exit 3
 fi
 
 # Set default bundle
