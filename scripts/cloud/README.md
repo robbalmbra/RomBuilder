@@ -10,7 +10,7 @@ USAGE: ./ec2.sh [BUILDKITE TOKEN]
 
 USAGE: ./gcloud.sh [TOKEN] [PROJECT NAME] [ZONE] [[MACHINE TYPE]]
 
-Example: ./gcloud.sh "token" eastern-crawler-277014 europe-west2-a
+Example: ./gcloud.sh "token" eastern-crawler-277014 europe-west2-a n1-standard-2
 
 ## Notes
 
