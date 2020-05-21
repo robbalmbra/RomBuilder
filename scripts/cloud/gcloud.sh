@@ -97,6 +97,8 @@ cat >run.sh <<EOL
 export BHOST="$PROJECT_NAME"
 export BTOKEN="$TOKEN"
 wget https://raw.githubusercontent.com/robbalmbra/RomBuilder/master/scripts/setup-buildtools.sh -O /opt/setup-buildtools.sh > /dev/null 2>&1
+chmod 700 /opt/setup-buildtools.sh
+/opt/setup-buildtools.sh
 EOT
 
 # Create instance
