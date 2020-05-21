@@ -49,8 +49,8 @@ REGION=$(aws configure get region)
 # Check bundle
 if [ -n "$2" ]; then
   bundles=($(aws ec2 describe-instance-types | jq -r '.InstanceTypes[] | select(.ProcessorInfo.SupportedArchitectures[] | contains("x86_64")) .InstanceType'))
-  if [[ ! " ${bundles[@]} " =~ " $3 " ]]; then
-    echo "$0 - Error: BUNDLE '$3' is invalid"
+  if [[ ! " ${bundles[@]} " =~ " $2 " ]]; then
+    echo "$0 - Error: BUNDLE '$2' is invalid"
     bundles_string="Available bundles: "
 
     i=0
