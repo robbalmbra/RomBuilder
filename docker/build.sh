@@ -239,7 +239,7 @@ if [ -f "$BUILD_DIR/android.sparseimage" ]; then
 fi
 
 # Change to build folder
-cd $BUILD_DIR
+cd "$BUILD_DIR"
 
 # Specify global vars
 git config --global user.name robbbalmbra
