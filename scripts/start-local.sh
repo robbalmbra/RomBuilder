@@ -114,12 +114,6 @@ elif [ "$(uname)" == "Darwin" ]; then
   new=1
 fi
 
-# Sets vars for run script
-export OUTPUT_DIR=$(pwd)/../files/;
-if [[ -z "${BUILDKITE}" ]]; then
-  mkdir "$OUTPUT_DIR" > /dev/null 2>&1
-fi
-
 if [[ -z "${BUILDKITE}" ]]; then
   export USE_CCACHE=1
   # Pass other parameter to build through env vars
@@ -153,7 +147,7 @@ do
   fi
 done
 
-# Quit if requirements not met
+# Quit if env requirements not met
 if [ "$quit" -ne 0 ]; then
   exit 1
 fi
