@@ -65,7 +65,6 @@ error_exit()
 {
   ret="$?"
   if [ "$ret" != "0" ]; then
-    echo "^^^ +++"
     if [[ $BUILD_LANG == "it" ]]; then
       echo "Errore - '$1' non riuscito ($ret) :exclamation:"
     else
@@ -227,7 +226,6 @@ if [ ! -f "/etc/lsb-release" ] && [ ! -f "$BUILD_DIR/android.sparseimage" ]; the
 
   # Check for errors
   if [ $? -ne 0 ]; then
-    echo "^^^ +++"
     echo "Error, something went wrong in creating local image :exclamation:"
     exit 1
   fi
@@ -265,7 +263,6 @@ quit=0
 for variable in "${variables[@]}"
 do
   if [[ -z ${!variable+x} ]]; then
-    echo "^^^ +++"
     if [[ $BUILD_LANG == "it" ]]; then
       echo "$0 - Errore, $variable non è impostato :exclamation:";
     else
@@ -632,7 +629,6 @@ if [ "$SKIP_BUILD" -eq 0 ]; then
     fi
 
     if [ "$ret" != "0" ]; then
-      echo "^^^ +++"
 
       if [[ $BUILD_LANG == "it" ]]; then
         echo "Errore - Creazione di $DEVICE non riuscita ($ret) :bk-status-failed:"
