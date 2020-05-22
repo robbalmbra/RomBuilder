@@ -13,6 +13,10 @@ if [ -z "$SKIP_API_DOCS" ]; then
   export SKIP_API_DOCS=0
 fi
 
+if [ -z "$UPLOAD_FOLDER" ]; then
+  export UPLOAD_FOLDER="ROMS"
+fi
+
 if [ -z "$DEBUG" ]; then
   DEBUG=false
 else
@@ -230,7 +234,7 @@ if [ ! -z "$JUST_UPLOAD" ]; then
       echo "Uploading $(basename $ROM)"
     fi
 
-    mega-put -c $ROM ROMS/$UPLOAD_NAME/$DATE/
+    mega-put -c $ROM $UPLOAD_FOLDER/$UPLOAD_NAME/$DATE/
     error_exit "mega put"
     sleep 15
   done
@@ -737,7 +741,7 @@ if [ "$TEST_BUILD" -eq 0 ]; then
     file_size=$(ls -lh "$ROM" | awk '{print $5}')
 
     # Upload
-    mega-put -c $ROM ROMS/$UPLOAD_NAME/$DATE/
+    mega-put -c $ROM $UPLOAD_FOLDER/$UPLOAD_NAME/$DATE/
     error_exit "mega put"
 
     # Create md5 of file
