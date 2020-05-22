@@ -181,6 +181,33 @@ if [ ! -z "$JUST_PROCESS_OTA" ]; then
   exit 0
 fi
 
+# Set ccache and directory
+export USE_CCACHE=1
+
+if [ ! -z "$CUSTOM_CCACHE_DIR" ]; then
+  export CCACHE_DIR="$CUSTOM_CCACHE_DIR"
+else
+  export CCACHE_DIR="/var/lib/buildkite-agent/ccache"
+fi
+
+log_setting "CCACHE" "$CCACHE_DIR"
+
+# Create directory
+if [[ ! -d "$CCACHE_DIR" ]]; then
+  mkdir "$CCACHE_DIR" > /dev/null 2>&1
+fi
+
+# Enable ccache with 50 gigabytes if not overrided
+if [ -z "$CCACHE_SIZE" ]; then
+  ccache -M "50G" > /dev/null 2>&1
+  error_exit "ccache"
+  log_setting "CCACHE_SIZE" "50G"
+else
+  ccache -M "${CCACHE_SIZE}G" > /dev/null 2>&1
+  error_exit "ccache"
+  log_setting "CCACHE_SIZE" "${CCACHE_SIZE}G"
+fi
+
 # Jut upload mode
 if [ ! -z "$JUST_UPLOAD" ]; then
   # Upload firmware to mega
@@ -487,39 +514,11 @@ if [ "$SKIP_BUILD" -eq 0 ]; then
 
   fi
 
-
   # Build
   if [[ $BUILD_LANG == "it" ]]; then
     echo "Impostazione dell'ambiente"
   else
     echo "Environment setup"
-  fi
-
-  # Set ccache and directory
-  export USE_CCACHE=1
-
-  if [ ! -z "$CUSTOM_CCACHE_DIR" ]; then
-    export CCACHE_DIR="$CUSTOM_CCACHE_DIR"
-  else
-    export CCACHE_DIR="/var/lib/buildkite-agent/ccache"
-  fi
-
-  log_setting "CCACHE" "$CCACHE_DIR"
-
-  # Create directory
-  if [[ ! -d "$CCACHE_DIR" ]]; then
-    mkdir "$CCACHE_DIR" > /dev/null 2>&1
-  fi
-
-  # Enable ccache with 50 gigabytes if not overrided
-  if [ -z "$CCACHE_SIZE" ]; then
-    ccache -M "50G" > /dev/null 2>&1
-    error_exit "ccache"
-    log_setting "CCACHE_SIZE" "50G"
-  else
-    ccache -M "${CCACHE_SIZE}G" > /dev/null 2>&1
-    error_exit "ccache"
-    log_setting "CCACHE_SIZE" "${CCACHE_SIZE}G"
   fi
 
   # Run env script
