@@ -121,3 +121,7 @@ if [ $? -ne 0 ]; then
 else
   echo "Warning - Machine has been launched"
 fi
+
+# Remove temp files
+rm -rf mapping.json > /dev/null 2>&1
+rm -rf user-data.txt > /dev/null 2>&1
