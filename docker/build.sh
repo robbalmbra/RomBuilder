@@ -126,7 +126,7 @@ if [[ ! -z "${BUILDKITE}" ]]; then
   else
     log_setting "DEBUG" "$DEBUG"
   fi
-  
+
   # Copy modifications and logger to build dir if exists
   if [ ! -z "$USER_MODS" ]; then
     if [[ $BUILD_LANG == "it" ]]; then
@@ -146,7 +146,7 @@ if [[ ! -z "${BUILDKITE}" ]]; then
 
   # Copy magisk patcher to build directory
   cp "$ROM_PATCHER" "$BUILD_DIR/scripts/patcher.sh" > /dev/null 2>&1
-  chmod +x "$BUILD_DIR/scripts/patcher.sh" 
+  chmod +x "$BUILD_DIR/scripts/patcher.sh"
 
   # Set logging rate if hasnt been defined
   if [[ -z "${LOGGING_RATE}" ]]; then
@@ -368,7 +368,7 @@ if [ "$SKIP_BUILD" -eq 0 ]; then
     echo "Reverting repo to date '$DATE_REVERT'"
     repo forall -c 'git checkout `git rev-list -n1 --before="$DATE_REVERT" HEAD`' > /dev/null 2>&1
   fi
-  
+
   # Run extra commands after sync if any
   if [[ ! -z "$EXTRA_COMMANDS" ]]; then
     eval $EXTRA_COMMANDS > /dev/null
@@ -528,12 +528,12 @@ if [ "$SKIP_BUILD" -eq 0 ]; then
   # Run env script
   cd "$BUILD_DIR/rom/"
   . build/envsetup.sh > /dev/null 2>&1
-  
+
   # Check for any build parameters passed to script
   BUILD_PARAMETERS="bacon"
   LUNCH_DEBUG="userdebug"
 
-  # Check for mka parameters, can be empty 
+  # Check for mka parameters, can be empty
   if [ -n "${MKA_PARAMETERS+1}" ]; then
     BUILD_PARAMETERS="$MKA_PARAMETERS"
   fi
@@ -554,7 +554,7 @@ if [ "$SKIP_BUILD" -eq 0 ]; then
       echo "Cleaning build"
       make installclean > /dev/null 2>&1
     fi
-    
+
     if [[ $BUILD_LANG == "it" ]]; then
       echo "--- Creazione di $DEVICE ($BUILD_NAME) :building_construction:"
     else
@@ -565,6 +565,7 @@ if [ "$SKIP_BUILD" -eq 0 ]; then
     build_id="${BUILD_NAME}_$DEVICE"
     build_id+="-${LUNCH_DEBUG}"
     if [[ ! -z "${CUSTOM_LUNCH_COMMAND}" ]]; then
+      echo "${CUSTOM_LUNCH_COMMAND} $build_id"
       eval "${CUSTOM_LUNCH_COMMAND}" "$build_id" > /dev/null 2>&1
     else
       echo "lunch $build_id"
@@ -586,7 +587,7 @@ if [ "$SKIP_BUILD" -eq 0 ]; then
     if [ "$runonce" -eq 0 ]; then
 
       if [[ $SKIP_API_DOCS == 0 ]]; then
-      
+
         if [[ $BUILD_LANG == "it" ]]; then
           echo "Generazione di documenti"
         else
@@ -612,7 +613,8 @@ if [ "$SKIP_BUILD" -eq 0 ]; then
         custom_text="$CUSTOM_MKA_COMMAND"
         custom_text=${custom_text/\{device\}/$DEVICE}
         custom_text=${custom_text/\{user_debug\}/$LUNCH_DEBUG}
-        eval "$custom_text" > /dev/null 2>&1
+
+        eval "$custom_text" 2>&1 | tee "$BUILD_DIR/logs/$DEVICE/make_${DEVICE}_android10.txt" > /dev/null 2>&1
       else
         mka $BUILD_PARAMETERS -j$MAX_CPU 2>&1 | tee "$BUILD_DIR/logs/$DEVICE/make_${DEVICE}_android10.txt" > /dev/null 2>&1
       fi
