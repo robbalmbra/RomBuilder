@@ -792,7 +792,7 @@ if [ "$TEST_BUILD" -eq 0 ]; then
       else
         echo "Sending message to broadcast group"
       fi
-      python3 "$BUILD_DIR/scripts/SendMessage.py" "$UPLOAD_NAME" "$MEGA_FOLDER_ID" "ten" "$file_size" changelog.txt notes.txt "$MEGA_DECRYPT_KEY" "$TELEGRAM_TOKEN" "$TELEGRAM_GROUP" "$BUILD_DIR/.hashes" "$AUTHORS"
+      python3 "$BUILD_DIR/scripts/SendMessage.py" "$UPLOAD_NAME" "$MEGA_FOLDER_ID" "ten" "$file_size" changelog.txt notes.txt "$MEGA_DECRYPT_KEY" "$TELEGRAM_TOKEN" "$TELEGRAM_GROUP" "$BUILD_DIR/.hashes" "$TELEGRAM_AUTHORS"
     fi
   fi
 fi
