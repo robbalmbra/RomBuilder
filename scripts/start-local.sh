@@ -84,34 +84,39 @@ if [ -f "/etc/lsb-release" ] && [ ! -d "/opt/build_env" ]; then
 
 elif [ "$(uname)" == "Darwin" ]; then
   # MacOS install
-  # Check if brew is installed
-  if ! [ -x "$(command -v brew)" ]; then
-    if [[ $shell_lang == "it" ]]; then
-      echo 'Errore: Brew non è installato'
-    else
-      echo 'Error - Brew is not installed'
+  # Check if software exists on system
+  if [ ! -f "$HOME/.complete" ]; then
+
+    # Check if brew is installed
+    if ! [ -x "$(command -v brew)" ]; then
+      if [[ $shell_lang == "it" ]]; then
+        echo 'Errore: Brew non è installato'
+      else
+        echo 'Error - Brew is not installed'
+      fi
+      exit 1
     fi
-    exit 1
+
+    # Install gnu sed for compatibility issues
+    if [[ $shell_lang == "it" ]]; then
+      echo "--- Installazione degli strumenti richiesti"
+      echo "Installazione di strumenti specifici di gnu"
+    else
+      echo "--- Installing required tools"
+      echo "Installing gnu specific tools"
+    fi
+
+    brew install gnu-sed > /dev/null 2>&1
+    brew install coreutils > /dev/null 2>&1
+    brew install ccache > /dev/null 2>&1
+    wget https://storage.googleapis.com/git-repo-downloads/repo -O /usr/local/bin/repo > /dev/null 2>&1
+    chmod +x /usr/local/bin/repo
+
+    export PATH="/usr/local/opt/python@3.8/bin:$PATH"
+    export LDFLAGS="-L/usr/local/opt/python@3.8/lib"
+    new=1
+    touch $HOME/.complete
   fi
-
-  # Install gnu sed for compatibility issues
-  if [[ $shell_lang == "it" ]]; then
-    echo "--- Installazione degli strumenti richiesti"
-    echo "Installazione di strumenti specifici di gnu"
-  else
-    echo "--- Installing required tools"
-    echo "Installing gnu specific tools"
-  fi
-
-  brew install gnu-sed > /dev/null 2>&1
-  brew install coreutils > /dev/null 2>&1
-  brew install ccache
-  curl https://storage.googleapis.com/git-repo-downloads/repo > /usr/local/bin/repo 2> /dev/null
-  chmod +x /usr/local/bin/repo
-
-  export PATH="/usr/local/opt/python@3.8/bin:$PATH"
-  export LDFLAGS="-L/usr/local/opt/python@3.8/lib"
-  new=1
 fi
 
 if [[ -z "${BUILDKITE}" ]]; then
