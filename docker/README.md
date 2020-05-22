@@ -48,7 +48,7 @@ Options can be defined within environment variables or within the environment se
 * TELEGRAM_AUTHORS - Specifies the authors for the telegram automatic group update
 * DEBUG=1 - Dont flush any output to /dev/null. Default ignores output.
 * EXTRA_COMMANDS - Run user commands after sync has finished. Default is ignored.
-* UPLOAD_FOLDER - Upload path relative from mega account root, e.g. `android_roms/testing`. Default is the folder `ROMS`.
+* UPLOAD_FOLDER - Upload path relative from mega account root, e.g. `android_roms/testing`,`phone_roms` . Default is the folder `ROMS`.
 
 **Other**
 
