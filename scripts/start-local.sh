@@ -116,6 +116,7 @@ elif [ "$(uname)" == "Darwin" ]; then
     export LDFLAGS="-L/usr/local/opt/python@3.8/lib"
     new=1
     touch $HOME/.complete
+    
   fi
 fi
 
