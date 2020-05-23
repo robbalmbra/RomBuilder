@@ -26,10 +26,10 @@ if ($project_name -eq ""){
 }
 
 # Check if token is exactly 50 characters
-#if ($token.length -ne 50){
-#  Write-Host "Error: BUILDKITE TOKEN is invalid"
-#  Exit 4
-#}
+if ($token.length -ne 50){
+  Write-Host "Error: BUILDKITE TOKEN is invalid"
+  Exit 4
+}
 
 # Set defaults for instance
 $VM_OS_PROJECT = "ubuntu-os-cloud"
