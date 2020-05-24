@@ -117,7 +117,7 @@ export BTOKEN="$token"
 $MultilineComment2 | Out-File -Encoding ASCII run.sh
 
 # Create instance
-$instance = (aws ec2 run-instances --count 1 --security-groups "buildkite" --key-name "buildkite-key" --image-id "ami-0701e7be9b2a77600" --block-device-mappings 'DeviceName=/dev/sda1,Ebs={VolumeSize=300,VolumeType=gp2}' --instance-type "$bundle" --user-data file://run.sh 2>&1) | Out-String
+$instance = (aws ec2 run-instances --count 1 --instance-initiated-shutdown-behavior terminate --security-groups "buildkite" --key-name "buildkite-key" --image-id "ami-0701e7be9b2a77600" --block-device-mappings 'DeviceName=/dev/sda1,Ebs={VolumeSize=300,VolumeType=gp2}' --instance-type "$bundle" --user-data file://run.sh 2>&1) | Out-String
 
 if($?) {
   Write-Host "Warning - Machine has been launched"
