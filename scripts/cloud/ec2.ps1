@@ -114,7 +114,6 @@ chmod 700 /tmp/terminate.sh
 export BHOST="$VM_NAME"
 export BTOKEN="$token"
 /tmp/setup-buildtools.sh
-sudo chmod 4755 /bin/systemctl
 chown root:buildkite-agent /bin/systemctl
 chown buildkite-agent:buildkite-agent /tmp/terminate.sh
 "@
