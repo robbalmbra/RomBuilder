@@ -86,7 +86,7 @@ Notes:
 
 """ + notes_txt + """- We also recommend using the WhiteWolf Kernel, which works perfectly on our rom
 
-#crownltexx #starltexx #star2ltexx #KeepEvolving """
+#crownltexx #starltexx #star2ltexx """
 
 # Send message to group
 bot.send_message(chat_id=telegram_group, text=structure)
