@@ -110,12 +110,12 @@ $MultilineComment = @"
 echo "Running custom startup script"
 export BHOST="$VM_NAME"
 export BTOKEN="$token"
-echo -e "#!/bin/bash\n/snap/bin/gcloud compute instances delete $VM_NAME --quiet --zone $zone" > /opt/terminate.sh
-wget https://raw.githubusercontent.com/robbalmbra/RomBuilder/master/scripts/setup-buildtools.sh -O /opt/setup-buildtools.sh > /dev/null 2>&1
-chmod 700 /opt/setup-buildtools.sh
-chmod 700 /opt/terminate.sh
-/bin/bash /opt/setup-buildtools.sh
-chown buildkite-agent:buildkite-agent /opt/terminate.sh
+echo -e "#!/bin/bash\n/snap/bin/gcloud compute instances delete $VM_NAME --quiet --zone $zone" > /tmp/terminate.sh
+wget https://raw.githubusercontent.com/robbalmbra/RomBuilder/master/scripts/setup-buildtools.sh -O /tmp/setup-buildtools.sh > /dev/null 2>&1
+chmod 700 /tmp/setup-buildtools.sh
+chmod 700 /tmp/terminate.sh
+/bin/bash /tmp/setup-buildtools.sh
+chown buildkite-agent:buildkite-agent /tmp/terminate.sh
 "@
 
 # Save to temp file
