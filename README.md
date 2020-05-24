@@ -8,7 +8,7 @@ To use this script to build roms, include the repo in a buildkite build instance
 
 [start-local.sh](scripts/start-local.sh) - Start build within the buildkite environment using a specified config
 
-[scripts/cloud/](scripts/cloud/) - Deploy buildkite and building tools to aws and gcloud
+[scripts/cloud](scripts/cloud) - Deploy buildkite and building tools to aws and gcloud
 
 ## Notes
 
