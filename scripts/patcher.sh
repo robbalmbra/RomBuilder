@@ -32,7 +32,6 @@ if [ ! -d $rom_folder_out ]; then
 fi
 
 file_name=$(basename $rom_file_in)
-echo "Adding magisk to $file_name"
 WORK_DIR=`mktemp -d`
 
 # Extract zip to folder
@@ -42,6 +41,9 @@ unzip $rom_file_in -d $WORK_DIR > /dev/null 2>&1
 update_script="$WORK_DIR/META-INF/com/google/android/updater-script"
 
 if [ $magisk_in_build -eq 1 ]; then
+
+  echo "Adding magisk to $file_name"
+
 cat <<EOT >> $update_script
 ui_print("-- Installing: Magisk");
 package_extract_dir("META-INF/ADD-ONS/Magisk", "/tmp/Magisk");
@@ -50,13 +52,14 @@ run_program("/sbin/busybox", "sh", "/tmp/Magisk/META-INF/com/google/android/upda
 delete_recursive("/tmp/Magisk");
 EOT
 
-# Make magisk addon directory
-magisk_dir=$WORK_DIR/META-INF/ADD-ONS/Magisk
-mkdir -p "$magisk_dir"
+  # Make magisk addon directory
+  magisk_dir=$WORK_DIR/META-INF/ADD-ONS/Magisk
+  mkdir -p "$magisk_dir"
 
-# Get latest magisk version
-magisk_url="https://github.com/topjohnwu/Magisk/releases/download/v$magisk_version/Magisk-v$magisk_version.zip"
-wget $magisk_url -O $magisk_dir/Magisk.zip > /dev/null 2>&1
+  # Get latest magisk version
+  magisk_url="https://github.com/topjohnwu/Magisk/releases/download/v$magisk_version/Magisk-v$magisk_version.zip"
+  wget $magisk_url -O $magisk_dir/Magisk.zip > /dev/null 2>&1
+
 fi
 
 if [ $LIBEXYNOS_CAMERA -eq 1 ]; then
