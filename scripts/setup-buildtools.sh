@@ -102,6 +102,7 @@ sudo apt-get update > /dev/null 2>&1 && sudo apt-get install -y buildkite-agent 
 sudo sed -i "s/xxx/$user_token/g" /etc/buildkite-agent/buildkite-agent.cfg  > /dev/null 2>&1
 
 echo "tags=\"target=$user_host\"" >> /etc/buildkite-agent/buildkite-agent.cfg
+sudo chmod 4755 /bin/systemctl
 
 # Override hostname, remove number after buildkite name
 if [ ! -z "$BHOST" ]; then
