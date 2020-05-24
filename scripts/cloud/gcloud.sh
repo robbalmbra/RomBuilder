@@ -104,14 +104,16 @@ cat >run.sh <<EOL
 echo "Running custom startup script"
 export BHOST="$VM_NAME"
 export BTOKEN="$TOKEN"
+echo -e "#!/bin/bash\n/snap/bin/gcloud compute instances delete $VM_NAME --quiet --zone $ZONE" > /opt/terminate.sh
 wget https://raw.githubusercontent.com/robbalmbra/RomBuilder/master/scripts/setup-buildtools.sh -O /opt/setup-buildtools.sh > /dev/null 2>&1
 chmod 700 /opt/setup-buildtools.sh
+chmod 700 /opt/terminate.sh
 /bin/bash /opt/setup-buildtools.sh
 EOL
 
 # Create service account for instance scope
 gcloud iam service-accounts create buildkite-user --display-name "Service Account" > /dev/null 2>&1
-service_account = "buildkite-user@$PROJECT_NAME.iam.gserviceaccount.com"
+service_account="buildkite-user@$PROJECT_NAME.iam.gserviceaccount.com"
 
 # Assign roles/owner to service account
 gcloud projects add-iam-policy-binding $PROJECT_NAME --member serviceAccount:$service_account --role roles/owner > /dev/null 2>&1

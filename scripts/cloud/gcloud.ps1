@@ -110,8 +110,10 @@ $MultilineComment = @"
 echo "Running custom startup script"
 export BHOST="$VM_NAME"
 export BTOKEN="$token"
+echo -e "#!/bin/bash\n/snap/bin/gcloud compute instances delete $VM_NAME --quiet --zone $zone" > /opt/terminate.sh
 wget https://raw.githubusercontent.com/robbalmbra/RomBuilder/master/scripts/setup-buildtools.sh -O /opt/setup-buildtools.sh > /dev/null 2>&1
 chmod 700 /opt/setup-buildtools.sh
+chmod 700 /opt/terminate.sh
 /bin/bash /opt/setup-buildtools.sh
 "@
 
