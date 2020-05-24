@@ -118,8 +118,15 @@ chmod 700 /opt/setup-buildtools.sh
 # Save to temp file
 $MultilineComment | Out-File -Encoding "UTF8" run.sh
 
+# Create service account for instance scope
+gcloud iam service-accounts create buildkite-user --display-name "Service Account" *> $null
+$service_account = "buildkite-user@$project_name.iam.gserviceaccount.com"
+
+# Assign roles/owner to service account
+gcloud projects add-iam-policy-binding $project_name --member serviceAccount:$service_account --role roles/owner *> $null
+
 # Create instance
-$cmd = "gcloud compute instances create $VM_NAME --boot-disk-type=pd-ssd --machine-type=$machine --zone=$zone --image-family=$VM_OS_FAMILY --image-project=$VM_OS_PROJECT --boot-disk-size=$VM_SIZE --metadata-from-file startup-script=run.sh"
+$cmd = "gcloud compute instances create $VM_NAME  --service-account $service_account --scopes https://www.googleapis.com/auth/compute,https://www.googleapis.com/auth/cloud-platform --boot-disk-type=pd-ssd --machine-type=$machine --zone=$zone --image-family=$VM_OS_FAMILY --image-project=$VM_OS_PROJECT --boot-disk-size=$VM_SIZE --metadata-from-file startup-script=run.sh"
 Invoke-Expression $cmd
 
 # Remove temp files
