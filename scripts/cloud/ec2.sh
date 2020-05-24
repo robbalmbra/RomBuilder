@@ -110,6 +110,7 @@ EOF
 instance=$(aws ec2 run-instances --count 1 \
                       --security-groups "buildkite" \
                       --key-name "buildkite-key" \
+                      --instance-initiated-shutdown-behavior terminate \
                       --image-id "ami-0701e7be9b2a77600" \
                       --block-device-mappings file://mapping.json \
                       --instance-type "$BUNDLE" \
