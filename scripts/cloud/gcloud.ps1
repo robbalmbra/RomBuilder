@@ -1,6 +1,7 @@
 # Check arguments
 if ($args.count -lt 3) {
   write-host "USAGE: .\gcloud.ps1 [BUILDKITE TOKEN] [PROJECT NAME] [ZONE] [[MACHINE TYPE]]"
+  Exit 1
 }
 
 $token=$args[0]
@@ -11,24 +12,24 @@ $zone=$args[2]
 if ((Get-Command "gcloud" -ErrorAction SilentlyContinue) -eq $null)
 {
    Write-Host "Error: gcloud is not installed. Install from https://cloud.google.com/sdk/docs"
-   Exit 1
+   Exit 2
 }
 
 # Check if variables are not empty
 if ($token -eq ""){
   Write-Host "Error: BUILDKITE TOKEN is invalid"
-  Exit 2
+  Exit 3
 }
 
 if ($project_name -eq ""){
   Write-Host "Error: PROJECT NAME is invalid"
-  Exit 3
+  Exit 4
 }
 
 # Check if token is exactly 50 characters
 if ($token.length -ne 50){
   Write-Host "Error: BUILDKITE TOKEN is invalid"
-  Exit 4
+  Exit 5
 }
 
 # Set defaults for instance
@@ -57,7 +58,7 @@ for ($i = 0; $i -lt $PROJECTS.length; $i++) {
 # Return errors if not found
 if ($found -eq 0){
   Write-Host "Error - Failed to find project name '$project_name'."
-  Exit 5
+  Exit 6
 }
 
 # Check if zone exists
@@ -77,7 +78,7 @@ for ($i = 0; $i -lt $ZONES.length; $i++) {
 # Return errors if not found
 if ($found -eq 0){
   Write-Host "Error - Failed to find zone '$zone'. Use 'gcloud compute zones list' to list valid configurations."
-  Exit 6
+  Exit 7
 }
 
 # Check machine type if specified
@@ -101,7 +102,7 @@ if ($args.count -ge 4){
 # Return errors if not found
 if ($found -eq 0){
   Write-Host "Error - Failed to find machine type '$machine'. Use 'gcloud compute machine-types list' to list valid configurations."
-  Exit 7
+  Exit 8
 }
 
 # Create custom startup script
