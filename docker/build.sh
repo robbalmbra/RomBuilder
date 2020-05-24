@@ -797,7 +797,7 @@ if [ "$TEST_BUILD" -eq 0 ]; then
 fi
 
 # Auto terminates if termination file exists, only currently supported in aws and gcloud
-if [ ! -z "$AUTO_TERMINATE" ]; then
+if [[ "$rom_count" -gt 0 ]]; then
   if [ -f "/tmp/terminate.sh" ]; then
     /bin/bash /tmp/terminate.sh
   fi
