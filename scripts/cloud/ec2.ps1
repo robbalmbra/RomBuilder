@@ -107,14 +107,14 @@ $MultilineComment2 = @"
 echo "Running custom startup script"
 hostname "$VM_NAME"
 apt install -y git curl wget
-echo -e "#!/bin/bash\nsudo halt" > /tmp/terminate.sh
+echo -e "#!/bin/bash\nsystemctl halt -i" > /tmp/terminate.sh
 wget https://raw.githubusercontent.com/robbalmbra/RomBuilder/master/scripts/setup-buildtools.sh -O /tmp/setup-buildtools.sh
 chmod 700 /tmp/setup-buildtools.sh
 chmod 700 /tmp/terminate.sh
 export BHOST="$VM_NAME"
 export BTOKEN="$token"
 /tmp/setup-buildtools.sh
-chmod 4755 /bin/systemctl
+sudo chmod 4755 /bin/systemctl
 chown root:buildkite-agent /bin/systemctl
 chown buildkite-agent:buildkite-agent /tmp/terminate.sh
 "@
