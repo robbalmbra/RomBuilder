@@ -109,6 +109,7 @@ wget https://raw.githubusercontent.com/robbalmbra/RomBuilder/master/scripts/setu
 chmod 700 /opt/setup-buildtools.sh
 chmod 700 /opt/terminate.sh
 /bin/bash /opt/setup-buildtools.sh
+chown buildkite-agent:buildkite-agent /opt/terminate.sh
 EOL
 
 # Create service account for instance scope
