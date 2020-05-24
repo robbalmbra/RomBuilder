@@ -49,7 +49,7 @@ Options can be defined within environment variables or within the environment se
 * DEBUG=1 - Dont flush any output to /dev/null. Default ignores output.
 * EXTRA_COMMANDS - Run user commands after sync has finished. Default is ignored.
 * UPLOAD_FOLDER - Upload path relative from mega account root, e.g. `android_roms/testing`, `phone_roms`. Default is the folder `ROMS`.
-* AUTO_TERMINATE - Halts the instance once builds have successfully finished, supported within aws and gcloud. Default is ignored.
+* AUTO_TERMINATE=1 - Halts the instance once builds have successfully finished, supported within aws and gcloud. Default is ignored.
 
 **Other**
 
