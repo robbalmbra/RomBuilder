@@ -76,7 +76,7 @@ aws ec2 authorize-security-group-ingress --group-name buildkite --protocol tcp -
 
 # Import private key to ec2
 aws ec2 delete-key-pair --key-name "buildkite-key" > /dev/null 2>&1
-aws ec2 import-key-pair --key-name "buildkite-key" --public-key-material file://~/.ssh/id_rsa.pub > /dev/null 2>&1
+aws ec2 import-key-pair --key-name "buildkite-key" --public-key-material fileb://~/.ssh/id_rsa.pub > /dev/null 2>&1
 
 # Create root parititon with 300GB
 cat > mapping.json <<EOL

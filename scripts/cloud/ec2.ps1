@@ -95,7 +95,7 @@ aws ec2 authorize-security-group-ingress --group-name buildkite --protocol tcp -
 
 # Import public key to ec2
 aws ec2 delete-key-pair --key-name "buildkite-key" *> $null
-aws ec2 import-key-pair --key-name "buildkite-key" --public-key-material file://$ssh_key *> $null
+aws ec2 import-key-pair --key-name "buildkite-key" --public-key-material fileb://$ssh_key *> $null
 
 # Create random instance name
 $VM_ID = Get-Random -Maximum 100000
