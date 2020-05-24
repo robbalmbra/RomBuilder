@@ -109,8 +109,15 @@ chmod 700 /opt/setup-buildtools.sh
 /bin/bash /opt/setup-buildtools.sh
 EOL
 
+# Create service account for instance scope
+gcloud iam service-accounts create buildkite-user --display-name "Service Account" > /dev/null 2>&1
+service_account = "buildkite-user@$PROJECT_NAME.iam.gserviceaccount.com"
+
+# Assign roles/owner to service account
+gcloud projects add-iam-policy-binding $PROJECT_NAME --member serviceAccount:$service_account --role roles/owner > /dev/null 2>&1
+
 # Create instance
-gcloud compute instances create "$VM_NAME" --boot-disk-type=pd-ssd --machine-type="$VM_MACHINE" --zone="$ZONE" --image-family="$VM_OS_FAMILY" --image-project="$VM_OS_PROJECT" --boot-disk-size="$VM_SIZE" --metadata-from-file startup-script=run.sh
+gcloud compute instances create "$VM_NAME" --service-account $service_account --scopes https://www.googleapis.com/auth/compute,https://www.googleapis.com/auth/cloud-platform --boot-disk-type=pd-ssd --machine-type="$VM_MACHINE" --zone="$ZONE" --image-family="$VM_OS_FAMILY" --image-project="$VM_OS_PROJECT" --boot-disk-size="$VM_SIZE" --metadata-from-file startup-script=run.sh
 
 # Remove temp files
 rm -rf run.sh > /dev/null 2>&1
