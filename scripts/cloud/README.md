@@ -12,8 +12,13 @@ USAGE: ./ec2.sh [BUILDKITE TOKEN] [[BUNDLE]]
 
 Example: ./ec2.sh "token" t2.2xlarge
 
-&nbsp;
+**ec2.ps1**
 
+USAGE: .\ec2.ps1 [BUILDKITE TOKEN] [SSH KEY] [[BUNDLE]]
+
+Example: .\ec2.ps1 "token" "pubkey" "t2.2xlarge"
+
+&nbsp;
 
 ## Google Cloud
 
