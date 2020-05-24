@@ -1,6 +1,6 @@
 # Check arguments
 if ($args.count -lt 2) {
-  write-host "USAGE: .\gcloud.ps1 [BUILDKITE TOKEN] [SSH KEY] [[BUNDLE]]"
+  write-host "USAGE: .\ec2.ps1 [BUILDKITE TOKEN] [SSH KEY] [[BUNDLE]]"
   Exit 1
 }
 
