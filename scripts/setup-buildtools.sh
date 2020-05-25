@@ -62,7 +62,7 @@ git config --global user.email "robbalmbra@gmail.com" > /dev/null 2>&1
 git clone https://github.com/akhilnarang/scripts.git /opt/build_env --depth=1 > /dev/null 2>&1
 sudo chmod +x /opt/build_env/setup/android_build_env.sh > /dev/null 2>&1
 . /opt/build_env/setup/android_build_env.sh > /dev/null 2>&1
-error_exit "environment script" 
+error_exit "environment script"
 
 echo "Installing apt packages"
 apt-get -y upgrade > /dev/null 2>&1 && \
@@ -102,7 +102,6 @@ sudo apt-get update > /dev/null 2>&1 && sudo apt-get install -y buildkite-agent 
 sudo sed -i "s/xxx/$user_token/g" /etc/buildkite-agent/buildkite-agent.cfg  > /dev/null 2>&1
 
 echo "tags=\"target=$user_host\"" >> /etc/buildkite-agent/buildkite-agent.cfg
-sudo chmod 4755 /bin/systemctl
 
 # Override hostname, remove number after buildkite name
 if [ ! -z "$BHOST" ]; then
