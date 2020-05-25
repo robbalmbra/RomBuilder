@@ -125,7 +125,24 @@ instance=$(aws ec2 run-instances --count 1 \
 if [ $? -ne 0 ]; then
   echo $instance
 else
+
+  # Get instance id from json output
+  instance_id=$(echo $instance | jq -r '.Instances[0].InstanceId')
   echo "Warning - Machine has been launched"
+
+  # Wait for instance to turn on, copy over private key for any private repos
+  public_ip=""
+  while true
+  do
+    public_ip=$(aws ec2 describe-instances --instance-id $instance_id --query 'Reservations[*].Instances[*].PublicIpAddress' --output text)
+    if [[ "$public_ip" != "" ]]; then
+      scp -o StrictHostKeyChecking=no ~/.ssh/id_rsa ubuntu@$public_ip:/tmp/ > /dev/null 2>&1
+      if [ $? -eq 0 ]; then
+        break
+      fi
+    fi
+    sleep 5
+  done
 fi
 
 # Remove temp files
