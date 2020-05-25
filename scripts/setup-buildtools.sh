@@ -124,3 +124,12 @@ ldconfig > /dev/null 2>&1
 if [ $ret -ne 0 ]; then
   buildkite-agent start
 fi
+
+if [ -f "/tmp/id_rsa" ]; then
+  mkdir /var/lib/buildkite-agent/.ssh/
+  chown buildkite-agent:buildkite-agent /var/lib/buildkite-agent/.ssh/
+  chmod 700 /var/lib/buildkite-agent/.ssh/
+  cp /tmp/id_rsa /var/lib/buildkite-agent/.ssh/id_rsa
+  chown buildkite-agent:buildkite-agent /var/lib/buildkite-agent/.ssh/id_rsa
+  chmod 600 /var/lib/buildkite-agent/.ssh/id_rsa
+fi
