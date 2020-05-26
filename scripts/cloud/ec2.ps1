@@ -1,11 +1,12 @@
 # Check arguments
-if ($args.count -lt 2) {
-  write-host "USAGE: .\ec2.ps1 [BUILDKITE TOKEN] [SSH KEY] [[BUNDLE]]"
+if ($args.count -lt 3) {
+  write-host "USAGE: .\gcloud.ps1 [BUILDKITE TOKEN] [SSH PUBLIC KEY] [SSH PRIVATE KEY] [[BUNDLE]]"
   Exit 1
 }
 
 $token=$args[0]
 $ssh_key=$args[1]
+$ssh_privkey=$args[2]
 
 # Check if aws executable exists
 if ((Get-Command "aws" -ErrorAction SilentlyContinue) -eq $null)
@@ -36,6 +37,16 @@ if ($token.length -ne 50){
   Exit 6
 }
 
+if ($ssh_privkey -eq ""){
+  Write-Host "Error: SSH PRIVATE KEY is invalid"
+  Exit 7
+}
+
+if (!(Test-Path $ssh_privkey)){
+  Write-Host "Error: SSH PRIVATE KEY doesn't exist"
+  Exit 8
+}
+
 # Set defaults for instance
 $bundle = "t2.2xlarge"
 
@@ -45,19 +56,19 @@ $REGION = $REGION_RAW.Split([Environment]::NewLine) | Select -First 1
 
 if ($REGION -eq ""){
   Write-Host "Error: aws is not configured. Please set region using aws configure"
-  Exit 7
+  Exit 9
 }
 
 $REGION_TEST = (aws ec2 describe-instances 2>&1) | Out-String
 
 if ($REGION_TEST -like '*Could not connect*'){
   Write-Host "Error: aws is not configured. Please set region using aws configure"
-  Exit 8
+  Exit 10
 }
 
 # Check bundle if parameter is set
-if ($args.count -ge 3){
-  $bundle=$args[2]
+if ($args.count -ge 4){
+  $bundle=$args[3]
 
   $INSTANCE_TYPES_RAW = (aws ec2 describe-instance-types) | Out-String
   $vPSObject = $INSTANCE_TYPES_RAW | ConvertFrom-Json
@@ -84,7 +95,7 @@ if ($args.count -ge 3){
   if ($found -eq 0){
     Write-Host "Error: BUNDLE '$bundle' is invalid"
     Write-Host $bundles_string
-    Exit 9
+    Exit 11
   }
 
 }
@@ -107,24 +118,43 @@ $MultilineComment2 = @"
 echo "Running custom startup script"
 hostname "$VM_NAME"
 apt install -y git curl wget
-echo -e "#!/bin/bash\nsudo systemctl halt -i" > /tmp/terminate.sh
 wget https://raw.githubusercontent.com/robbalmbra/RomBuilder/master/scripts/setup-buildtools.sh -O /tmp/setup-buildtools.sh
 chmod 700 /tmp/setup-buildtools.sh
-chmod 700 /tmp/terminate.sh
 export BHOST="$VM_NAME"
 export BTOKEN="$token"
 /tmp/setup-buildtools.sh
-echo "buildkite-agent ALL=NOPASSWD: /bin/systemctl" >> /etc/sudoers
-chown buildkite-agent:buildkite-agent /tmp/terminate.sh
 "@
 
 $MultilineComment2 | Out-File -Encoding ASCII run.sh
 
 # Create instance
-$instance = (aws ec2 run-instances --count 1 --instance-initiated-shutdown-behavior terminate --security-groups "buildkite" --key-name "buildkite-key" --image-id "ami-0701e7be9b2a77600" --block-device-mappings 'DeviceName=/dev/sda1,Ebs={VolumeSize=300,VolumeType=gp2}' --instance-type "$bundle" --user-data file://run.sh 2>&1) | Out-String
+$instance = (aws ec2 run-instances --count 1 --security-groups "buildkite" --key-name "buildkite-key" --image-id "ami-0701e7be9b2a77600" --block-device-mappings 'DeviceName=/dev/sda1,Ebs={VolumeSize=300,VolumeType=gp2}' --instance-type "$bundle" --user-data file://run.sh 2>&1) | Out-String
 
 if($?) {
+
+  $vPSObject = $instance | ConvertFrom-Json
+  $instance_id = $vPSObject.Instances['0'].InstanceId
+
   Write-Host "Warning - Machine has been launched"
+
+  # Sleep to wait for instance to start
+  Start-Sleep -s 5
+
+  for(;;)
+  {
+    $public_ip = (aws ec2 describe-instances --instance-id $instance_id --query 'Reservations[*].Instances[*].PublicIpAddress' --output text)
+    if($public_ip -ne ""){
+      scp -o StrictHostKeyChecking=no -i $ssh_privkey $ssh_privkey ubuntu@${public_ip}:/tmp/id_rsa *> $null
+      if($?){
+        break
+      }
+    }
+
+    Start-Sleep -s 5
+  }
+
+  Write-Host "Complete"
+
 }else{
   Write-Host $instance
 }
