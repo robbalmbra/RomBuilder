@@ -136,13 +136,12 @@ gcloud compute instances create "$VM_NAME" --service-account $service_account --
 if [ $? -eq 0 ]; then
   echo "Warning - Machine has been launched"
 
-  sleep 3
-
-  # Use public key for ssh auth
-  retrieve_public_key
+  sleep 5
 
   # Add ssh keys to instance for user ubuntu
-  gcloud compute instances add-metadata $VM_NAME --metadata-from-file ssh-keys=ssh.keys > /dev/null 2>&1
+  retrieve_public_key
+  gcloud compute instances add-metadata $VM_NAME --zone $ZONE --metadata-from-file ssh-keys=ssh.keys > /dev/null 2>&1
+  echo "Adding ssh support for instance"
 
   # Wait for instance to turn on, copy over private key for any private repos
   public_ip=""
@@ -159,6 +158,7 @@ if [ $? -eq 0 ]; then
     sleep 5
   done
 
+  echo "Complete"
 else
   echo "Error - Machine failed to launch"
 fi
