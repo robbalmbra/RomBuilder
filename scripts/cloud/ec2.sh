@@ -143,6 +143,8 @@ else
     fi
     sleep 5
   done
+
+  echo "Complete"
 fi
 
 # Remove temp files
