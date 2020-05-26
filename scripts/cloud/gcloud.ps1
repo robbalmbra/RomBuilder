@@ -32,6 +32,11 @@ if ($token.length -ne 50){
   Exit 5
 }
 
+$ssh_priv_key = "$HOME\.ssh\id_rsa"
+if (!(Test-Path $ssh_priv_key)){
+  ssh-keygen -t rsa -f $HOME\.ssh\id_rsa -N '""'
+}
+
 # Set defaults for instance
 $VM_OS_PROJECT = "ubuntu-os-cloud"
 $VM_OS_FAMILY = "ubuntu-1804-lts"
@@ -129,8 +134,32 @@ $service_account = "buildkite-user@$project_name.iam.gserviceaccount.com"
 gcloud projects add-iam-policy-binding $project_name --member serviceAccount:$service_account --role roles/owner *> $null
 
 # Create instance
-$cmd = "gcloud compute instances create $VM_NAME  --service-account $service_account --scopes https://www.googleapis.com/auth/compute,https://www.googleapis.com/auth/cloud-platform --boot-disk-type=pd-ssd --machine-type=$machine --zone=$zone --image-family=$VM_OS_FAMILY --image-project=$VM_OS_PROJECT --boot-disk-size=$VM_SIZE --metadata-from-file startup-script=run.sh"
-Invoke-Expression $cmd
+$instance = (gcloud compute instances create $VM_NAME  --service-account $service_account --scopes https://www.googleapis.com/auth/compute,https://www.googleapis.com/auth/cloud-platform --boot-disk-type=pd-ssd --machine-type=$machine --zone=$zone --image-family=$VM_OS_FAMILY --image-project=$VM_OS_PROJECT --boot-disk-size=$VM_SIZE --metadata-from-file startup-script=run.sh 2>&1) | Out-String
+
+if($?) {
+  Write-Host "Warning - Machine has been launched"
+
+  # Sleep to wait for instance to start
+  Start-Sleep -s 5
+
+  for(;;)
+  {
+    $public_ip = (gcloud compute instances list --format="value(networkInterfaces[0].accessConfigs[0].natIP)")
+    if($public_ip -ne ""){
+      gcloud compute scp --force-key-file-overwrite --strict-host-key-checking no --zone ${zone} ${ssh_priv_key} ${VM_NAME}:/tmp/id_rsa *> $null
+      if($?){
+        break
+      }
+    }
+
+    Start-Sleep -s 5
+
+  }
+
+  Write-Host "Complete"
+}else{
+  Write-Host $instance
+}
 
 # Remove temp files
 Remove-Item run.sh
