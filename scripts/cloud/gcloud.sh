@@ -1,5 +1,11 @@
 #!/bin/bash
 
+function retrieve_public_key()
+{
+  ssh_pub_key=$(cat ~/.ssh/id_rsa.pub | awk '{$NF=""}1')
+  echo "ubuntu:$ssh_pub_key ubuntu" > ssh.keys
+}
+
 # Check if user has requirements installed
 if ! [ -x "$(command -v gcloud)" ]; then
   echo '$0 - Error: gcloud is not installed. Install from https://cloud.google.com/sdk/docs'
@@ -35,6 +41,11 @@ token_size=${#TOKEN}
 if [ $token_size -ne 50 ]; then
   echo "Error - TOKEN is invalid"
   exit 6
+fi
+
+# Check if user has a ssh private key to import to gcloud
+if [ ! -f ~/.ssh/id_rsa ]; then
+  cat /dev/zero | ssh-keygen -q -N ""
 fi
 
 # Change here to alter vm default attributes
@@ -122,5 +133,36 @@ gcloud projects add-iam-policy-binding $PROJECT_NAME --member serviceAccount:$se
 # Create instance
 gcloud compute instances create "$VM_NAME" --service-account $service_account --scopes https://www.googleapis.com/auth/compute,https://www.googleapis.com/auth/cloud-platform --boot-disk-type=pd-ssd --machine-type="$VM_MACHINE" --zone="$ZONE" --image-family="$VM_OS_FAMILY" --image-project="$VM_OS_PROJECT" --boot-disk-size="$VM_SIZE" --metadata-from-file startup-script=run.sh
 
+if [ $? -eq 0 ]; then
+  echo "Warning - Machine has been launched"
+
+  sleep 3
+
+  # Use public key for ssh auth
+  retrieve_public_key
+
+  # Add ssh keys to instance for user ubuntu
+  gcloud compute instances add-metadata $VM_NAME --metadata-from-file ssh-keys=ssh.keys > /dev/null 2>&1
+
+  # Wait for instance to turn on, copy over private key for any private repos
+  public_ip=""
+  while true
+  do
+    public_ip=$(gcloud compute instances list --format="value(networkInterfaces[0].accessConfigs[0].natIP)")
+    if [[ "$public_ip" != "" ]]; then
+      ssh-keygen -R $public_ip > /dev/null 2>&1
+      scp -o StrictHostKeyChecking=no ~/.ssh/id_rsa ubuntu@$public_ip:/tmp/ > /dev/null 2>&1
+      if [ $? -eq 0 ]; then
+        break
+      fi
+    fi
+    sleep 5
+  done
+
+else
+  echo "Error - Machine failed to launch"
+fi
+
 # Remove temp files
 rm -rf run.sh > /dev/null 2>&1
+rm -rf ssh.keys > /dev/null 2>&1
