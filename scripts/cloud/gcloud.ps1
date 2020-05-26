@@ -102,12 +102,12 @@ if ($args.count -ge 4){
       }
     }
   }
-}
 
-# Return errors if not found
-if ($found -eq 0){
-  Write-Host "Error - Failed to find machine type '$machine'. Use 'gcloud compute machine-types list' to list valid configurations."
-  Exit 8
+  # Return errors if not found
+  if ($found -eq 0){
+    Write-Host "Error - Failed to find machine type '$machine'. Use 'gcloud compute machine-types list' to list valid configurations."
+    Exit 8
+  }
 }
 
 # Create custom startup script
