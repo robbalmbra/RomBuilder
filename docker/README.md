@@ -47,7 +47,7 @@ Options can be defined within environment variables or within the environment se
 * TELEGRAM_GROUP - Specifies telegram group name, e.g `@groupname`
 * TELEGRAM_AUTHORS - Specifies the authors for the telegram automatic group update
 * DEBUG=1 - Dont flush any output to /dev/null. Default ignores output.
-* EXTRA_COMMANDS - Run user commands after sync has finished. Default is ignored.
+* EXTRA_COMMANDS - Run user commands after sync has finished, e.g. `pwd;ls -al;git clone test.git /opt/out` Default is ignored.
 * UPLOAD_FOLDER - Upload path relative from mega account root, e.g. `android_roms/testing`, `phone_roms`. Default is the folder `ROMS`.
 * AUTO_TERMINATE=0 - Ignores normal operation of halting instances once builds have successfully finished within aws and gcloud. Default is terminated on cloud platforms whereby build has successfully completed.
 
