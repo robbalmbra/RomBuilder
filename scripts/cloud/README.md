@@ -36,3 +36,4 @@ Example: .\gcloud.ps1 "token" eastern-crawler-277014 europe-west2-a n1-standard-
 ## Notes
 
 Double braces indicate an optional parameter
+Local private key is copied to instance to allow cloning of private repos
