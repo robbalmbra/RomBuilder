@@ -9,6 +9,14 @@ if [ -z "$BUILD_LANG" ]; then
   export BUILD_LANG="en"
 fi
 
+if [ -z "$AUTO_TERMINATE" ]; then
+  AUTO_TERMINATE=1
+elif [ $AUTO_TERMINATE -eq 0 ]; then
+  AUTO_TERMINATE=0
+else
+  AUTO_TERMINATE=1
+fi
+
 if [ -z "$SKIP_API_DOCS" ]; then
   export SKIP_API_DOCS=0
 fi
