@@ -83,7 +83,7 @@ wget --quiet -O /opt/megasync.deb https://mega.nz/linux/MEGAsync/xUbuntu_$(lsb_r
 apt update --fix-missing > /dev/null 2>&1
 sudo apt install -f > /dev/null 2>&1
 cd /opt/ && git clone --quiet https://github.com/meganz/MEGAcmd.git > /dev/null 2>&1
-cd /opt/MEGAcmd && git submodule update --quiet --init --recursive && sh autogen.sh > /dev/null 2>&1 && ./configure --quiet > /dev/null 2>&1 && make > /dev/null 2>&1 && make install > /dev/null 2>&1
+cd /opt/MEGAcmd && git submodule update --quiet --init --recursive && sh autogen.sh > /dev/null 2>&1 && ./configure --quiet > /dev/null 2>&1 && make -j$(nproc) > /dev/null 2>&1 && make install > /dev/null 2>&1
 error_exit "mega"
 
 apt --fix-broken -y install > /dev/null 2>&1
