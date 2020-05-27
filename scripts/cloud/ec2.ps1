@@ -124,6 +124,9 @@ chmod 700 /tmp/setup-buildtools.sh
 export BHOST="$VM_NAME"
 export BTOKEN="$token"
 /tmp/setup-buildtools.sh
+chmod 700 /tmp/terminate.sh
+echo "buildkite-agent ALL=NOPASSWD: /bin/systemctl" >> /etc/sudoers
+chown buildkite-agent:buildkite-agent /tmp/terminate.sh
 "@
 
 $MultilineComment2 | Out-File -Encoding ASCII run.sh
