@@ -2,15 +2,6 @@
 
 # Script for local build V1.0
 
-# Get lang of device
-lang=$(echo $LANG | awk -F. {'print $1'})
-
-if [[ $lang == "it_IT" ]]; then
-  shell_lang="it"
-else
-  shell_lang="en"
-fi
-
 function check_vars {
 
   count=0
@@ -36,11 +27,7 @@ error_exit()
 {
     ret="$?"
     if [ "$ret" != "0" ]; then
-      if [[ $shell_lang == "it" ]]; then
-        echo "Errore - '$1' non riuscito con codice di ritorno '$ret'"
-      else
-        echo "Error - '$1' failed with return code '$ret'"
-      fi
+      echo "Error - '$1' failed with return code '$ret'"
       exit 1
     fi
 }
@@ -58,13 +45,8 @@ if [ -f "/etc/lsb-release" ] && [ ! -d "/opt/build_env" ]; then
     apt-get install -y sudo
   fi
 
-  if [[ $shell_lang == "it" ]]; then
-    echo "--- Installazione degli strumenti richiesti :toolbox:"
-    echo "Installazione dello script di compilazione"
-  else
-    echo "--- Installing required tools :toolbox:"
-    echo "Installing build script"
-  fi
+  echo "--- Installing required tools :toolbox:"
+  echo "Installing build script"
 
   apt-get install git curl -y > /dev/null 2>&1
   git config --global user.name "Robert Balmbra" > /dev/null 2>&1
@@ -88,12 +70,7 @@ if [ -f "/etc/lsb-release" ] && [ ! -d "/opt/build_env" ]; then
 
   # Download and build mega
   if [ ! -d "/opt/MEGAcmd/" ]; then
-    if [[ $shell_lang == "it" ]]; then
-      echo "Installazione di mega CLI"
-    else
-      echo "Installing mega CLI"
-    fi
-
+    echo "Installing mega CLI"
     wget --quiet -O /opt/megasync.deb https://mega.nz/linux/MEGAsync/xUbuntu_$(lsb_release -rs)/amd64/megasync-xUbuntu_$(lsb_release -rs)_amd64.deb && ls /opt/ && dpkg -i /opt/megasync.deb
     cd /opt/ && git clone --quiet https://github.com/meganz/MEGAcmd.git
     cd /opt/MEGAcmd && git submodule update --quiet --init --recursive && sh autogen.sh > /dev/null 2>&1 && ./configure --quiet && make -j$(nproc) > /dev/null 2>&1 && make install > /dev/null 2>&1
@@ -110,22 +87,13 @@ elif [ "$(uname)" == "Darwin" ]; then
 
     # Check if brew is installed
     if ! [ -x "$(command -v brew)" ]; then
-      if [[ $shell_lang == "it" ]]; then
-        echo 'Errore: Brew non è installato'
-      else
-        echo 'Error - Brew is not installed'
-      fi
+      echo 'Error - Brew is not installed'
       exit 1
     fi
 
     # Install gnu sed for compatibility issues
-    if [[ $shell_lang == "it" ]]; then
-      echo "--- Installazione degli strumenti richiesti"
-      echo "Installazione di strumenti specifici di gnu"
-    else
-      echo "--- Installing required tools"
-      echo "Installing gnu specific tools"
-    fi
+    echo "--- Installing required tools"
+    echo "Installing gnu specific tools"
 
     brew install gnu-sed > /dev/null 2>&1
     brew install coreutils > /dev/null 2>&1
@@ -164,11 +132,7 @@ quit=0
 for variable in "${variables[@]}"
 do
   if [[ -z ${!variable+x} ]]; then
-    if [[ $shell_lang == "it" ]]; then
-      echo "$0 - Errore, $variable non è impostato.";
-    else
-      echo "$0 - Error, $variable isn't set.";
-    fi
+    echo "$0 - Error, $variable isn't set.";
     quit=1
     break
   fi
@@ -203,38 +167,22 @@ variables=(
 check_vars $variables
 
 if [ $new -eq 0 ]; then
-  if [[ $shell_lang == "it" ]]; then
-    echo "--- Recupero di strumenti e file del supplemento :page_facing_up:"
-  else
-    echo "--- Retrieving supplement tools and files :page_facing_up:"
-  fi
+  echo "--- Retrieving supplement tools and files :page_facing_up:"
 fi
 
 # Check and get user modifications either as a url or env string
 cd "$CURRENT"
 if [[ ! -z "$USER_MODIFICATIONS" ]]; then
-  if [[ $shell_lang == "it" ]]; then
-    echo "Recupero modifiche utente"
-  else
-    echo "Retrieving user modifications"
-  fi
 
+  echo "Retrieving user modifications"
   regex='(https?|ftp|file)://[-A-Za-z0-9\+&@#/%?=~_|!:,.;]*[-A-Za-z0-9\+&@#/%=~_|]'
   if [[ $USER_MODIFICATIONS =~ $regex ]]
   then
     # Get url and save to local file
-    if [[ $shell_lang == "it" ]]; then
-      echo "Download e salvataggio di $USER_MODIFICATIONS in '$CURRENT/user_modifications.sh'"
-    else
-      echo "Downloading and saving $USER_MODIFICATIONS to '$CURRENT/user_modifications.sh'"
-    fi
+    echo "Downloading and saving $USER_MODIFICATIONS to '$CURRENT/user_modifications.sh'"
     wget $USER_MODIFICATIONS -O "$CURRENT/user_modifications.sh"
   else
-    if [[ $shell_lang == "it" ]]; then
-      echo "Errore - '$USER_MODIFICATIONS' non è un URL valido."
-    else
-      echo "Error - '$USER_MODIFICATIONS' isn't a valid url."
-    fi
+    echo "Error - '$USER_MODIFICATIONS' isn't a valid url."
     exit 1
   fi
 
@@ -246,27 +194,16 @@ fi
 # Override if modification file exists from buildkite stage
 if [[ ! -z "$USER_MODS" ]]; then
   if [[ ! -f "$USER_MODS" ]]; then
-    if [[ $shell_lang == "it" ]]; then
-      echo "Errore - '$USER_MODS' non esiste."
-    else
-      echo "Error - '$USER_MODS' doesnt exist."
-    fi
+    echo "Error - '$USER_MODS' doesnt exist."
     exit 1
   fi
-  if [[ $shell_lang == "it" ]]; then
-    echo "Usando '$USER_MODS' come script di modifica"
-  else
-    echo "Using '$USER_MODS' as modification script"
-  fi
+
+  echo "Using '$USER_MODS' as modification script"
   chmod +x $USER_MODS
 fi
 
 # Run build
-if [[ $shell_lang == "it" ]]; then
-  echo "--- Inizializzazione dell'ambiente di compilazione :parcel:"
-else
-  echo "--- Initializing build environment :parcel:"
-fi
+echo "--- Initializing build environment :parcel:"
 
 # Check os
 if [[ "$OSTYPE" == "darwin"* ]]; then
@@ -277,7 +214,6 @@ export BUILDKITE_LOGGER="$CURRENT/buildkite_logger.sh"
 export ROM_PATCHER="$CURRENT/patcher.sh"
 export TELEGRAM_BOT="$CURRENT/SendMessage.py"
 export SUPPLEMENTS="$CURRENT/../supplements/"
-export BUILD_LANG="$shell_lang"
 export PRELIMINARY_SETUP=1
 
 "$(pwd)/../docker/build.sh"
