@@ -154,6 +154,11 @@ if($?) {
 
     Start-Sleep -s 5
   }
+  
+  # Copy private config to instance if its exists on host
+  if ((Test-Path -LiteralPath "$HOME/rom.env")){
+    gcloud compute scp --strict-host-key-checking no --zone ${zone} "$HOME/rom.env" ${VM_NAME}:/tmp/ *> $null
+  }
 
   Write-Host "Complete"
 }else{
