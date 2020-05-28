@@ -214,14 +214,40 @@ if [ ! -z "$JUST_UPLOAD" ]; then
     DATE=$(date '+%d-%m-%y');
     for ROM in $BUILD_DIR/rom/out/target/product/*/*.zip; do
       echo "Uploading $(basename $ROM)"
-      mega-put -c $ROM $UPLOAD_FOLDER/$UPLOAD_NAME/$DATE/
+      mega-put -c $ROM $MEGA_UPLOAD_FOLDER/$UPLOAD_NAME/$DATE/
       error_exit "mega put"
-      sleep 15
+      sleep 5
     done
 
     echo "Upload complete"
     exit 0
   fi
+
+  if [ ! -z "$SCP_HOST" ]; then
+
+    # Upload via scp if set
+    echo "--- Uploading via scp :rea:"
+
+    shopt -s nocaseglob
+    DATE=$(date '+%d-%m-%y');
+    for ROM in $BUILD_DIR/rom/out/target/product/*/*.zip; do
+
+      # Skip if zip has -ota- in zip
+      if [[ $ROM == *"-ota-"* ]]; then
+        continue
+      fi
+
+      echo "Uploading $(basename $ROM)"
+
+      # Upload via scp
+      scp $ROM ${SCP_USERNAME}@${SCP_HOST}:${SCP_PATH}
+      error_exit "scp upload"
+      sleep 5
+    done
+
+    echo "Upload complete"
+  fi
+
 fi
 
 # Flush logs
@@ -646,15 +672,43 @@ if [ "$TEST_BUILD" -eq 0 ]; then
       file_size=$(ls -lh "$ROM" | awk '{print $5}')
 
       # Upload
-      mega-put -c $ROM $UPLOAD_FOLDER/$UPLOAD_NAME/$DATE/
+      mega-put -c $ROM $MEGA_UPLOAD_FOLDER/$UPLOAD_NAME/$DATE/
       error_exit "mega put"
 
       # Create md5 of file
       file_md5=`md5sum ${ROM} | awk '{ print $1 }'`
       device_name="$(basename "$(dirname "$ROM")")"
       echo "$device_name - $file_md5" >> "$BUILD_DIR/.hashes"
-      sleep 15
+      sleep 5
       ((rom_count=rom_count+1))
+    done
+
+    echo "Upload complete"
+  fi
+
+  if [ ! -z "$SCP_HOST" ]; then
+
+    # Upload via scp if set
+    echo "--- Uploading via scp :rea:"
+
+    shopt -s nocaseglob
+    DATE=$(date '+%d-%m-%y');
+    for ROM in $BUILD_DIR/rom/out/target/product/*/*.zip; do
+
+      # Skip if zip has -ota- in zip
+      if [[ $ROM == *"-ota-"* ]]; then
+        continue
+      fi
+
+      echo "Uploading $(basename $ROM)"
+
+      # Get rom size for telegram group
+      file_size=$(ls -lh "$ROM" | awk '{print $5}')
+
+      # Upload via scp
+      scp $ROM ${SCP_USERNAME}@${SCP_HOST}:${SCP_PATH}
+      error_exit "scp upload"
+      sleep 5
     done
 
     echo "Upload complete"
