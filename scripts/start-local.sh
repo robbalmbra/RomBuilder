@@ -174,8 +174,6 @@ if [ -z "$TEST_BUILD" ]; then
   TEST_BUILD=0
 fi
 
-
-
 # Check if scp vars are all set if any mega variable is set
 variables=(
   SCP_USERNAME
@@ -186,7 +184,7 @@ check_vars $variables
 scp_check=$count
 
 if [ $mega_check -eq 0 ] && [ $scp_check -eq 0 ]; then
-  echo "Error - No upload method set. Please use mega and/or scp. :exclamation:"
+  echo "Error - No upload method set. Please use mega and/or scp."
   exit 1
 fi
 

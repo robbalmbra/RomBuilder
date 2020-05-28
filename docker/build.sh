@@ -201,24 +201,27 @@ fi
 
 # Jut upload mode
 if [ ! -z "$JUST_UPLOAD" ]; then
-  # Upload firmware to mega
-  echo "--- Uploading to mega :rea:"
 
-  mega-logout > /dev/null 2>&1
-  mega-login $MEGA_USERNAME $MEGA_PASSWORD > /dev/null 2>&1
-  error_exit "mega login"
+  # Upload firmware to mega if set
+  if [ ! -z "$MEGA_USERNAME" ]; then
+    echo "--- Uploading to mega :rea:"
 
-  shopt -s nocaseglob
-  DATE=$(date '+%d-%m-%y');
-  for ROM in $BUILD_DIR/rom/out/target/product/*/*.zip; do
-    echo "Uploading $(basename $ROM)"
-    mega-put -c $ROM $UPLOAD_FOLDER/$UPLOAD_NAME/$DATE/
-    error_exit "mega put"
-    sleep 15
-  done
+    mega-logout > /dev/null 2>&1
+    mega-login $MEGA_USERNAME $MEGA_PASSWORD > /dev/null 2>&1
+    error_exit "mega login"
 
-  echo "Upload complete"
-  exit 0
+    shopt -s nocaseglob
+    DATE=$(date '+%d-%m-%y');
+    for ROM in $BUILD_DIR/rom/out/target/product/*/*.zip; do
+      echo "Uploading $(basename $ROM)"
+      mega-put -c $ROM $UPLOAD_FOLDER/$UPLOAD_NAME/$DATE/
+      error_exit "mega put"
+      sleep 15
+    done
+
+    echo "Upload complete"
+    exit 0
+  fi
 fi
 
 # Flush logs
@@ -255,8 +258,6 @@ git config --global color.ui true
 variables=(
   BUILD_NAME
   UPLOAD_NAME
-  MEGA_USERNAME
-  MEGA_PASSWORD
   DEVICES
   REPO
   BRANCH
@@ -621,40 +622,43 @@ fi
 # Upload firmware to mega
 if [ "$TEST_BUILD" -eq 0 ]; then
 
-  echo "--- Uploading to mega :rea:"
-  mega-logout > /dev/null 2>&1
-  mega-login $MEGA_USERNAME $MEGA_PASSWORD > /dev/null 2>&1
-  error_exit "mega login"
+  if [ ! -z "$MEGA_USERNAME" ]; then
 
-  shopt -s nocaseglob
-  DATE=$(date '+%d-%m-%y');
-  rom_count=0
-  for ROM in $BUILD_DIR/rom/out/target/product/*/*.zip; do
+    # Upload to mega if set
+    echo "--- Uploading to mega :rea:"
+    mega-logout > /dev/null 2>&1
+    mega-login $MEGA_USERNAME $MEGA_PASSWORD > /dev/null 2>&1
+    error_exit "mega login"
 
-    # Skip if zip has -ota- in zip
-    if [[ $ROM == *"-ota-"* ]]; then
-      continue
-    fi
+    shopt -s nocaseglob
+    DATE=$(date '+%d-%m-%y');
+    rom_count=0
+    for ROM in $BUILD_DIR/rom/out/target/product/*/*.zip; do
 
-    echo "Uploading $(basename $ROM)"
+      # Skip if zip has -ota- in zip
+      if [[ $ROM == *"-ota-"* ]]; then
+        continue
+      fi
 
-    # Get rom size for telegram group
-    file_size=$(ls -lh "$ROM" | awk '{print $5}')
+      echo "Uploading $(basename $ROM)"
 
-    # Upload
-    mega-put -c $ROM $UPLOAD_FOLDER/$UPLOAD_NAME/$DATE/
-    error_exit "mega put"
+      # Get rom size for telegram group
+      file_size=$(ls -lh "$ROM" | awk '{print $5}')
 
-    # Create md5 of file
-    file_md5=`md5sum ${ROM} | awk '{ print $1 }'`
-    device_name="$(basename "$(dirname "$ROM")")"
-    echo "$device_name - $file_md5" >> "$BUILD_DIR/.hashes"
-    sleep 15
-    ((rom_count=rom_count+1))
-  done
+      # Upload
+      mega-put -c $ROM $UPLOAD_FOLDER/$UPLOAD_NAME/$DATE/
+      error_exit "mega put"
 
-  echo "Upload complete"
+      # Create md5 of file
+      file_md5=`md5sum ${ROM} | awk '{ print $1 }'`
+      device_name="$(basename "$(dirname "$ROM")")"
+      echo "$device_name - $file_md5" >> "$BUILD_DIR/.hashes"
+      sleep 15
+      ((rom_count=rom_count+1))
+    done
 
+    echo "Upload complete"
+  fi
 fi
 
 # Launch OTA handler script
