@@ -13,6 +13,14 @@ else
   AUTO_TERMINATE=1
 fi
 
+if [ -z "$MEGA_UPLOAD" ]; then
+  export MEGA_UPLOAD=0
+fi
+
+if [ -z "$SCP_UPLOAD" ]; then
+  export SCP_UPLOAD=0
+fi
+
 if [ -z "$SKIP_API_DOCS" ]; then
   export SKIP_API_DOCS=0
 fi
@@ -202,52 +210,54 @@ fi
 # Jut upload mode
 if [ ! -z "$JUST_UPLOAD" ]; then
 
-  # Upload firmware to mega if set
-  if [ ! -z "$MEGA_USERNAME" ]; then
-    echo "--- Uploading to mega :rea:"
+  if [ "$TEST_BUILD" -eq 0 ]; then
 
-    mega-logout > /dev/null 2>&1
-    mega-login $MEGA_USERNAME $MEGA_PASSWORD > /dev/null 2>&1
-    error_exit "mega login"
+    # Upload firmware to mega if set
+    if [ "$MEGA_UPLOAD" -eq 1 ]; then
+      echo "--- Uploading to mega :rea:"
 
-    shopt -s nocaseglob
-    DATE=$(date '+%d-%m-%y');
-    for ROM in $BUILD_DIR/rom/out/target/product/*/*.zip; do
-      echo "Uploading $(basename $ROM)"
-      mega-put -c $ROM $MEGA_UPLOAD_FOLDER/$UPLOAD_NAME/$DATE/
-      error_exit "mega put"
-      sleep 5
-    done
+      mega-logout > /dev/null 2>&1
+      mega-login $MEGA_USERNAME $MEGA_PASSWORD > /dev/null 2>&1
+      error_exit "mega login"
 
-    echo "Upload complete"
-    exit 0
+      shopt -s nocaseglob
+      DATE=$(date '+%d-%m-%y');
+      for ROM in $BUILD_DIR/rom/out/target/product/*/*.zip; do
+        echo "Uploading $(basename $ROM)"
+        mega-put -c $ROM $MEGA_UPLOAD_FOLDER/$UPLOAD_NAME/$DATE/
+        error_exit "mega put"
+        sleep 5
+      done
+
+      echo "Upload complete"
+      exit 0
+    fi
+
+    if [ "$SCP_UPLOAD" -eq 1 ]; then
+
+      # Upload via scp if set
+      echo "--- Uploading via scp :rea:"
+
+      shopt -s nocaseglob
+      DATE=$(date '+%d-%m-%y');
+      for ROM in $BUILD_DIR/rom/out/target/product/*/*.zip; do
+
+        # Skip if zip has -ota- in zip
+        if [[ $ROM == *"-ota-"* ]]; then
+          continue
+        fi
+
+        echo "Uploading $(basename $ROM)"
+
+        # Upload via scp
+        scp $ROM ${SCP_USERNAME}@${SCP_HOST}:${SCP_PATH}
+        error_exit "scp upload"
+        sleep 5
+      done
+
+      echo "Upload complete"
+    fi
   fi
-
-  if [ ! -z "$SCP_HOST" ]; then
-
-    # Upload via scp if set
-    echo "--- Uploading via scp :rea:"
-
-    shopt -s nocaseglob
-    DATE=$(date '+%d-%m-%y');
-    for ROM in $BUILD_DIR/rom/out/target/product/*/*.zip; do
-
-      # Skip if zip has -ota- in zip
-      if [[ $ROM == *"-ota-"* ]]; then
-        continue
-      fi
-
-      echo "Uploading $(basename $ROM)"
-
-      # Upload via scp
-      scp $ROM ${SCP_USERNAME}@${SCP_HOST}:${SCP_PATH}
-      error_exit "scp upload"
-      sleep 5
-    done
-
-    echo "Upload complete"
-  fi
-
 fi
 
 # Flush logs
@@ -648,7 +658,7 @@ fi
 # Upload firmware to mega
 if [ "$TEST_BUILD" -eq 0 ]; then
 
-  if [ ! -z "$MEGA_USERNAME" ]; then
+  if [ "$MEGA_UPLOAD" -eq 1 ]; then
 
     # Upload to mega if set
     echo "--- Uploading to mega :rea:"
@@ -686,7 +696,7 @@ if [ "$TEST_BUILD" -eq 0 ]; then
     echo "Upload complete"
   fi
 
-  if [ ! -z "$SCP_HOST" ]; then
+  if [ "$SCP_UPLOAD" -eq 1 ]; then
 
     # Upload via scp if set
     echo "--- Uploading via scp :rea:"

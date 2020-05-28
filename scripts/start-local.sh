@@ -162,6 +162,10 @@ variables=(
 check_vars $variables
 mega_check=$count
 
+if [ "$mega_check" -eq 2 ]; then
+  export MEGA_UPLOAD=1
+fi
+
 if [ -z "$TEST_BUILD" ]; then
 
   if [ $mega_check -ne 0 ]; then
@@ -188,9 +192,8 @@ variables=(
 check_vars $variables
 scp_check=$count
 
-if [ $mega_check -eq 0 ] && [ $scp_check -eq 0 ]; then
-  echo "Error - No upload method set. Please use mega and/or scp."
-  exit 1
+if [ "$scp_check" -eq 3 ]; then
+  export SCP_UPLOAD=1
 fi
 
 if [ $new -eq 0 ]; then
