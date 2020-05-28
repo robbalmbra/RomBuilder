@@ -11,6 +11,27 @@ else
   shell_lang="en"
 fi
 
+function check_vars {
+
+  count=0
+  variables=$1
+  variable_string=""
+  for variable in "${variables[@]}"
+  do
+    if [[ ${!variable+x} ]]; then
+      ((count=count+1))
+    else
+      variable_string+="$variable, "
+    fi
+  done
+
+  if [ $count -gt 0 ] && [ $count -lt 3 ]; then
+    echo "Error - ${variable_string:0:${#variable_string}-2} are missing variables. Please define these."
+    exit 1
+  fi
+
+}
+
 error_exit()
 {
     ret="$?"
@@ -179,18 +200,7 @@ variables=(
   TELEGRAM_AUTHORS
 )
 
-count=0
-for variable in "${variables[@]}"
-do
-  if [[ ${!variable+x} ]]; then
-    ((count=count+1))
-  fi
-done
-
-if [ $count -gt 0] && [ $count -lt 3 ]; then
-  echo "Error - TELEGRAM_TOKEN, TELEGRAM_GROUP and TELEGRAM_AUTHORS are required for TELEGRAM to function."
-  exit 1
-fi
+check_vars $variables
 
 if [ $new -eq 0 ]; then
   if [[ $shell_lang == "it" ]]; then
