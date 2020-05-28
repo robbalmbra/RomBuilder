@@ -56,6 +56,7 @@ Options can be defined within environment variables or within the environment se
 * SKIP_BUILD=1 - Skip build process. Default will build.
 * DATE_REVERT - Specifies the date that the repo will pull before the specified date; e.g `2020-03-01 00:00`
 * PRODUCE_DEVICE_TREES=1 - Apply modifications and only produce device trees.
+* ADDITIONAL_PROPS - Defines a list of props that will be appended to the build props of the build; e.g `ro.config.vc_call_steps=20;camera.eis.enable=1`. Note - Each prop is seperated by a semicolon.
 
 **Extras**
 * MAGISK_IN_BUILD=0 - Specifies to not include magisk within the build. Default is enabled.
@@ -68,7 +69,6 @@ Options can be defined within environment variables or within the environment se
 **Other**
 * USER_MODS - Defines location of custom modifications bash script to alter sources after being pulled
 * JUST_UPLOAD=1 - Causes build script to only upload any built files to mega and/or scp
-* ADDITIONAL_PROPS - Defines a list of props that will be appended to the build props of the build; e.g `ro.config.vc_call_steps=20;camera.eis.enable=1`. Note - Each prop is seperated by a semicolon.
 * PROCESS_OTA=1 - Generate ota json and upload to sourceforge. Default is ignored.
 * JUST_PROCESS_OTA - Only run ota generation and upload script.
 
