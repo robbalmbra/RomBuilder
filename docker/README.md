@@ -15,11 +15,11 @@ Options can be defined within environment variables or within the environment se
 * BRANCH Defines the github branch for the specified REPO; e.g. `queso`
 * LOCAL_REPO - Defines the URL of the local manifest; e.g. `https://github.com/robbalmbra/local_manifests.git`
 * LOCAL_BRANCH - Defines the branch for the specified LOCAL_REPO; e.g. `android-10.0`
-* MEGA_FOLDER_ID - Folder id of the build name being built, needed for non test builds when mega upload is used
-* MEGA_DECRYPT_KEY - Decryption key for selected folder specified in MEGA_FOLDER_ID, needed for non test builds when mega upload is used
 
 **Optional**
 
+* MEGA_FOLDER_ID - Folder id of the build name being built, needed for non test builds when mega upload is used
+* MEGA_DECRYPT_KEY - Decryption key for selected folder specified in MEGA_FOLDER_ID, needed for non test builds when mega upload is used
 * MEGA_USERNAME - Specifies username for mega upload CLI
 * MEGA_PASSWORD - Specifies password for mega upload CLI
 * MAGISK_VERSION - Specifies magisk version to include within the rom; e.g `20.4`
@@ -50,6 +50,9 @@ Options can be defined within environment variables or within the environment se
 * EXTRA_COMMANDS - Run user commands after sync has finished, e.g. `pwd;ls -al;git clone test.git /opt/out` Default is ignored.
 * MEGA_UPLOAD_FOLDER - Upload path relative from mega account root, e.g. `android_roms/testing`, `phone_roms`. Default is the folder `ROMS`.
 * AUTO_TERMINATE=0 - Ignores normal operation of halting instances once builds have successfully finished within aws and gcloud. Default is terminated on cloud platforms whereby build has successfully completed.
+  SCP_USERNAME
+  SCP_HOST
+  SCP_PATH
 
 **Other**
 
