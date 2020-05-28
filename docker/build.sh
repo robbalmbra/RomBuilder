@@ -753,6 +753,11 @@ if [ "$TEST_BUILD" -eq 0 ]; then
   fi
 fi
 
+# Disable auto terminate if nothing is set to upload
+if [ "$MEGA_UPLOAD" -eq 0 ] && [ "$SCP_UPLOAD" -eq 0 ]; then
+  AUTO_TERMINATE=0  
+fi
+
 # Disable auto terminate if build is a test build
 if [ "$TEST_BUILD" -eq 1 ]; then
   AUTO_TERMINATE=0
