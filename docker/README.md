@@ -43,10 +43,12 @@ Options can be defined within environment variables or within the environment se
 * CUSTOM_CCACHE_DIR -  Specifies alternative directory for ccache to save relevant files into for the build, e.g. `/media/data/ccache`
 * CCACHE_SIZE - Defines in gigabytes the size of ccache. Default is 70 gigabytes.
 
-**Build options**
-* MKA_PARAMETERS - Defines extra parameters to add to the mka build command; e.g. `xtended`. Default parameter is bacon.
+**Lunch options**
 * LUNCH_VERSION - Defines the lunch build option; possible options include `user,userdebug and eng`. Default is userdebug.
 * CUSTOM_LUNCH_COMMAND - Overrides default lunch command. Default is lunch.
+
+**Build options**
+* MKA_PARAMETERS - Defines extra parameters to add to the mka build command; e.g. `xtended`. Default parameter is bacon.
 * CUSTOM_MKA_COMMAND - Sets custom make command. Notes - {device} changes to device name and {user_debug} defaults to rom debug type.
 * TEST_BUILD=1 - Disable telegram, upload to mega and via scp and termination of instances in cloud platforms.
 * MAX_CPUS - Defines max CPUs to use for the building process; e.g. `MAX_CPUS=6` defines to only use 6 CPUS for the build. Default uses all CPU cores for the build.
@@ -57,6 +59,12 @@ Options can be defined within environment variables or within the environment se
 * DATE_REVERT - Specifies the date that the repo will pull before the specified date; e.g `2020-03-01 00:00`
 * PRODUCE_DEVICE_TREES=1 - Apply modifications and only produce device trees.
 * ADDITIONAL_PROPS - Defines a list of props that will be appended to the build props of the build; e.g `ro.config.vc_call_steps=20;camera.eis.enable=1`. Note - Each prop is seperated by a semicolon.
+* USER_MODS - Defines location of custom modifications bash script to alter sources after being pulled
+* JUST_UPLOAD=1 - Causes build script to only upload any built files to mega and/or scp
+
+**OTA**
+* PROCESS_OTA=1 - Generate ota json and upload to sourceforge. Default is ignored.
+* JUST_PROCESS_OTA - Only run ota generation and upload script.
 
 **Extras**
 * MAGISK_IN_BUILD=0 - Specifies to not include magisk within the build. Default is enabled.
@@ -65,12 +73,6 @@ Options can be defined within environment variables or within the environment se
 
 **Buildkite logging**
 * LOGGING_RATE - Defines rate of how often logs are updated to buildkite; e.g `LOGGING_RATE=20` defines every 20 seconds to check and pull current log for the device being built. Default is 30 seconds.
-
-**Other**
-* USER_MODS - Defines location of custom modifications bash script to alter sources after being pulled
-* JUST_UPLOAD=1 - Causes build script to only upload any built files to mega and/or scp
-* PROCESS_OTA=1 - Generate ota json and upload to sourceforge. Default is ignored.
-* JUST_PROCESS_OTA - Only run ota generation and upload script.
 
 **Notes**
 
