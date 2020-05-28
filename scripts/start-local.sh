@@ -18,7 +18,7 @@ function check_vars {
 
   if [ $count -gt 0 ] && [ $count -lt ${#variables[@]} ]; then
     if [ $count -eq 1 ]; then
-      echo "Error - ${variable_string:0:${#variable_string}-2} is a missing variable. Please define these."
+      echo "Error - ${variable_string:0:${#variable_string}-2} is a missing variable. Please define this."
     else
       echo "Error - ${variable_string:0:${#variable_string}-2} are missing variables. Please define these."
     fi
