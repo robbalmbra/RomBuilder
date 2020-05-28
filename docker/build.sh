@@ -159,7 +159,7 @@ fi
 
 length=${#BUILD_DIR}
 last_char=${BUILD_DIR:length-1:1}
-[[ $last_char == "/" ]] && BUILD_DIR=${BUILD_DIR:0:length-1}; :
+[[ $last_char == "/" ]] && BUILD_DIR=${BUILD_DIR:0:length-1};
 
 # Just process ota
 if [ ! -z "$JUST_PROCESS_OTA" ]; then
@@ -565,7 +565,7 @@ if [ "$SKIP_BUILD" -eq 0 ]; then
     makestart=`date +%s`
 
     # Make sure script is running in rom directory
-    cd $BUILD_DIR/rom/
+    cd "$BUILD_DIR/rom/"
 
     # Run build
     if [[ ! -z "${BUILDKITE}" ]]; then
@@ -755,7 +755,7 @@ fi
 
 # Disable auto terminate if nothing is set to upload
 if [ "$MEGA_UPLOAD" -eq 0 ] && [ "$SCP_UPLOAD" -eq 0 ]; then
-  AUTO_TERMINATE=0  
+  AUTO_TERMINATE=0
 fi
 
 # Disable auto terminate if build is a test build
