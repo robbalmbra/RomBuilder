@@ -118,8 +118,6 @@ fi
 variables=(
   BUILD_NAME
   UPLOAD_NAME
-  MEGA_USERNAME
-  MEGA_PASSWORD
   DEVICES
   REPO
   BRANCH
@@ -157,14 +155,35 @@ if [ -z "$TEST_BUILD" ]; then
   TEST_BUILD=0
 fi
 
-# Check if telegram vars are all set if any telegram variable are specified
+# Check if telegram vars are all set if any telegram variable is set
 variables=(
   TELEGRAM_TOKEN
   TELEGRAM_GROUP
   TELEGRAM_AUTHORS
 )
-
 check_vars $variables
+
+# Check if mega vars are all set if any mega variable is set
+variables=(
+  MEGA_USERNAME
+  MEGA_PASSWORD
+)
+check_vars $variables
+mega_check=$count
+
+# Check if scp vars are all set if any mega variable is set
+variables=(
+  SCP_USERNAME
+  SCP_HOST
+  SCP_PATH
+)
+check_vars $variables
+scp_check=$count
+
+if [ $mega_check -eq 0 ] && [ $scp_check -eq 0 ]; then
+  "Error - No upload method set. Please use mega and/or scp."
+  exit 1
+fi
 
 if [ $new -eq 0 ]; then
   echo "--- Retrieving supplement tools and files :page_facing_up:"
