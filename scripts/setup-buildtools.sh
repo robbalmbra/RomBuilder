@@ -53,6 +53,9 @@ else
   user_token="$BTOKEN"
 fi
 
+# Mega/scp write credentials if defined to build script, so that pipeline can be made public
+
+
 # Install build tools
 echo "Pulling and installing build tools"
 apt-get install git curl -y > /dev/null 2>&1
