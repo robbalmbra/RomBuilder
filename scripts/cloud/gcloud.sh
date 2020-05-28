@@ -158,6 +158,11 @@ if [ $? -eq 0 ]; then
     sleep 5
   done
 
+  # Copy private config to instance if its exists on host
+  if [ -f "$HOME/.rom.env" ]; then
+    scp -o StrictHostKeyChecking=no $HOME/.rom.env ubuntu@$public_ip:/home/ubuntu/ > /dev/null 2>&1
+  fi
+
   echo "Complete"
 else
   echo "Error - Machine failed to launch"
