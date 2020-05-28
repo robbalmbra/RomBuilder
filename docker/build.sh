@@ -5,10 +5,6 @@ if [ -z "$PRELIMINARY_SETUP" ]; then
   exit 1
 fi
 
-if [ -z "$BUILD_LANG" ]; then
-  export BUILD_LANG="en"
-fi
-
 if [ -z "$AUTO_TERMINATE" ]; then
   AUTO_TERMINATE=1
 elif [ $AUTO_TERMINATE -eq 0 ]; then
@@ -77,22 +73,14 @@ error_exit()
 {
   ret="$?"
   if [ "$ret" != "0" ]; then
-    if [[ $BUILD_LANG == "it" ]]; then
-      echo "Errore - '$1' non riuscito ($ret) :exclamation:"
-    else
-      echo "Error - '$1' failed ($ret) :exclamation:"
-    fi
+    echo "Error - '$1' failed ($ret) :exclamation:"
     exit 1
   fi
 }
 
 log_setting()
 {
-  if [[ $BUILD_LANG == "it" ]]; then
-    echo "Impostazione di $1 a '$2'"
-  else
-    echo "Setting $1 to '$2'"
-  fi
+  echo "Setting $1 to '$2'"
 }
 
 # Check for local use, not using docker
@@ -132,20 +120,11 @@ if [[ ! -z "${BUILDKITE}" ]]; then
   log_setting "BUILD_DIR" "$BUILD_DIR"
 
   # Show debug setting
-  if [[ $BUILD_LANG == "it" ]]; then
-    log_setting "DEBUG" "falso"
-  else
-    log_setting "DEBUG" "$DEBUG"
-  fi
+  log_setting "DEBUG" "$DEBUG"
 
   # Copy modifications and logger to build dir if exists
   if [ ! -z "$USER_MODS" ]; then
-    if [[ $BUILD_LANG == "it" ]]; then
-      echo "Copia di '$USER_MODS' in '$BUILD_DIR/scripts/user_modifications.sh'"
-    else
-      echo "Copying '$USER_MODS' to '$BUILD_DIR/scripts/user_modifications.sh'"
-    fi
-
+    echo "Copying '$USER_MODS' to '$BUILD_DIR/scripts/user_modifications.sh'"
     cp "$USER_MODS" "$BUILD_DIR/scripts/user_modifications.sh" > /dev/null 2>&1
     chmod +x "$BUILD_DIR/scripts/user_modifications.sh"
     rm -rf "$USER_MODS"
@@ -223,11 +202,7 @@ fi
 # Jut upload mode
 if [ ! -z "$JUST_UPLOAD" ]; then
   # Upload firmware to mega
-  if [[ $BUILD_LANG == "it" ]]; then
-    echo "--- Caricamento su mega :rea:"
-  else
-    echo "--- Uploading to mega :rea:"
-  fi
+  echo "--- Uploading to mega :rea:"
 
   mega-logout > /dev/null 2>&1
   mega-login $MEGA_USERNAME $MEGA_PASSWORD > /dev/null 2>&1
@@ -236,21 +211,13 @@ if [ ! -z "$JUST_UPLOAD" ]; then
   shopt -s nocaseglob
   DATE=$(date '+%d-%m-%y');
   for ROM in $BUILD_DIR/rom/out/target/product/*/*.zip; do
-    if [[ $BUILD_LANG == "it" ]]; then
-      echo "Caricamento $(basename $ROM)"
-    else
-      echo "Uploading $(basename $ROM)"
-    fi
-
+    echo "Uploading $(basename $ROM)"
     mega-put -c $ROM $UPLOAD_FOLDER/$UPLOAD_NAME/$DATE/
     error_exit "mega put"
     sleep 15
   done
-  if [[ $BUILD_LANG == "it" ]]; then
-    echo "Caricamento completato"
-  else
-    echo "Upload complete"
-  fi
+
+  echo "Upload complete"
   exit 0
 fi
 
@@ -302,11 +269,7 @@ quit=0
 for variable in "${variables[@]}"
 do
   if [[ -z ${!variable+x} ]]; then
-    if [[ $BUILD_LANG == "it" ]]; then
-      echo "$0 - Errore, $variable non è impostato :exclamation:";
-    else
-      echo "$0 - Error, $variable isn't set :exclamation:";
-    fi
+    echo "$0 - Error, $variable isn't set :exclamation:";
     quit=1
     break
   fi
@@ -337,12 +300,7 @@ if [ "$SKIP_BUILD" -eq 0 ]; then
   if [ ! -d "$BUILD_DIR/rom/.repo/" ]; then
 
     # Pull latest sources
-    if [[ $BUILD_LANG == "it" ]]; then
-      echo "Recuperando le fonti"
-    else
-      echo "Pulling sources"
-    fi
-
+    echo "Pulling sources"
     mkdir "$BUILD_DIR/rom/" > /dev/null 2>&1
 
     INIT_OPTIONS="--no-clone-bundle --depth=1"
@@ -355,11 +313,7 @@ if [ "$SKIP_BUILD" -eq 0 ]; then
     error_exit "repo init"
 
     # Pulling local manifests
-    if [[ $BUILD_LANG == "it" ]]; then
-      echo "Recuperando i manifest locali"
-    else
-      echo "Pulling local manifests"
-    fi
+    echo "Pulling local manifests"
 
     cd "$BUILD_DIR/rom/.repo/"
     run git clone "$LOCAL_REPO" -b "$LOCAL_BRANCH" --depth=1
@@ -368,11 +322,7 @@ if [ "$SKIP_BUILD" -eq 0 ]; then
   else
 
    # Clean if reprocessing
-   if [[ $BUILD_LANG == "it" ]]; then
-     echo "Pulizia della build e ripristino delle modifiche"
-   else
-     echo "Cleaning the build and reverting changes"
-   fi
+  echo "Cleaning the build and reverting changes"
 
    cd "$BUILD_DIR/rom/"
    make clean >/dev/null 2>&1
@@ -384,12 +334,7 @@ if [ "$SKIP_BUILD" -eq 0 ]; then
 
   # Sync sources
   cd "$BUILD_DIR/rom/"
-
-  if [[ $BUILD_LANG == "it" ]]; then
-    echo "Sincronizzazione delle fonti dal repository"
-  else
-    echo "Syncing sources from repo"
-  fi
+  echo "Syncing sources from repo"
 
   # Override for date revert
   SYNC_OPTIONS="--no-clone-bundle --no-tags"
@@ -410,11 +355,7 @@ if [ "$SKIP_BUILD" -eq 0 ]; then
     eval $EXTRA_COMMANDS > /dev/null
   fi
 
-  if [[ $BUILD_LANG == "it" ]]; then
-    echo "Applicazione di modifiche locali"
-  else
-    echo "Applying local modifications"
-  fi
+  echo "Applying local modifications"
 
   # Check for props environment variable to add to build props
   if [ ! -z "$ADDITIONAL_PROPS" ]; then
@@ -423,11 +364,7 @@ if [ "$SKIP_BUILD" -eq 0 ]; then
     additional_props_string=""
     for prop in $ADDITIONAL_PROPS; do
 
-      if [[ $BUILD_LANG == "it" ]]; then
-        echo "Aggiunta di ulteriore prop '$prop' a product_prop.mk"
-      else
-        echo "Adding additional prop '$prop' to product_prop.mk"
-      fi
+      echo "Adding additional prop '$prop' to product_prop.mk"
 
       if [[ $check == 0 ]]; then
         check=1
@@ -450,12 +387,7 @@ if [ "$SKIP_BUILD" -eq 0 ]; then
       export PATH="/usr/local/opt/gnu-sed/libexec/gnubin:$PATH"
     fi
 
-    if [[ $BUILD_LANG == "it" ]]; then
-      echo "Utilizzo dello script di modifica dell'utente"
-    else
-      echo "Using user modification script"
-    fi
-
+    echo "Using user modification script"
     $BUILD_DIR/scripts/user_modifications.sh "$BUILD_DIR" 1> /dev/null
     error_exit "user modifications"
   fi
@@ -481,11 +413,7 @@ if [ "$SKIP_BUILD" -eq 0 ]; then
 
   # Only apply modifications and save device trees
   if [ ! -z "$PRODUCE_DEVICE_TREES" ]; then
-    if [[ $BUILD_LANG == "it" ]]; then
-      echo "Avviso - alberi dei dispositivi salvati in $BUILD_DIR/rom/device/samsung"
-    else
-      echo "Warning - Device trees saved to $BUILD_DIR/rom/device/samsung"
-    fi
+    echo "Warning - Device trees saved to $BUILD_DIR/rom/device/samsung"
     exit 0
   fi
 
@@ -527,11 +455,7 @@ if [ "$SKIP_BUILD" -eq 0 ]; then
   fi
 
   # Build
-  if [[ $BUILD_LANG == "it" ]]; then
-    echo "Impostazione dell'ambiente"
-  else
-    echo "Environment setup"
-  fi
+  echo "Environment setup"
 
   # Run env script
   cd "$BUILD_DIR/rom/"
@@ -563,11 +487,7 @@ if [ "$SKIP_BUILD" -eq 0 ]; then
       make installclean > /dev/null 2>&1
     fi
 
-    if [[ $BUILD_LANG == "it" ]]; then
-      echo "--- Creazione di $DEVICE ($BUILD_NAME) :building_construction:"
-    else
-      echo "--- Building $DEVICE ($BUILD_NAME) :building_construction:"
-    fi
+    echo "--- Building $DEVICE ($BUILD_NAME) :building_construction:"
 
     # Run lunch
     build_id="${BUILD_NAME}_$DEVICE"
@@ -596,12 +516,7 @@ if [ "$SKIP_BUILD" -eq 0 ]; then
 
       if [[ $SKIP_API_DOCS == 0 ]]; then
 
-        if [[ $BUILD_LANG == "it" ]]; then
-          echo "Generazione di documenti"
-        else
-          echo "Generating docs"
-        fi
-
+        echo "Generating docs"
         run mka -j$MAX_CPU api-stubs-docs
         run mka -j$MAX_CPU hiddenapi-lists-docs
         run mka -j$MAX_CPU test-api-stubs-docs
@@ -641,11 +556,7 @@ if [ "$SKIP_BUILD" -eq 0 ]; then
 
     if [ "$ret" != "0" ]; then
 
-      if [[ $BUILD_LANG == "it" ]]; then
-        echo "Errore - Creazione di $DEVICE non riuscita ($ret) :bk-status-failed:"
-      else
-        echo "Error - $DEVICE build failed ($ret) :bk-status-failed:"
-      fi
+      echo "Error - $DEVICE build failed ($ret) :bk-status-failed:"
 
       # Save folder for cd
       CURRENT=$(pwd)
@@ -670,12 +581,7 @@ if [ "$SKIP_BUILD" -eq 0 ]; then
       # Show time of build in minutes
       makeend=`date +%s`
       maketime=$(((makeend-makestart)/60))
-
-      if [[ $BUILD_LANG == "it" ]]; then
-        echo "Successo: $DEVICE è stato creato in $maketime minuti"
-      else
-        echo "Success - $DEVICE was built in $maketime minutes"
-      fi
+      echo "Success - $DEVICE was built in $maketime minutes"
 
       # Save folder for cd
       CURRENT=$(pwd)
@@ -691,11 +597,7 @@ if [ "$SKIP_BUILD" -eq 0 ]; then
 
   # Patch magisk
   mkdir -p /tmp/rom-magisk/
-  if [[ $BUILD_LANG == "it" ]]; then
-    echo "--- Patch per includere extra all'interno della ROM"
-  else
-    echo "--- Patching to include extras within ROM"
-  fi
+  echo "--- Patching to include extras within ROM"
 
   for ROM in $BUILD_DIR/rom/out/target/product/*/*.zip; do
 
@@ -719,12 +621,7 @@ fi
 # Upload firmware to mega
 if [ "$TEST_BUILD" -eq 0 ]; then
 
-  if [[ $BUILD_LANG == "it" ]]; then
-    echo "--- Caricamento su mega :rea:"
-  else
-    echo "--- Uploading to mega :rea:"
-  fi
-
+  echo "--- Uploading to mega :rea:"
   mega-logout > /dev/null 2>&1
   mega-login $MEGA_USERNAME $MEGA_PASSWORD > /dev/null 2>&1
   error_exit "mega login"
@@ -739,11 +636,7 @@ if [ "$TEST_BUILD" -eq 0 ]; then
       continue
     fi
 
-    if [[ $BUILD_LANG == "it" ]]; then
-      echo "Caricamento $(basename $ROM)"
-    else
-      echo "Uploading $(basename $ROM)"
-    fi
+    echo "Uploading $(basename $ROM)"
 
     # Get rom size for telegram group
     file_size=$(ls -lh "$ROM" | awk '{print $5}')
@@ -760,21 +653,13 @@ if [ "$TEST_BUILD" -eq 0 ]; then
     ((rom_count=rom_count+1))
   done
 
-  if [[ $BUILD_LANG == "it" ]]; then
-    echo "Caricamento completato"
-  else
-    echo "Upload complete"
-  fi
+  echo "Upload complete"
 
 fi
 
 # Launch OTA handler script
 if [[ "$PROCESS_OTA" == 1 ]]; then
-  if [[ $BUILD_LANG == "it" ]]; then
-    echo "Esecuzione di script di generazione OTA"
-  else
-    echo "--- Running OTA generation script"
-  fi
+  echo "--- Running OTA generation script"
 
   # Create git for ota folder
   rm -rf "$BUILD_DIR/ota" > /dev/null 2>&1
@@ -794,11 +679,7 @@ if [ "$TEST_BUILD" -eq 0 ]; then
   if [ ! -z "$TELEGRAM_TOKEN" ]; then
     if [[ "$rom_count" -gt 0 ]]; then
       # Send message
-      if [[ $BUILD_LANG == "it" ]]; then
-        echo "Invio di un messaggio al gruppo di trasmissione"
-      else
-        echo "Sending message to broadcast group"
-      fi
+      echo "Sending message to broadcast group"
       python3 "$BUILD_DIR/scripts/SendMessage.py" "$UPLOAD_NAME" "$MEGA_FOLDER_ID" "ten" "$file_size" changelog.txt notes.txt "$MEGA_DECRYPT_KEY" "$TELEGRAM_TOKEN" "$TELEGRAM_GROUP" "$BUILD_DIR/.hashes" "$TELEGRAM_AUTHORS"
     fi
   fi
