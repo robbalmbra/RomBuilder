@@ -16,7 +16,7 @@ function check_vars {
     fi
   done
 
-  if [ $count -gt 0 ] && [ $count -lt 3 ]; then
+  if [ $count -gt 0 ] && [ $count -lt ${#variables[@]} ]; then
     echo "Error - ${variable_string:0:${#variable_string}-2} are missing variables. Please define these."
     exit 1
   fi
