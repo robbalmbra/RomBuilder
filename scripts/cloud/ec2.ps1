@@ -157,6 +157,11 @@ if($?) {
     Start-Sleep -s 5
   }
 
+  # Copy private config to instance if its exists on host
+  if ((Test-Path -LiteralPath "$HOME/rom.env")){
+    scp -o StrictHostKeyChecking=no -i $ssh_privkey $HOME/rom.env ubuntu@$public_ip:/home/ubuntu/ > /dev/null 2>&1
+  }
+
   Write-Host "Complete"
 }else{
   Write-Host $instance
