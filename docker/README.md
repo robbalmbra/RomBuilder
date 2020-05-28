@@ -10,8 +10,6 @@ Options can be defined within environment variables or within the environment se
 
 * BUILD_NAME - Used and passed within the lunch command, e.g `bootleggers`, whereby BUILD_NAME is used within the context of the lunch command; e.g. `lunch BUILD_NAME_crownlte-userdebug`
 * UPLOAD_NAME - Defines the folder name that mega uploads to; e.g `bootleggers` whereby UPLOAD_NAME is used within the output directory, e.g. `ROMS/UPLOAD_NAME/29-04-20/`
-* MEGA_USERNAME - Specifies username for mega upload CLI
-* MEGA_PASSWORD - Specifies password for mega upload CLI
 * DEVICES - Defines a list of devices that the build script will iterate over, seperated by a comma; e.g. `crownlte,starlte,star2lte`
 * REPO - Defines the github manfifest URL for the selected rom; e.g. `https://github.com/BootleggersROM/manifest.git`
 * BRANCH Defines the github branch for the specified REPO; e.g. `queso`
@@ -22,6 +20,8 @@ Options can be defined within environment variables or within the environment se
 
 **Optional**
 
+* MEGA_USERNAME - Specifies username for mega upload CLI
+* MEGA_PASSWORD - Specifies password for mega upload CLI
 * MAGISK_VERSION - Specifies magisk version to include within the rom; e.g `20.4`
 * LIBEXYNOS_CAMERA=0 - Turns off libexynoscamera intergration into rom
 * CUSTOM_OUTPUT_DIR - Overrides default build directory to selected directory
@@ -48,7 +48,7 @@ Options can be defined within environment variables or within the environment se
 * TELEGRAM_AUTHORS - Specifies the authors for the telegram automatic group update
 * DEBUG=1 - Dont flush any output to /dev/null. Default ignores output.
 * EXTRA_COMMANDS - Run user commands after sync has finished, e.g. `pwd;ls -al;git clone test.git /opt/out` Default is ignored.
-* UPLOAD_FOLDER - Upload path relative from mega account root, e.g. `android_roms/testing`, `phone_roms`. Default is the folder `ROMS`.
+* MEGA_UPLOAD_FOLDER - Upload path relative from mega account root, e.g. `android_roms/testing`, `phone_roms`. Default is the folder `ROMS`.
 * AUTO_TERMINATE=0 - Ignores normal operation of halting instances once builds have successfully finished within aws and gcloud. Default is terminated on cloud platforms whereby build has successfully completed.
 
 **Other**
