@@ -186,7 +186,7 @@ check_vars $variables
 scp_check=$count
 
 if [ $mega_check -eq 0 ] && [ $scp_check -eq 0 ]; then
-  echo "Error - No upload method set. Please use mega and/or scp."
+  echo "Error - No upload method set. Please use mega and/or scp. :exclamation:"
   exit 1
 fi
 
