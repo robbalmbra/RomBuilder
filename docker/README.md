@@ -18,10 +18,27 @@ Options can be defined within environment variables or within the environment se
 
 **Optional**
 
+
+
+
+**Mega file upload**
 * MEGA_FOLDER_ID - Folder id of the build name being built, needed for non test builds when mega upload is used
 * MEGA_DECRYPT_KEY - Decryption key for selected folder specified in MEGA_FOLDER_ID, needed for non test builds when mega upload is used
+* MEGA_UPLOAD_FOLDER - Upload path relative from mega account root, e.g. `android_roms/testing`, `phone_roms`. Default is the folder `ROMS`.
 * MEGA_USERNAME - Specifies username for mega upload CLI
 * MEGA_PASSWORD - Specifies password for mega upload CLI
+
+**SCP file upload**
+* SCP_USERNAME - Specifies the username to use during file transfer to the host
+* SCP_HOST - Specifies the host to connect to, e.g. `test.git.com`
+* SCP_PATH - Specifies the path to the upload to, e.g. `/home/ubuntu/out/`
+
+**Telegram build updater**
+* TELEGRAM_TOKEN - Specifies token for automatic group update after build has completed.
+* TELEGRAM_GROUP - Specifies telegram group name, e.g `@groupname`
+* TELEGRAM_AUTHORS - Specifies the authors for the telegram automatic group update
+
+**Other**
 * MAGISK_VERSION - Specifies magisk version to include within the rom; e.g `20.4`
 * LIBEXYNOS_CAMERA=0 - Turns off libexynoscamera intergration into rom
 * CUSTOM_OUTPUT_DIR - Overrides default build directory to selected directory
@@ -43,17 +60,10 @@ Options can be defined within environment variables or within the environment se
 * PROCESS_OTA=1 - Generate ota json and upload to sourceforge. Default is ignored.
 * SKIP_BUILD=1 - Skip build process. Default will build.
 * JUST_PROCESS_OTA - Only run ota generation and upload script.
-* TELEGRAM_TOKEN - Specifies token for automatic group update after build has completed.
-* TELEGRAM_GROUP - Specifies telegram group name, e.g `@groupname`
-* TELEGRAM_AUTHORS - Specifies the authors for the telegram automatic group update
 * DEBUG=1 - Dont flush any output to /dev/null. Default ignores output.
 * EXTRA_COMMANDS - Run user commands after sync has finished, e.g. `pwd;ls -al;git clone test.git /opt/out` Default is ignored.
-* MEGA_UPLOAD_FOLDER - Upload path relative from mega account root, e.g. `android_roms/testing`, `phone_roms`. Default is the folder `ROMS`.
 * AUTO_TERMINATE=0 - Ignores normal operation of halting instances once builds have successfully finished within aws and gcloud. Default is terminated on cloud platforms whereby build has successfully completed.
-  SCP_USERNAME
-  SCP_HOST
-  SCP_PATH
 
-**Other**
+**Notes**
 
 Specific environment variables can be set prior to executing build.sh for defining specific build options
