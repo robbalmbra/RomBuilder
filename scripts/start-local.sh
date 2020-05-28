@@ -148,7 +148,7 @@ fi
 
 # Mega/scp write credentials if local config exists, so that pipeline can be made public
 if [ -f "$HOME/rom.env" ]; then
-  source "$HOME/.rom.env"
+  source "$HOME/rom.env"
 fi
 
 if [ -f "/tmp/rom.env" ]; then
