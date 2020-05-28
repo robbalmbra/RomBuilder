@@ -141,20 +141,6 @@ if [ "$quit" -ne 0 ]; then
   exit 1
 fi
 
-if [ -z "$TEST_BUILD" ]; then
-  if [ -z "$MEGA_FOLDER_ID" ]; then
-    echo "$0 - Error, MEGA_FOLDER_ID isn't set."
-    exit 1
-  fi
-
-  if [ -z "$MEGA_DECRYPT_KEY" ]; then
-    echo "$0 - Error, MEGA_DECRYPT_KEY isn't set."
-    exit 1
-  fi
-
-  TEST_BUILD=0
-fi
-
 # Check if telegram vars are all set if any telegram variable is set
 variables=(
   TELEGRAM_TOKEN
@@ -170,6 +156,25 @@ variables=(
 )
 check_vars $variables
 mega_check=$count
+
+if [ -z "$TEST_BUILD" ]; then
+
+  if [ $mega_check -ne 0 ]; then
+    if [ -z "$MEGA_FOLDER_ID" ]; then
+      echo "$0 - Error, MEGA_FOLDER_ID isn't set."
+      exit 1
+    fi
+
+    if [ -z "$MEGA_DECRYPT_KEY" ]; then
+      echo "$0 - Error, MEGA_DECRYPT_KEY isn't set."
+      exit 1
+    fi
+  fi
+
+  TEST_BUILD=0
+fi
+
+
 
 # Check if scp vars are all set if any mega variable is set
 variables=(
