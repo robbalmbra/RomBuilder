@@ -146,6 +146,11 @@ if [ "$quit" -ne 0 ]; then
   exit 1
 fi
 
+# Mega/scp write credentials if local config exists, so that pipeline can be made public
+if [ -f "$HOME/.rombuilder" ]; then
+  source "$HOME/.rombuilder"
+fi
+
 # Check if telegram vars are all set if any telegram variable is set
 variables=(
   TELEGRAM_TOKEN
