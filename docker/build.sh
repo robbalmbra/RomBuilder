@@ -102,7 +102,7 @@ create_scppath()
   host=$2
   path=$3
 
-  ssh -q -o "StrictHostKeyChecking=no" ${user}@${host} mkdir -p $path > /dev/null 2>&1
+  ssh -q -o "StrictHostKeyChecking=no" ${user}@${host} mkdir -p $path
   if [ $? -ne 0 ]; then
 
     arrIN=(${path//// })
@@ -116,7 +116,7 @@ create_scppath()
     done
 
     echo -e "$command_string" > /tmp/sftp
-    sftp -q -b /tmp/sftp -o "StrictHostKeyChecking=no" ${user}@${host} > /dev/null 2>&1
+    sftp -q -b /tmp/sftp -o "StrictHostKeyChecking=no" ${user}@${host}
     rm -rf /tmp/sftp
   fi
   
