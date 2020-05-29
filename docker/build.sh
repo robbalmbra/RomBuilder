@@ -111,7 +111,7 @@ create_scppath()
       command_string+="-mkdir $path_string\n"
     done
 
-    echo -e $command_string > /tmp/sftp
+    echo -e "$command_string" > /tmp/sftp
     sftp -q -b /tmp/sftp -o "StrictHostKeyChecking=no" ${user}@${host} > /dev/null 2>&1
     rm -rf /tmp/sftp
   fi
@@ -321,13 +321,13 @@ fi
 cd "$BUILD_DIR"
 
 # Set git login details if available
-if [ ! -z "$GIT_UNAME']; then
+if [ ! -z "$GIT_UNAME"]; then
   git config --global user.name "$GIT_UNAME"
 else
   git config --global user.name "robbbalmbra"
 fi
 
-if [ ! -z "$GIT_EMAIL']; then
+if [ ! -z "$GIT_EMAIL"]; then
   git config --global user.email "$GIT_EMAIL"
 else
   git config --global user.email "robbalmbra@gmail.com"
@@ -850,7 +850,7 @@ fi
 if [ $AUTO_TERMINATE -eq 1 ]; then
   if [[ "$rom_count" -gt 0 ]]; then
     if [ -f "/tmp/terminate.sh" ]; then
-       if [ ! -z $CUSTOM_TERMINATION_COMMAND ]; then
+       if [ ! -z "$CUSTOM_TERMINATION_COMMAND" ]; then
          eval $CUSTOM_TERMINATION_COMMAND > /dev/null 2>&1
        else
         /bin/bash /tmp/terminate.sh
