@@ -84,7 +84,7 @@ structure = """ ROM: """ + rom_name + """
 """ + changelog_txt + """
 Notes:
 
-""" + notes_txt + """- We also recommend using the WhiteWolf Kernel, which works perfectly on our rom
+""" + notes_txt + """- We also recommend using the WhiteWolf Kernel, which works perfectly on this rom
 
 #crownltexx #starltexx #star2ltexx """
 
