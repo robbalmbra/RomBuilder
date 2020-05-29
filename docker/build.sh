@@ -701,6 +701,9 @@ if [ "$TEST_BUILD" -eq 0 ]; then
     mega-login $MEGA_USERNAME $MEGA_PASSWORD > /dev/null 2>&1
     error_exit "mega login"
 
+    # Create link to created folder
+    mega_folder_link = "https://mega.nz/folder/${MEGA_FOLDER_ID}${MEGA_DECRYPT_KEY}"
+
     shopt -s nocaseglob
     DATE=$(date '+%d-%m-%y');
     for ROM in $BUILD_DIR/rom/out/target/product/*/*.zip; do
@@ -740,6 +743,9 @@ if [ "$TEST_BUILD" -eq 0 ]; then
     if [ "$rom_count" -eq 0 ]; then
       create=1
     fi
+
+    # Create link to created folder
+    scp_folder_link = ${SCP_LINK}"
 
     shopt -s nocaseglob
     DATE=$(date '+%d-%m-%y');
@@ -803,9 +809,11 @@ fi
 if [ "$TEST_BUILD" -eq 0 ]; then
   if [ ! -z "$TELEGRAM_TOKEN" ]; then
     if [[ "$rom_count" -gt 0 ]]; then
+    
+    
       # Send message
       echo "Sending message to broadcast group"
-      python3 "$BUILD_DIR/scripts/SendMessage.py" "$UPLOAD_NAME" "$MEGA_FOLDER_ID" "ten" "$file_size" changelog.txt notes.txt "$MEGA_DECRYPT_KEY" "$TELEGRAM_TOKEN" "$TELEGRAM_GROUP" "$BUILD_DIR/.hashes" "$TELEGRAM_AUTHORS"
+      python3 "$BUILD_DIR/scripts/SendMessage.py" "$UPLOAD_NAME" "ten" "$file_size" changelog.txt notes.txt "$ROM_LINK" "$TELEGRAM_TOKEN" "$TELEGRAM_GROUP" "$BUILD_DIR/.hashes" "$TELEGRAM_AUTHORS"
     fi
   fi
 fi
