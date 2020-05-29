@@ -568,7 +568,7 @@ if [ "$SKIP_BUILD" -eq 0 ]; then
       make installclean > /dev/null 2>&1
     fi
 
-    echo "--- Building $DEVICE ($BUILD_NAME) :building_construction:"
+    echo "--- Building $DEVICE \($BUILD_NAME\) :building_construction:"
 
     # Run lunch
     build_id="${BUILD_NAME}_$DEVICE"
