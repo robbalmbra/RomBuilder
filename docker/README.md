@@ -18,6 +18,9 @@ Options can be defined within environment variables or within the environment se
 
 **Optional**
 
+**Git options**
+* GIT_EMAIL - Specify email to use for git commands
+* GIT_UNAME - Specify username to use for git commands
 
 **Instance options**
 * AUTO_TERMINATE=0 - Ignores normal operation of halting instances once builds have successfully finished within aws and gcloud. Default is terminated on cloud platforms whereby build has successfully completed.
