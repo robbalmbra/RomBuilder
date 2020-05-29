@@ -568,7 +568,7 @@ if [ "$SKIP_BUILD" -eq 0 ]; then
       make installclean > /dev/null 2>&1
     fi
 
-    echo "--- Building $DEVICE \($BUILD_NAME\) :building_construction:"
+    echo "--- Building $DEVICE ($BUILD_NAME) :building_construction:"
 
     # Run lunch
     build_id="${BUILD_NAME}_$DEVICE"
@@ -637,7 +637,7 @@ if [ "$SKIP_BUILD" -eq 0 ]; then
 
     if [ "$ret" != "0" ]; then
 
-      echo "Error - $DEVICE build failed \($ret\) :bk-status-failed:"
+      echo "Error - $DEVICE build failed ($ret) :bk-status-failed:"
 
       # Save folder for cd
       CURRENT=$(pwd)
@@ -786,11 +786,11 @@ if [ "$TEST_BUILD" -eq 0 ]; then
       # Upload via scp
       scp $ROM ${SCP_USERNAME}@${SCP_HOST}:${scp_path_string}
       error_exit "scp upload"
-      
+
       if [ "$create" -eq 1 ]; then
         ((rom_count=rom_count+1))
       fi
-      
+
       sleep 5
     done
 
@@ -819,16 +819,16 @@ fi
 if [ "$TEST_BUILD" -eq 0 ]; then
   if [ ! -z "$TELEGRAM_TOKEN" ]; then
     if [[ "$rom_count" -gt 0 ]]; then
-      
+
       rom_file_links=""
       if [ ! -z "$mega_folder_link" ]; then
         rom_file_links+="mega_folder_link\n"
       fi
-      
+
       if [ ! -z "$scp_folder_link" ]; then
         rom_file_links+="$scp_folder_link\n"
       fi
-    
+
       # Send message
       echo "Sending message to broadcast group"
       python3 "$BUILD_DIR/scripts/SendMessage.py" "$UPLOAD_NAME" "ten" "$file_size" changelog.txt notes.txt "$rom_file_links" "$TELEGRAM_TOKEN" "$TELEGRAM_GROUP" "$BUILD_DIR/.hashes" "$TELEGRAM_AUTHORS"
