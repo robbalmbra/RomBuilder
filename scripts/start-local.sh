@@ -197,11 +197,12 @@ variables=(
   SCP_USERNAME
   SCP_HOST
   SCP_PATH
+  SCP_LINK
 )
 check_vars $variables
 scp_check=$count
 
-if [ "$scp_check" -eq 3 ]; then
+if [ "$scp_check" -eq 4 ]; then
   export SCP_UPLOAD=1
 fi
 
