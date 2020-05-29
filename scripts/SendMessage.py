@@ -15,7 +15,7 @@ version = sys.argv[2]
 filesize = sys.argv[3]
 changelog = sys.argv[4]
 notes = sys.argv[5]
-mega_folder_link = sys.argv[6]
+mega_folder_links = sys.argv[6]
 telegram_token = sys.argv[7]
 telegram_group = sys.argv[8]
 rom_md5 = sys.argv[9]
@@ -30,7 +30,15 @@ if not os.path.isfile(sys.argv[9]):
 else:
   with open(rom_md5, 'r') as file:
     rom_md5_txt = file.read()
-  
+ 
+#Check if sources file exists
+if not os.path.isfile(sys.argv[6]):
+  print("Warning - sources file doesn't exist")
+  mega_folder_link_txt = "Error retrieving sources"
+else:
+  with open(mega_folder_links, 'r') as file:
+    mega_folder_link_txt = file.read()
+
 # Check if changelog file exists
 if not os.path.isfile(sys.argv[4]):
   print("Warning - change log file doesn't exist")
@@ -62,7 +70,7 @@ structure = """ ROM: """ + rom_name + """
 
 ⬇️  Download now ⬇️
 
-""" + mega_folder_link + """
+""" + mega_folder_link_txt + """
 
 📃 ROM hashes 📃
 
