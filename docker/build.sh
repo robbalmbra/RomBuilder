@@ -320,9 +320,19 @@ fi
 # Change to build folder
 cd "$BUILD_DIR"
 
-# Specify global vars
-git config --global user.name robbbalmbra
-git config --global user.email robbalmbra@gmail.com
+# Set git login details if available
+if [ ! -z "$GIT_USERNAME']; then
+  git config --global user.name "$GIT_USERNAME"
+else
+  git config --global user.name "robbbalmbra"
+fi
+
+if [ ! -z "$GIT_EMAIL']; then
+  git config --global user.email "$GIT_EMAIL"
+else
+  git config --global user.email "robbalmbra@gmail.com"
+fi
+
 git config --global color.ui true
 
 variables=(
