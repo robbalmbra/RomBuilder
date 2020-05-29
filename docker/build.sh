@@ -823,18 +823,18 @@ if [ "$TEST_BUILD" -eq 0 ]; then
   if [ ! -z "$TELEGRAM_TOKEN" ]; then
     if [[ "$rom_count" -gt 0 ]]; then
 
-      rom_file_links=""
+      rm -rf "$BUILD_DIR/.sources" > /dev/null 2>&1
       if [ ! -z "$mega_folder_link" ]; then
-        rom_file_links+="mega_folder_link\n"
+        echo "$mega_folder_link" >> "$BUILD_DIR/.sources"
       fi
 
       if [ ! -z "$scp_folder_link" ]; then
-        rom_file_links+="$scp_folder_link\n"
+        echo "$scp_folder_link" >> "$BUILD_DIR/.sources"
       fi
 
       # Send message
       echo "Sending message to broadcast group"
-      python3 "$BUILD_DIR/scripts/SendMessage.py" "$UPLOAD_NAME" "ten" "$file_size" changelog.txt notes.txt "$rom_file_links" "$TELEGRAM_TOKEN" "$TELEGRAM_GROUP" "$BUILD_DIR/.hashes" "$TELEGRAM_AUTHORS"
+      python3 "$BUILD_DIR/scripts/SendMessage.py" "$UPLOAD_NAME" "ten" "$file_size" changelog.txt notes.txt "$BUILD_DIR/.sources" "$TELEGRAM_TOKEN" "$TELEGRAM_GROUP" "$BUILD_DIR/.hashes" "$TELEGRAM_AUTHORS"
     fi
   fi
 fi
