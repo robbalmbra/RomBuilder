@@ -24,7 +24,7 @@ authors = sys.argv[10]
 bot = telegram.Bot(token=telegram_token)
 
 # Check if md5 file exist
-if not os.path.isfile(sys.argv[10]):
+if not os.path.isfile(sys.argv[9]):
   print("Warning - md5 file doesn't exist")
   rom_md5_txt = "Error retrieving md5 hashes"
 else:
@@ -32,7 +32,7 @@ else:
     rom_md5_txt = file.read()
   
 # Check if changelog file exists
-if not os.path.isfile(sys.argv[5]):
+if not os.path.isfile(sys.argv[4]):
   print("Warning - change log file doesn't exist")
   changelog_txt = ""
 else:
@@ -40,7 +40,7 @@ else:
     changelog_txt = file.read()
 
 # Check if notes file exists
-if not os.path.isfile(sys.argv[6]):
+if not os.path.isfile(sys.argv[5]):
   print ("Warning - notes file doesn't exist")
   notes_txt = ""
 else:
