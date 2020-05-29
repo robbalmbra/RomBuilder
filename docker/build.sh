@@ -612,9 +612,6 @@ if [ "$SKIP_BUILD" -eq 0 ]; then
       runonce=1
     fi
 
-    # Save start time of build
-    makestart=`date +%s`
-
     # Make sure script is running in rom directory
     cd "$BUILD_DIR/rom/"
 
@@ -667,9 +664,7 @@ if [ "$SKIP_BUILD" -eq 0 ]; then
     else
 
       # Show time of build in minutes
-      makeend=`date +%s`
-      maketime=$(((makeend-makestart)/60))
-      echo "Success - $DEVICE was built in $maketime minutes"
+      echo "Success - $DEVICE was built"
 
       # Save folder for cd
       CURRENT=$(pwd)
