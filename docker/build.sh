@@ -112,15 +112,9 @@ create_scppath()
     # Iterate over path segments
     for i in "${arrIN[@]}"; do
       path_string+="$i/"
-      command_string+="-mkdir $path_string\n"
+      sftp -o "StrictHostKeyChecking=no" ${user}@${host} <<< "mkdir $path_string"
     done
-
-    echo -e "$command_string" > /tmp/sftp
-    sftp -q -b /tmp/sftp -o "StrictHostKeyChecking=no" ${user}@${host}
-    rm -rf /tmp/sftp
   fi
-  
-  sleep 2
 }
 
 # Check for local use, not using docker
