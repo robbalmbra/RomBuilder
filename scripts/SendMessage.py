@@ -6,28 +6,22 @@ import sys
 import datetime
 import os
 
-if len(sys.argv) < 12:
-  print(sys.argv[0] + " USAGE [ROM NAME] [ROM FOLDER ID] [VERSION] [FILESIZE] [CHANGELOG FILE] [NOTES FILE] [MEGA DECRYPT KEY] [TELEGRAM TOKEN] [TELEGRAM GROUP] [MD5 HASHES] [AUTHORS]")
+if len(sys.argv) < 11:
+  print(sys.argv[0] + " USAGE [ROM NAME] [VERSION] [FILESIZE] [CHANGELOG FILE] [NOTES FILE] [ROM LINK] [TELEGRAM TOKEN] [TELEGRAM GROUP] [MD5 HASHES] [AUTHORS]")
   sys.exit(1)
 
 rom_name = sys.argv[1]
-rom_folder_id = sys.argv[2]
-version = sys.argv[3]
-filesize = sys.argv[4]
-changelog = sys.argv[5]
-notes = sys.argv[6]
-mega_decrypt_key = sys.argv[7]
-telegram_token = sys.argv[8]
-telegram_group = sys.argv[9]
-rom_md5 = sys.argv[10]
-authors = sys.argv[11]
+version = sys.argv[2]
+filesize = sys.argv[3]
+changelog = sys.argv[4]
+notes = sys.argv[5]
+mega_folder_link = sys.argv[6]
+telegram_token = sys.argv[7]
+telegram_group = sys.argv[8]
+rom_md5 = sys.argv[9]
+authors = sys.argv[10]
 
 bot = telegram.Bot(token=telegram_token)
-
-# Check if rom mega id is valid
-if rom_folder_id == "":
-  print("Error - ROM FOLDER ID is invalid")
-  sys.exit(2)
 
 # Check if md5 file exist
 if not os.path.isfile(sys.argv[10]):
@@ -52,9 +46,6 @@ if not os.path.isfile(sys.argv[6]):
 else:
   with open(notes, 'r') as file2:
     notes_txt = file2.read()
-
-# Create mega link from id
-mega_folder_link = "https://mega.nz/folder/" + rom_folder_id + mega_decrypt_key
 
 # Get current date
 x = datetime.datetime.now()
