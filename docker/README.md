@@ -32,7 +32,7 @@ Options can be defined within environment variables or within the environment se
 **SCP file upload**
 * SCP_USERNAME - Specifies the username to use during file transfer to the host
 * SCP_HOST - Specifies the host to connect to, e.g. `test.git.com`
-* SCP_PATH - Specifies the path to the upload to, e.g. `/home/ubuntu/out/`
+* SCP_PATH - Specifies an absolute path to the upload to, e.g. `/home/ubuntu/out/`
 
 **Telegram build updater**
 * TELEGRAM_TOKEN - Specifies token for automatic group update after build has completed.
