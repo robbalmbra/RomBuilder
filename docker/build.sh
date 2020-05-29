@@ -755,7 +755,7 @@ if [ "$TEST_BUILD" -eq 0 ]; then
     fi
 
     # Create link to created folder
-    scp_folder_link = $SCP_LINK"
+    scp_folder_link = "$SCP_LINK"
 
     shopt -s nocaseglob
     DATE=$(date '+%d-%m-%y');
