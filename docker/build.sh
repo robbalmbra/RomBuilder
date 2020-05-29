@@ -13,7 +13,7 @@ else
   AUTO_TERMINATE=1
 fi
 
-if [ -z "$MEGA_UPLOAD_FOLDER]; then
+if [ -z "$MEGA_UPLOAD_FOLDER" ]; then
   MEGA_UPLOAD_FOLDER="ROMS"
 fi
 
