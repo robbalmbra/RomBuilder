@@ -13,6 +13,10 @@ else
   AUTO_TERMINATE=1
 fi
 
+if [ -z "$MEGA_UPLOAD_FOLDER]; then
+  MEGA_UPLOAD_FOLDER="ROMS"
+fi
+
 if [ -z "$MEGA_UPLOAD" ]; then
   export MEGA_UPLOAD=0
 fi
