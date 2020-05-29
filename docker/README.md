@@ -24,6 +24,7 @@ Options can be defined within environment variables or within the environment se
 
 **Instance options**
 * AUTO_TERMINATE=0 - Ignores normal operation of halting instances once builds have successfully finished within aws and gcloud. Default is terminated on cloud platforms whereby build has successfully completed.
+* CUSTOM_TERMINATION_COMMAND - Defines a custom termination command once building has successfully built. e.g. `halt`
 
 **Mega file upload**
 * MEGA_FOLDER_ID - Folder id of the build name being built, needed for non test builds when mega upload is used
