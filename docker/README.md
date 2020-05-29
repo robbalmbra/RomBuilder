@@ -76,5 +76,5 @@ Options can be defined within environment variables or within the environment se
 
 **Notes**
 
-*Specific environment variables can be set prior to executing build.sh for defining specific build options
-*SCP uploader uses a private key to connect to the server, please configurate this with your scp provider.
+* Specific environment variables can be set prior to executing build.sh for defining specific build options
+* SCP uploader uses a private key to connect to the server, please configurate this with your scp provider.
