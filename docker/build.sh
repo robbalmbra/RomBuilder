@@ -692,6 +692,7 @@ fi
 # Upload firmware to mega
 if [ "$TEST_BUILD" -eq 0 ]; then
 
+  rom_count=0
   if [ "$MEGA_UPLOAD" -eq 1 ]; then
 
     # Upload to mega if set
@@ -702,7 +703,6 @@ if [ "$TEST_BUILD" -eq 0 ]; then
 
     shopt -s nocaseglob
     DATE=$(date '+%d-%m-%y');
-    rom_count=0
     for ROM in $BUILD_DIR/rom/out/target/product/*/*.zip; do
 
       # Skip if zip has -ota- in zip
@@ -734,6 +734,12 @@ if [ "$TEST_BUILD" -eq 0 ]; then
 
     # Upload via scp if set
     echo "--- Uploading via scp :rea:"
+    rm -rf "$BUILD_DIR/.hashes"
+
+    create=0
+    if [ "$rom_count" -eq 0 ]; then
+      create=1
+    fi
 
     shopt -s nocaseglob
     DATE=$(date '+%d-%m-%y');
@@ -757,9 +763,18 @@ if [ "$TEST_BUILD" -eq 0 ]; then
       # Create folder structure via sftp and ssh
       create_scppath "$SCP_USERNAME" "$SCP_HOST" "$scp_path_string"
 
+      # Create md5 of file
+      file_md5=`md5sum ${ROM} | awk '{ print $1 }'`
+      echo "$device_name - $file_md5" >> "$BUILD_DIR/.hashes"
+
       # Upload via scp
       scp $ROM ${SCP_USERNAME}@${SCP_HOST}:${scp_path_string}
       error_exit "scp upload"
+      
+      if [ "$create" -eq 1 ]; then
+        ((rom_count=rom_count+1))
+      fi
+      
       sleep 5
     done
 
