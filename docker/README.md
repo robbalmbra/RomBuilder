@@ -36,7 +36,7 @@ Options can be defined within environment variables or within the environment se
 **SCP file upload**
 * SCP_USERNAME - Specifies the username to use during file transfer to the host
 * SCP_HOST - Specifies the host to connect to, e.g. `test.git.com`
-* SCP_PATH - Specifies an absolute path to upload to, e.g. `/home/robbalmbra/project/{device}/{data}/` Optional - {device} will resolve to the current device being uploaded, {date} will resolve to the current date.
+* SCP_PATH - Specifies an absolute path to upload to, e.g. `/home/robbalmbra/project/{device}/{date}/` Optional - {device} will resolve to the current device being uploaded, {date} will resolve to the current date.
 * SCP_LINK - Public link to where files are hosted
 
 **Telegram build updater**
