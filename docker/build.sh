@@ -713,7 +713,7 @@ if [ "$TEST_BUILD" -eq 0 ]; then
     error_exit "mega login"
 
     # Create link to created folder
-    mega_folder_link = "https://mega.nz/folder/${MEGA_FOLDER_ID}${MEGA_DECRYPT_KEY}"
+    mega_folder_link="https://mega.nz/folder/${MEGA_FOLDER_ID}${MEGA_DECRYPT_KEY}"
 
     shopt -s nocaseglob
     DATE=$(date '+%d-%m-%y');
@@ -756,7 +756,7 @@ if [ "$TEST_BUILD" -eq 0 ]; then
     fi
 
     # Create link to created folder
-    scp_folder_link = "$SCP_LINK"
+    scp_folder_link="$SCP_LINK"
 
     shopt -s nocaseglob
     DATE=$(date '+%d-%m-%y');
