@@ -256,7 +256,6 @@ if [ ! -z "$JUST_UPLOAD" ]; then
       done
 
       echo "Upload complete"
-      exit 0
     fi
 
     if [ "$SCP_UPLOAD" -eq 1 ]; then
@@ -291,6 +290,7 @@ if [ ! -z "$JUST_UPLOAD" ]; then
       done
 
       echo "Upload complete"
+      exit 0
     fi
   fi
 fi
