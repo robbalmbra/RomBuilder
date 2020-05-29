@@ -745,7 +745,7 @@ if [ "$TEST_BUILD" -eq 0 ]; then
     fi
 
     # Create link to created folder
-    scp_folder_link = ${SCP_LINK}"
+    scp_folder_link = $SCP_LINK"
 
     shopt -s nocaseglob
     DATE=$(date '+%d-%m-%y');
@@ -809,11 +809,19 @@ fi
 if [ "$TEST_BUILD" -eq 0 ]; then
   if [ ! -z "$TELEGRAM_TOKEN" ]; then
     if [[ "$rom_count" -gt 0 ]]; then
-    
+      
+      rom_file_links=""
+      if [ ! -z "$mega_folder_link" ]; then
+        rom_file_links+="mega_folder_link\n"
+      fi
+      
+      if [ ! -z "$scp_folder_link" ]; then
+        rom_file_links+="$scp_folder_link\n"
+      fi
     
       # Send message
       echo "Sending message to broadcast group"
-      python3 "$BUILD_DIR/scripts/SendMessage.py" "$UPLOAD_NAME" "ten" "$file_size" changelog.txt notes.txt "$ROM_LINK" "$TELEGRAM_TOKEN" "$TELEGRAM_GROUP" "$BUILD_DIR/.hashes" "$TELEGRAM_AUTHORS"
+      python3 "$BUILD_DIR/scripts/SendMessage.py" "$UPLOAD_NAME" "ten" "$file_size" changelog.txt notes.txt "$rom_file_links" "$TELEGRAM_TOKEN" "$TELEGRAM_GROUP" "$BUILD_DIR/.hashes" "$TELEGRAM_AUTHORS"
     fi
   fi
 fi
