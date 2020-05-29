@@ -274,7 +274,7 @@ if [ ! -z "$JUST_UPLOAD" ]; then
 
         # Replace device with dynamic name if it exists in path
         device_name="$(basename "$(dirname "$ROM")")"
-        scp_path_string=$SCP_PATH
+        scp_path_string="$SCP_PATH"
         scp_path_string=${scp_path_string/\{device\}/$device_name}
         scp_path_string=${scp_path_string/\{date\}/$DATE}
 
@@ -771,7 +771,7 @@ if [ "$TEST_BUILD" -eq 0 ]; then
 
       # Replace device with dynamic name if it exists in path
       device_name="$(basename "$(dirname "$ROM")")"
-      scp_path_string=$SCP_PATH
+      scp_path_string="$SCP_PATH"
       scp_path_string=${scp_path_string/\{device\}/$device_name}
       scp_path_string=${scp_path_string/\{date\}/$DATE}
 
