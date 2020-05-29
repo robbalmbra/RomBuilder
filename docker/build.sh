@@ -850,7 +850,11 @@ fi
 if [ $AUTO_TERMINATE -eq 1 ]; then
   if [[ "$rom_count" -gt 0 ]]; then
     if [ -f "/tmp/terminate.sh" ]; then
-      /bin/bash /tmp/terminate.sh
+       if [ ! -z "$CUSTOM_TERMINATION_COMMAND" ]; then
+         eval $CUSTOM_TERMINATION_COMMAND > /dev/null 2>&1
+       else
+        /bin/bash /tmp/terminate.sh
+       fi
     fi
   fi
 fi
