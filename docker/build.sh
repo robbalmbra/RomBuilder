@@ -321,8 +321,8 @@ fi
 cd "$BUILD_DIR"
 
 # Set git login details if available
-if [ ! -z "$GIT_USERNAME']; then
-  git config --global user.name "$GIT_USERNAME"
+if [ ! -z "$GIT_UNAME']; then
+  git config --global user.name "$GIT_UNAME"
 else
   git config --global user.name "robbbalmbra"
 fi
