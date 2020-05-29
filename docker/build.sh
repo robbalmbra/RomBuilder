@@ -115,6 +115,8 @@ create_scppath()
     sftp -q -b /tmp/sftp -o "StrictHostKeyChecking=no" ${user}@${host} > /dev/null 2>&1
     rm -rf /tmp/sftp
   fi
+  
+  sleep 2
 }
 
 # Check for local use, not using docker
@@ -252,7 +254,7 @@ if [ ! -z "$JUST_UPLOAD" ]; then
         echo "Uploading $(basename $ROM)"
         mega-put -c $ROM $MEGA_UPLOAD_FOLDER/$UPLOAD_NAME/$DATE/
         error_exit "mega put"
-        sleep 5
+        sleep 3
       done
 
       echo "Upload complete"
@@ -286,7 +288,7 @@ if [ ! -z "$JUST_UPLOAD" ]; then
         # Upload via scp
         scp $ROM ${SCP_USERNAME}@${SCP_HOST}:${scp_path_string}
         error_exit "scp upload"
-        sleep 5
+        sleep 3
       done
 
       echo "Upload complete"
@@ -737,7 +739,7 @@ if [ "$TEST_BUILD" -eq 0 ]; then
       file_md5=`md5sum ${ROM} | awk '{ print $1 }'`
       device_name="$(basename "$(dirname "$ROM")")"
       echo "$device_name - $file_md5" >> "$BUILD_DIR/.hashes"
-      sleep 5
+      sleep 3
       ((rom_count=rom_count+1))
     done
 
@@ -793,7 +795,7 @@ if [ "$TEST_BUILD" -eq 0 ]; then
         ((rom_count=rom_count+1))
       fi
 
-      sleep 5
+      sleep 3
     done
 
     echo "Upload complete"
