@@ -91,6 +91,32 @@ log_setting()
   echo "Setting $1 to '$2'"
 }
 
+# Create path on scp server
+create_scppath()
+{
+  user=$1
+  host=$2
+  path=$3
+
+  ssh -q -o "StrictHostKeyChecking=no" ${user}@${host} mkdir -p $path > /dev/null 2>&1
+  if [ $? -ne 0 ]; then
+
+    arrIN=(${path//// })
+    path_string="/"
+    command_string=""
+
+    # Iterate over path segments
+    for i in "${arrIN[@]}"; do
+      path_string+="$i/"
+      command_string+="-mkdir $path_string\n"
+    done
+
+    echo -e $command_string > /tmp/sftp
+    sftp -q -b /tmp/sftp -o "StrictHostKeyChecking=no" ${user}@${host} > /dev/null 2>&1
+    rm -rf /tmp/sftp
+  fi
+}
+
 # Check for local use, not using docker
 if [ ! -z "$OUTPUT_DIR" ]; then
   BUILD_DIR="$OUTPUT_DIR"
@@ -249,8 +275,16 @@ if [ ! -z "$JUST_UPLOAD" ]; then
 
         echo "Uploading $(basename $ROM)"
 
+        # Replace device with dynamic name if it exists in path
+        device_name="$(basename "$(dirname "$ROM")")"
+        scp_path_string=$SCP_PATH
+        scp_path_string=${scp_path_string/\{device\}/$device_name}
+
+        # Create folder structure via sftp and ssh
+        create_scppath "$SCP_USERNAME" "$SCP_HOST" "$scp_path_string"
+
         # Upload via scp
-        scp $ROM ${SCP_USERNAME}@${SCP_HOST}:${SCP_PATH}
+        scp $ROM ${SCP_USERNAME}@${SCP_HOST}:${scp_path_string}
         error_exit "scp upload"
         sleep 5
       done
@@ -719,6 +753,9 @@ if [ "$TEST_BUILD" -eq 0 ]; then
       device_name="$(basename "$(dirname "$ROM")")"
       scp_path_string=$SCP_PATH
       scp_path_string=${scp_path_string/\{device\}/$device_name}
+
+      # Create folder structure via sftp and ssh
+      create_scppath "$SCP_USERNAME" "$SCP_HOST" "$scp_path_string"
 
       # Upload via scp
       scp $ROM ${SCP_USERNAME}@${SCP_HOST}:${scp_path_string}
