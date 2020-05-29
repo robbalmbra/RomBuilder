@@ -775,6 +775,7 @@ if [ "$TEST_BUILD" -eq 0 ]; then
       device_name="$(basename "$(dirname "$ROM")")"
       scp_path_string=$SCP_PATH
       scp_path_string=${scp_path_string/\{device\}/$device_name}
+      scp_path_string=${scp_path_string/\{date\}/$DATE}
 
       # Create folder structure via sftp and ssh
       create_scppath "$SCP_USERNAME" "$SCP_HOST" "$scp_path_string"
