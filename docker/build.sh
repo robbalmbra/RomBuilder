@@ -104,15 +104,13 @@ create_scppath()
 
   ssh -q -o "StrictHostKeyChecking=no" ${user}@${host} mkdir -p $path
   if [ $? -ne 0 ]; then
-
     arrIN=(${path//// })
     path_string="/"
-    command_string=""
 
     # Iterate over path segments
     for i in "${arrIN[@]}"; do
       path_string+="$i/"
-      sftp -o "StrictHostKeyChecking=no" ${user}@${host} <<< "mkdir $path_string"
+      sftp -q -o "StrictHostKeyChecking=no" ${user}@${host} <<< "mkdir $path_string"
     done
   fi
 }
