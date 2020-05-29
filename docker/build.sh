@@ -637,7 +637,7 @@ if [ "$SKIP_BUILD" -eq 0 ]; then
 
     if [ "$ret" != "0" ]; then
 
-      echo "Error - $DEVICE build failed ($ret) :bk-status-failed:"
+      echo "Error - $DEVICE build failed \($ret\) :bk-status-failed:"
 
       # Save folder for cd
       CURRENT=$(pwd)
