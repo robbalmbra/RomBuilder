@@ -110,6 +110,7 @@ create_scppath()
     # Iterate over path segments
     for i in "${arrIN[@]}"; do
       path_string+="$i/"
+      echo "$path_string"
       sftp -q -o "StrictHostKeyChecking=no" ${user}@${host} <<< "mkdir $path_string"
     done
   fi
@@ -771,12 +772,12 @@ if [ "$TEST_BUILD" -eq 0 ]; then
 
       # Replace device with dynamic name if it exists in path
       device_name="$(basename "$(dirname "$ROM")")"
-      scp_path_string="$SCP_PATH"
-      scp_path_string=${scp_path_string/\{device\}/$device_name}
-      scp_path_string=${scp_path_string/\{date\}/$DATE}
+      scp_path_string2="$SCP_PATH"
+      scp_path_string2=${scp_path_string2/\{device\}/$device_name}
+      scp_path_string2=${scp_path_string2/\{date\}/$DATE}
 
       # Create folder structure via sftp and ssh
-      create_scppath "$SCP_USERNAME" "$SCP_HOST" "$scp_path_string"
+      create_scppath "$SCP_USERNAME" "$SCP_HOST" "$scp_path_string2"
 
       # Upload via scp
       scp $ROM ${SCP_USERNAME}@${SCP_HOST}:${scp_path_string}
