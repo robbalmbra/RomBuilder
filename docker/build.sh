@@ -773,10 +773,14 @@ if [ "$TEST_BUILD" -eq 0 ]; then
         continue
       fi
 
-      echo "Uploading $(basename $ROM)"
-
       # Get rom size for telegram group
       file_size=$(ls -lh "$ROM" | awk '{print $5}')
+
+      # Create md5 of file
+      file_md5=`md5sum ${ROM} | awk '{ print $1 }'`
+      echo "$device_name - $file_md5" >> "$BUILD_DIR/.hashes"
+
+      echo "Uploading $(basename $ROM)"
 
       # Replace device with dynamic name if it exists in path
       device_name="$(basename "$(dirname "$ROM")")"
@@ -786,10 +790,6 @@ if [ "$TEST_BUILD" -eq 0 ]; then
 
       # Create folder structure via sftp and ssh
       create_scppath "$SCP_USERNAME" "$SCP_HOST" "$scp_path_string"
-
-      # Create md5 of file
-      file_md5=`md5sum ${ROM} | awk '{ print $1 }'`
-      echo "$device_name - $file_md5" >> "$BUILD_DIR/.hashes"
 
       # Upload via scp
       scp $ROM ${SCP_USERNAME}@${SCP_HOST}:${scp_path_string}
