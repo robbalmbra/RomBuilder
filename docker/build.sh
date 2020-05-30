@@ -134,7 +134,7 @@ scp_upload()
 
     mkdir -p /tmp/rom_out/${SCP_PATH}/
     cp $ROM /tmp/rom_out/${SCP_PATH}/
-    rsync -avR /tmp/rom_out/./${SCP_PATH} ${SCP_USER}@${SCP_HOST}:${SCP_DEST}
+    rsync -avR -e "ssh -o StrictHostKeyChecking=no" /tmp/rom_out/./${SCP_PATH} ${SCP_USER}@${SCP_HOST}:${SCP_DEST}
     error_exit "scp rsync"
     sleep 3
   done
