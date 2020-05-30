@@ -132,10 +132,12 @@ scp_upload()
     scp_path_string=${SCP_PATH/\{device\}/$device_name}
     scp_path_string=${scp_path_string/\{date\}/$DATE}
 
+    rm -rf /tmp/rom_out/
     mkdir -p /tmp/rom_out/${SCP_PATH}/
     cp $ROM /tmp/rom_out/${SCP_PATH}/
     rsync -avR -e "ssh -o StrictHostKeyChecking=no" /tmp/rom_out/./${SCP_PATH} ${SCP_USER}@${SCP_HOST}:${SCP_DEST}
     error_exit "scp rsync"
+    rm -rf /tmp/rom_out/
     sleep 3
   done
 
