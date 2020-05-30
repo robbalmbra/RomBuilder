@@ -131,7 +131,7 @@ scp_upload()
     scp_path_string=${scp_path_string/\{date\}/$DATE}
 
     # Create folder structure via sftp or ssh
-    create_scppath "$SCP_USERNAME" "$SCP_HOST" "$scp_path_string"
+    create_scppath "$SCP_USERNAME" "$SCP_HOST" "${scp_path_string}"
 
     # Upload via scp
     scp $ROM ${SCP_USERNAME}@${SCP_HOST}:${scp_path_string}
@@ -170,9 +170,9 @@ create_scppath()
 
     # Iterate over path segments
     for i in "${arrIN[@]}"; do
-      path_string+="$i//"
+      path_string+="$i/"
       echo "$path_string"
-      sftp -q -o "StrictHostKeyChecking=no" ${user}@${host} <<< "mkdir $path_string"
+      sftp -q -o "StrictHostKeyChecking=no" ${user}@${host} <<< "mkdir ${path_string}"
     done
   fi
 }
