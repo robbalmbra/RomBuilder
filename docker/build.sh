@@ -296,14 +296,11 @@ fi
 # Jut upload mode
 if [ ! -z "$JUST_UPLOAD" ]; then
 
-  if [ "$TEST_BUILD" -eq 0 ]; then
-
     # Upload firmware to mega if set
     if [ "$MEGA_UPLOAD" -eq 1 ]; then
 
       # Call handler for mega upload
       mega_upload
-      exit 0
 
     fi
 
@@ -311,10 +308,10 @@ if [ ! -z "$JUST_UPLOAD" ]; then
 
       # Call handler for scp upload
       scp_upload
-      exit 0
 
     fi
-  fi
+
+    exit 0
 fi
 
 # Flush logs
