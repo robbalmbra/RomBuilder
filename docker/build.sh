@@ -133,10 +133,10 @@ scp_upload()
     scp_path_string=${scp_path_string/\{date\}/$DATE}
 
     rm -rf /tmp/rom_out/
-    mkdir -p /tmp/rom_out/${SCP_PATH}/
-    cp $ROM /tmp/rom_out/${SCP_PATH}/
-    echo "rsync -avR -e \"ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null\" /tmp/rom_out/./$SCP_PATH $SCP_USERNAME@$SCP_HOST:$SCP_DEST"
-    rsync -avR -e "ssh -i ~/.id_rsa -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" /tmp/rom_out/./$SCP_PATH $SCP_USERNAME@$SCP_HOST:$SCP_DEST
+    mkdir -p /tmp/rom_out/$scp_path_string/
+    cp $ROM /tmp/rom_out/$scp_path_string
+    echo "rsync -avR -e \"ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null\" /tmp/rom_out/./$scp_path_string $SCP_USERNAME@$SCP_HOST:$SCP_DEST"
+    rsync -avR -e "ssh -i ~/.id_rsa -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" /tmp/rom_out/./$scp_path_string $SCP_USERNAME@$SCP_HOST:$SCP_DEST
     error_exit "scp rsync"
     rm -rf /tmp/rom_out/
     sleep 3
