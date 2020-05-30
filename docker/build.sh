@@ -98,9 +98,9 @@ log_setting()
 # Create path on scp server
 create_scppath()
 {
-  user=$1
-  host=$2
-  path=$3
+  user="$1"
+  host="$2"
+  path="$3"
 
   ssh -q -o "StrictHostKeyChecking=no" ${user}@${host} mkdir -p $path
   if [ $? -ne 0 ]; then
