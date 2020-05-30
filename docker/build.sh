@@ -81,6 +81,67 @@ fi
 
 ota_found=0
 
+# Upload function for mega
+mega_upload()
+{
+  # Upload to mega if set
+  echo "--- Uploading to mega :rea:"
+  mega-logout > /dev/null 2>&1
+  mega-login $MEGA_USERNAME $MEGA_PASSWORD > /dev/null 2>&1
+  error_exit "mega login"
+
+  shopt -s nocaseglob
+  DATE=$(date '+%d-%m-%y');
+  for ROM in $BUILD_DIR/rom/out/target/product/*/*.zip; do
+
+    # Skip if zip has -ota- in zip
+    if [[ $ROM == *"-ota-"* ]]; then
+      continue
+    fi
+
+    echo "Uploading $(basename $ROM)"
+    mega-put -c $ROM $MEGA_UPLOAD_FOLDER/$UPLOAD_NAME/$DATE/
+    error_exit "mega put"
+    sleep 3
+  done
+
+  echo "Upload complete"
+}
+
+# Upload function for scp
+scp_upload()
+{
+  # Upload via scp if set
+  echo "--- Uploading via scp :rea:"
+
+  shopt -s nocaseglob
+  DATE=$(date '+%d-%m-%y');
+  for ROM in $BUILD_DIR/rom/out/target/product/*/*.zip; do
+
+    # Skip if zip has -ota- in zip
+    if [[ $ROM == *"-ota-"* ]]; then
+      continue
+    fi
+
+    echo "Uploading $(basename $ROM)"
+
+    # Replace device with dynamic name if it exists in path
+    device_name="$(basename "$(dirname "$ROM")")"
+    scp_path_string=${SCP_PATH/\{device\}/$device_name}
+    scp_path_string=${scp_path_string/\{date\}/$DATE}
+
+    # Create folder structure via sftp or ssh
+    create_scppath "$SCP_USERNAME" "$SCP_HOST" "$scp_path_string"
+
+    # Upload via scp
+    scp $ROM ${SCP_USERNAME}@${SCP_HOST}:${scp_path_string}
+    error_exit "scp upload"
+    sleep 3
+  done
+
+  echo "Upload complete"
+}
+
 error_exit()
 {
   ret="$?"
@@ -239,57 +300,19 @@ if [ ! -z "$JUST_UPLOAD" ]; then
 
     # Upload firmware to mega if set
     if [ "$MEGA_UPLOAD" -eq 1 ]; then
-      echo "--- Uploading to mega :rea:"
 
-      mega-logout > /dev/null 2>&1
-      mega-login $MEGA_USERNAME $MEGA_PASSWORD > /dev/null 2>&1
-      error_exit "mega login"
+      # Call handler for mega upload
+      mega_upload
+      exit 0
 
-      shopt -s nocaseglob
-      DATE=$(date '+%d-%m-%y');
-      for ROM in $BUILD_DIR/rom/out/target/product/*/*.zip; do
-        echo "Uploading $(basename $ROM)"
-        mega-put -c $ROM $MEGA_UPLOAD_FOLDER/$UPLOAD_NAME/$DATE/
-        error_exit "mega put"
-        sleep 3
-      done
-
-      echo "Upload complete"
     fi
 
     if [ "$SCP_UPLOAD" -eq 1 ]; then
 
-      # Upload via scp if set
-      echo "--- Uploading via scp :rea:"
-
-      shopt -s nocaseglob
-      DATE=$(date '+%d-%m-%y');
-      for ROM in $BUILD_DIR/rom/out/target/product/*/*.zip; do
-
-        # Skip if zip has -ota- in zip
-        if [[ $ROM == *"-ota-"* ]]; then
-          continue
-        fi
-
-        echo "Uploading $(basename $ROM)"
-
-        # Replace device with dynamic name if it exists in path
-        device_name="$(basename "$(dirname "$ROM")")"
-        scp_path_string="$SCP_PATH"
-        scp_path_string=${scp_path_string/\{device\}/$device_name}
-        scp_path_string=${scp_path_string/\{date\}/$DATE}
-
-        # Create folder structure via sftp and ssh
-        create_scppath "$SCP_USERNAME" "$SCP_HOST" "$scp_path_string"
-
-        # Upload via scp
-        scp $ROM ${SCP_USERNAME}@${SCP_HOST}:${scp_path_string}
-        error_exit "scp upload"
-        sleep 3
-      done
-
-      echo "Upload complete"
+      # Call handler for scp upload
+      scp_upload
       exit 0
+
     fi
   fi
 fi
@@ -697,101 +720,53 @@ fi
 # Upload firmware to mega
 if [ "$TEST_BUILD" -eq 0 ]; then
 
-  rom_count=0
   if [ "$MEGA_UPLOAD" -eq 1 ]; then
 
-    # Upload to mega if set
-    echo "--- Uploading to mega :rea:"
-    mega-logout > /dev/null 2>&1
-    mega-login $MEGA_USERNAME $MEGA_PASSWORD > /dev/null 2>&1
-    error_exit "mega login"
-
-    # Create link to created folder
+    # Create link to created folder for telegram updater
     mega_folder_link="https://mega.nz/folder/${MEGA_FOLDER_ID}${MEGA_DECRYPT_KEY}"
 
-    shopt -s nocaseglob
-    DATE=$(date '+%d-%m-%y');
-    for ROM in $BUILD_DIR/rom/out/target/product/*/*.zip; do
+    # Call handler for mega upload
+    mega_upload
 
-      # Skip if zip has -ota- in zip
-      if [[ $ROM == *"-ota-"* ]]; then
-        continue
-      fi
-
-      echo "Uploading $(basename $ROM)"
-
-      # Get rom size for telegram group
-      file_size=$(ls -lh "$ROM" | awk '{print $5}')
-
-      # Upload
-      mega-put -c $ROM $MEGA_UPLOAD_FOLDER/$UPLOAD_NAME/$DATE/
-      error_exit "mega put"
-
-      # Create md5 of file
-      file_md5=`md5sum ${ROM} | awk '{ print $1 }'`
-      device_name="$(basename "$(dirname "$ROM")")"
-      echo "$device_name - $file_md5" >> "$BUILD_DIR/.hashes"
-      sleep 3
-      ((rom_count=rom_count+1))
-    done
-
-    echo "Upload complete"
   fi
 
   if [ "$SCP_UPLOAD" -eq 1 ]; then
 
-    # Upload via scp if set
-    echo "--- Uploading via scp :rea:"
-    rm -rf "$BUILD_DIR/.hashes"
-
-    create=0
-    if [ "$rom_count" -eq 0 ]; then
-      create=1
-    fi
-
-    # Create link to created folder
+    # Create link to created folder for telegram updater
     scp_folder_link="$SCP_LINK"
 
-    shopt -s nocaseglob
-    DATE=$(date '+%d-%m-%y');
-    for ROM in $BUILD_DIR/rom/out/target/product/*/*.zip; do
+    # Call handler for scp upload
+    scp_upload
 
-      # Skip if zip has -ota- in zip
-      if [[ $ROM == *"-ota-"* ]]; then
-        continue
-      fi
-
-      # Get rom size for telegram group
-      file_size=$(ls -lh "$ROM" | awk '{print $5}')
-
-      # Create md5 of file
-      file_md5=`md5sum ${ROM} | awk '{ print $1 }'`
-      echo "$device_name - $file_md5" >> "$BUILD_DIR/.hashes"
-
-      echo "Uploading $(basename $ROM)"
-
-      # Replace device with dynamic name if it exists in path
-      device_name="$(basename "$(dirname "$ROM")")"
-      scp_path_string2="$SCP_PATH"
-      scp_path_string2=${scp_path_string2/\{device\}/$device_name}
-      scp_path_string2=${scp_path_string2/\{date\}/$DATE}
-
-      # Create folder structure via sftp and ssh
-      create_scppath "$SCP_USERNAME" "$SCP_HOST" "$scp_path_string2"
-
-      # Upload via scp
-      scp $ROM ${SCP_USERNAME}@${SCP_HOST}:${scp_path_string}
-      error_exit "scp upload"
-
-      if [ "$create" -eq 1 ]; then
-        ((rom_count=rom_count+1))
-      fi
-
-      sleep 3
-    done
-
-    echo "Upload complete"
   fi
+fi
+
+# Retrieve md5, file size and rom count
+if [ "$MEGA_UPLOAD" -eq 1 ] || [ "$SCP_UPLOAD" -eq 1 ]; then
+
+  # Iterate over ROMS
+  rom_count=0
+  for ROM in $BUILD_DIR/rom/out/target/product/*/*.zip; do
+
+    # Skip if zip has -ota- in zip
+    if [[ $ROM == *"-ota-"* ]]; then
+      continue
+    fi
+
+    # Get device name from path
+    device_name="$(basename "$(dirname "$ROM")")"
+
+    # Get rom size for telegram group
+    file_size=$(ls -lh "$ROM" | awk '{print $5}')
+
+    # Create md5 of file
+    file_md5=`md5sum ${ROM} | awk '{ print $1 }'`
+    echo "$device_name - $file_md5" >> "$BUILD_DIR/.hashes"
+
+    # Log valid rom count
+    ((rom_count=rom_count+1))
+  done
+
 fi
 
 # Launch OTA handler script
