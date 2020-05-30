@@ -770,6 +770,12 @@ if [ "$MEGA_UPLOAD" -eq 1 ] || [ "$SCP_UPLOAD" -eq 1 ]; then
     ((rom_count=rom_count+1))
   done
 
+  # Error if rom_count is 0
+  if [ $rom_count -eq 0 ]; then
+    echo "Error - Failed to find any built ROM files"
+    exit 1
+  fi
+
 fi
 
 # Launch OTA handler script
