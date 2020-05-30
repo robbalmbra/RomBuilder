@@ -130,6 +130,9 @@ scp_upload()
     scp_path_string=${SCP_PATH/\{device\}/$device_name}
     scp_path_string=${scp_path_string/\{date\}/$DATE}
 
+    echo "$SCP_PATH"
+    echo "$scp_path_string"
+
     # Create folder structure via sftp or ssh
     create_scppath "$SCP_USERNAME" "$SCP_HOST" "$scp_path_string"
 
