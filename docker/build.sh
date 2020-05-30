@@ -132,13 +132,12 @@ scp_upload()
     scp_path_string=${SCP_PATH/\{device\}/$device_name}
     scp_path_string=${scp_path_string/\{date\}/$DATE}
 
-    rm -rf /tmp/rom_out/
-    mkdir -p /tmp/rom_out/$scp_path_string/
-    cp $ROM /tmp/rom_out/$scp_path_string
-    echo "rsync -avR -e \"ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null\" /tmp/rom_out/./$scp_path_string $SCP_USERNAME@$SCP_HOST:$SCP_DEST"
-    rsync -avR -e "ssh -i ~/.id_rsa -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" /tmp/rom_out/./$scp_path_string $SCP_USERNAME@$SCP_HOST:$SCP_DEST
+    rm -rf /tmp/rom_out/ 2> /dev/null
+    mkdir -p /tmp/rom_out/$scp_path_string/ 2> /dev/null
+    cp $ROM /tmp/rom_out/$scp_path_string 2> /dev/null
+    rsync -avR -e "ssh -i ~/.id_rsa -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" /tmp/rom_out/./$scp_path_string $SCP_USERNAME@$SCP_HOST:$SCP_DEST > /dev/null 2>&1
     error_exit "scp rsync"
-    rm -rf /tmp/rom_out/
+    rm -rf /tmp/rom_out/ 2> /dev/null
     sleep 3
   done
 
