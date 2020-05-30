@@ -131,7 +131,7 @@ scp_upload()
     scp_path_string=${scp_path_string/\{date\}/$DATE}
 
     # Create folder structure via sftp or ssh
-    create_scppath "$SCP_USERNAME" "$SCP_HOST" "${scp_path_string}"
+    create_scppath "$SCP_USERNAME" "$SCP_HOST" ${scp_path_string}
 
     # Upload via scp
     scp $ROM ${SCP_USERNAME}@${SCP_HOST}:${scp_path_string}
