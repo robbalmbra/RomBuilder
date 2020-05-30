@@ -127,15 +127,15 @@ scp_upload()
 
     # Replace device with dynamic name if it exists in path
     device_name="$(basename "$(dirname "$ROM")")"
+
+    # Create path string
     scp_path_string=${SCP_PATH/\{device\}/$device_name}
     scp_path_string=${scp_path_string/\{date\}/$DATE}
 
-    # Create folder structure via sftp or ssh
-    create_scppath "$SCP_USERNAME" "$SCP_HOST" ${scp_path_string}
-
-    # Upload via scp
-    scp $ROM ${SCP_USERNAME}@${SCP_HOST}:${scp_path_string}
-    error_exit "scp upload"
+    mkdir -p /tmp/rom_out/${SCP_PATH}/
+    cp $ROM /tmp/rom_out/${SCP_PATH}/
+    rsync -avR /tmp/rom_out/./${SCP_PATH} ${SCP_USER}@${SCP_HOST}:${SCP_DEST}
+    error_exit "scp rsync"
     sleep 3
   done
 
