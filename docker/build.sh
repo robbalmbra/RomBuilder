@@ -807,7 +807,7 @@ if [ "$TEST_BUILD" -eq 0 ]; then
 
       # Send message
       echo "Sending message to broadcast group"
-      python3 "$BUILD_DIR/scripts/SendMessage.py" "$UPLOAD_NAME" "ten" "$file_size" changelog.txt notes.txt "$BUILD_DIR/.sources" "$TELEGRAM_TOKEN" "$TELEGRAM_GROUP" "$BUILD_DIR/.hashes" "$TELEGRAM_AUTHORS"
+      python3 "$BUILD_DIR/scripts/SendMessage.py" "$UPLOAD_NAME" "ten" "$file_size" changelog.txt notes.txt "$BUILD_DIR/.sources" "$TELEGRAM_TOKEN" "$TELEGRAM_GROUP" "$BUILD_DIR/.hashes" "$TELEGRAM_AUTHORS" "$TELEGRAM_SUPPORT_LINK"
     fi
   fi
 fi
