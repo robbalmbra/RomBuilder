@@ -160,6 +160,7 @@ variables=(
   TELEGRAM_TOKEN
   TELEGRAM_GROUP
   TELEGRAM_AUTHORS
+  TELEGRAM_SUPPORT_LINK
 )
 check_vars $variables
 
