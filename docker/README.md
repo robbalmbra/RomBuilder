@@ -44,6 +44,7 @@ Options can be defined within environment variables or within the environment se
 * TELEGRAM_TOKEN - Specifies token for automatic group update after build has completed.
 * TELEGRAM_GROUP - Specifies telegram group name, e.g `@groupname`
 * TELEGRAM_AUTHORS - Specifies the authors for the telegram automatic group update
+* TELEGRAM_SUPPORT_LINK - Specifies a  http or https link to support page or group, i.e. telegram
 
 **Ccache options**
 * CUSTOM_CCACHE_DIR -  Specifies alternative directory for ccache to save relevant files into for the build, e.g. `/media/data/ccache`
