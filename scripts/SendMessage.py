@@ -6,8 +6,8 @@ import sys
 import datetime
 import os
 
-if len(sys.argv) < 11:
-  print(sys.argv[0] + " USAGE [ROM NAME] [VERSION] [FILESIZE] [CHANGELOG FILE] [NOTES FILE] [ROM LINK] [TELEGRAM TOKEN] [TELEGRAM GROUP] [MD5 HASHES] [AUTHORS]")
+if len(sys.argv) < 12:
+  print(sys.argv[0] + " USAGE [ROM NAME] [VERSION] [FILESIZE] [CHANGELOG FILE] [NOTES FILE] [ROM LINK] [TELEGRAM TOKEN] [TELEGRAM GROUP] [MD5 HASHES] [AUTHORS] [SUPPORT LINK]")
   sys.exit(1)
 
 rom_name = sys.argv[1]
@@ -20,6 +20,7 @@ telegram_token = sys.argv[7]
 telegram_group = sys.argv[8]
 rom_md5 = sys.argv[9]
 authors = sys.argv[10]
+authors = sys.argv[11]
 
 bot = telegram.Bot(token=telegram_token)
 
