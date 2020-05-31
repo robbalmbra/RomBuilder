@@ -20,7 +20,7 @@ telegram_token = sys.argv[7]
 telegram_group = sys.argv[8]
 rom_md5 = sys.argv[9]
 authors = sys.argv[10]
-authors = sys.argv[11]
+support_link = sys.argv[11]
 
 bot = telegram.Bot(token=telegram_token)
 
@@ -82,9 +82,11 @@ structure = """ ROM: """ + rom_name + """
 - Synced to latest """ + rom_name + """ sources
 - Fixed miscellaneous bugs and issues
 """ + changelog_txt + """
+
 Notes:
 
 """ + notes_txt + """- We also recommend using the WhiteWolf Kernel, which works perfectly on this rom
+Support can be accessed at """ + support_link + """
 
 #crownltexx #starltexx #star2ltexx """
 
