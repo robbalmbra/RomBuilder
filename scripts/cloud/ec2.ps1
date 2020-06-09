@@ -119,7 +119,7 @@ echo "Running custom startup script"
 hostname "$VM_NAME"
 apt install -y git curl wget
 echo -e "#!/bin/bash\nsudo systemctl poweroff" > /tmp/terminate.sh
-wget "https://raw.githubusercontent.com/robbalmbra/RomBuilder/master/scripts/setup-buildtools.sh?token=AC56JFRYR6ORLXEQP2J6OXK637LLW" -O /tmp/setup-buildtools.sh
+wget "https://raw.githubusercontent.com/robbalmbra/RomBuilder/master/scripts/setup-buildtools.sh" -O /tmp/setup-buildtools.sh
 chmod 700 /tmp/setup-buildtools.sh
 export BHOST="$VM_NAME"
 export BTOKEN="$token"
