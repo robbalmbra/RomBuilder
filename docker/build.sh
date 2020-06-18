@@ -135,7 +135,7 @@ scp_upload()
     rm -rf /tmp/rom_out/ 2> /dev/null
     mkdir -p /tmp/rom_out/$scp_path_string/ 2> /dev/null
     cp $ROM /tmp/rom_out/$scp_path_string 2> /dev/null
-    rsync -avR -e "ssh -i ~/.id_rsa -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" /tmp/rom_out/./$scp_path_string $SCP_USERNAME@$SCP_HOST:$SCP_DEST > /dev/null 2>&1
+    rsync -avR -e "ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" /tmp/rom_out/./$scp_path_string $SCP_USERNAME@$SCP_HOST:$SCP_DEST > /dev/null 2>&1
     error_exit "scp rsync"
     rm -rf /tmp/rom_out/ 2> /dev/null
     sleep 3
