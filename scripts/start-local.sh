@@ -206,6 +206,13 @@ scp_check=$count
 
 if [ "$scp_check" -eq 5 ]; then
   export SCP_UPLOAD=1
+  
+  # Check if private key exists for scp transfer, location is ~/.ssh/id_rsa
+  if [ ! -f "$HOME/.ssh/id_rsa" ]; then
+    echo "Error - Private key doesn't exist for user buildkite-agent, transfer a valid private key to ~/.ssh/id_rsa"
+    exit 1
+  fi
+  
 fi
 
 if [ $new -eq 0 ]; then
