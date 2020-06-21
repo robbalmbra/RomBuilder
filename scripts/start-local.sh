@@ -211,8 +211,13 @@ if [ "$scp_check" -eq 5 ]; then
   if [ ! -f "$HOME/.ssh/id_rsa" ]; then
     echo "Error - Private key doesn't exist for user buildkite-agent, transfer a valid private key to ~/.ssh/id_rsa"
     exit 1
+  else
+    # Check permissions and connection to host
+    if [ ! -r "$HOME/.ssh/id_rsa" ]; then
+      echo "Error - Private key can't be read by user buildkite-agent."
+      exit 1
+    fi
   fi
-  
 fi
 
 if [ $new -eq 0 ]; then
