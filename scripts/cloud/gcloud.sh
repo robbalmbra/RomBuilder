@@ -8,7 +8,7 @@ function retrieve_public_key()
 
 # Check if user has requirements installed
 if ! [ -x "$(command -v gcloud)" ]; then
-  echo '$0 - Error: gcloud is not installed. Install from https://cloud.google.com/sdk/docs'
+  echo "$0 - Error: gcloud is not installed. Install from https://cloud.google.com/sdk/docs"
   exit 1
 fi
 
