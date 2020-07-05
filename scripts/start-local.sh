@@ -43,75 +43,9 @@ CURRENT="$(pwd)"
 # Requirements for buildkite
 new=0
 
-if [ -f "/etc/lsb-release" ] && [ ! -d "/opt/build_env" ]; then
-  # Linux install
-
-  if [ ! -z "$DOCKER_SETUP" ]; then
-    apt-get install -y sudo
-  fi
-
-  echo "--- Installing required tools :toolbox:"
-  echo "Installing build script"
-
-  apt-get install git curl -y > /dev/null 2>&1
-  git config --global user.name "Robert Balmbra" > /dev/null 2>&1
-  git config --global user.email "robbalmbra@gmail.com" > /dev/null 2>&1
-  error_exit "git config"
-
-  git clone https://github.com/akhilnarang/scripts.git /opt/build_env --depth=1 > /dev/null 2>&1
-  sudo chmod +x /opt/build_env/setup/android_build_env.sh
-  . /opt/build_env/setup/android_build_env.sh > /dev/null 2>&1
-
-  apt-get -y upgrade > /dev/null 2>&1 && \
-  apt-get -y install make python3 bc bison git screen wget openjdk-8-jdk lsb-core sudo curl shellcheck \
-  autoconf libtool g++ libcrypto++-dev build-essential libz-dev libsqlite3-dev libssl-dev libcurl4-gnutls-dev libreadline-dev \
-  libpcre++-dev libsodium-dev libc-ares-dev libfreeimage-dev libavcodec-dev libavutil-dev libavformat-dev flex \
-  libswscale-dev libmediainfo-dev libzen-dev libuv1-dev libxkbcommon-dev libxkbcommon-x11-0 zram-config python3-pip \
-  libelf-dev libncurses-dev g++-multilib gcc-multilib gperf libxml2 libxml2-utils zlib1g-dev zip yasm jq \
-  squashfs-tools xsltproc schedtool rsync lzop liblz4-tool libesd0-dev lib32z1-dev lib32readline-dev libsdl1.2-dev > /dev/null 2>&1
-
-  # Install python packages
-  pip3 install python-telegram-bot --upgrade > /dev/null 2>&1
-
-  # Download and build mega
-  if [ ! -d "/opt/MEGAcmd/" ]; then
-    echo "Installing mega CLI"
-    wget --quiet -O /opt/megasync.deb https://mega.nz/linux/MEGAsync/xUbuntu_$(lsb_release -rs)/amd64/megasync-xUbuntu_$(lsb_release -rs)_amd64.deb && ls /opt/ && dpkg -i /opt/megasync.deb
-    cd /opt/ && git clone --quiet https://github.com/meganz/MEGAcmd.git
-    cd /opt/MEGAcmd && git submodule update --quiet --init --recursive && sh autogen.sh > /dev/null 2>&1 && ./configure --quiet && make -j$(nproc) > /dev/null 2>&1 && make install > /dev/null 2>&1
-  fi
-
-  apt update -y --fix-missing > /dev/null 2>&1
-  sudo apt install -y -f  > /dev/null 2>&1
-  new=1
-
-elif [ "$(uname)" == "Darwin" ]; then
-  # MacOS install
-  # Check if software exists on system
-  if [ ! -f "$HOME/.complete" ]; then
-
-    # Check if brew is installed
-    if ! [ -x "$(command -v brew)" ]; then
-      echo 'Error - Brew is not installed'
-      exit 1
-    fi
-
-    # Install gnu sed for compatibility issues
-    echo "--- Installing required tools"
-    echo "Installing gnu specific tools"
-
-    brew install gnu-sed > /dev/null 2>&1
-    brew install coreutils > /dev/null 2>&1
-    brew install ccache > /dev/null 2>&1
-    wget https://storage.googleapis.com/git-repo-downloads/repo -O /usr/local/bin/repo > /dev/null 2>&1
-    chmod +x /usr/local/bin/repo
-
-    export PATH="/usr/local/opt/python@3.8/bin:$PATH"
-    export LDFLAGS="-L/usr/local/opt/python@3.8/lib"
-    new=1
-    touch $HOME/.complete
-
-  fi
+if [ ! -d "/opt/build_env" ]; then
+  echo "Error - Build tools don't exist on machine. Please run setup-buildtools.sh in the scripts folder to install the relevant software packages."
+  exit 1
 fi
 
 if [[ -z "${BUILDKITE}" ]]; then
