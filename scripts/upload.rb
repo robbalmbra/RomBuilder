@@ -26,12 +26,10 @@ def create_path(fullpath,storage)
     i = i + 1
   end
 
-  return parent_folder
-
 end
 
-if ARGV.length < 4
-  puts "USAGE: ./upload.rb [USERNAME] [PASSWORD] [FILE] [PATH]"
+if ARGV.length < 3
+  puts "USAGE: ./upload.rb [USERNAME] [PASSWORD] [PATH]"
 end
 
 begin
@@ -41,13 +39,5 @@ rescue
   exit
 end
 
-if(!(File.exist?(ARGV[2].to_s)))
-  puts "Error - File doesn't exist"
-  exit
-end
-
 # Create directory and return parent inode id
-parent_folder = create_path(ARGV[3].to_s,storage)
-
-# Upload file
-parent_folder.upload(ARGV[2].to_s)
+create_path(ARGV[2].to_s,storage)
