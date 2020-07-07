@@ -97,8 +97,15 @@ mega_upload()
     fi
 
     echo "Uploading $(basename $ROM)"
-    ruby $BUILD_DIR/scripts/upload.rb "$MEGA_USERNAME" "$MEGA_PASSWORD" "$ROM" "$MEGA_UPLOAD_FOLDER/$UPLOAD_NAME/$DATE/"
+
+    # Create directory structure
+    ruby $BUILD_DIR/scripts/upload.rb "$MEGA_USERNAME" "$MEGA_PASSWORD" "$MEGA_UPLOAD_FOLDER/$UPLOAD_NAME/$DATE/"
+    error_exit "mega directory generation"
+    
+    # Upload with progress bar and stats
+    rmega-up "$ROM" -r "$MEGA_UPLOAD_FOLDER/$UPLOAD_NAME/$DATE/" --user "$MEGA_USERNAME" --pass "$MEGA_PASSWORD"
     error_exit "mega upload"
+    
     sleep 2
   done
 
