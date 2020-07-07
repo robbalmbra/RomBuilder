@@ -201,6 +201,7 @@ fi
 export BUILDKITE_LOGGER="$CURRENT/buildkite_logger.sh"
 export ROM_PATCHER="$CURRENT/patcher.sh"
 export TELEGRAM_BOT="$CURRENT/SendMessage.py"
+export MEGA_UPLOADER="$CURRENT/upload.rb"
 export SUPPLEMENTS="$CURRENT/../supplements/"
 export PRELIMINARY_SETUP=1
 
