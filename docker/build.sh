@@ -86,9 +86,6 @@ mega_upload()
 {
   # Upload to mega if set
   echo "--- Uploading to mega :rea:"
-  mega-logout > /dev/null 2>&1
-  mega-login $MEGA_USERNAME $MEGA_PASSWORD > /dev/null 2>&1
-  error_exit "mega login"
 
   shopt -s nocaseglob
   DATE=$(date '+%d-%m-%y');
@@ -100,9 +97,9 @@ mega_upload()
     fi
 
     echo "Uploading $(basename $ROM)"
-    mega-put -c $ROM $MEGA_UPLOAD_FOLDER/$UPLOAD_NAME/$DATE/
-    error_exit "mega put"
-    sleep 3
+    ruby $BUILD_DIR/scripts/upload.rb "$MEGA_USERNAME" "$MEGA_PASSWORD" "$ROM" "$MEGA_UPLOAD_FOLDER/$UPLOAD_NAME/$DATE/"
+    error_exit "mega upload"
+    sleep 2
   done
 
   echo "Upload complete"
@@ -205,6 +202,9 @@ if [[ ! -z "${BUILDKITE}" ]]; then
 
   # Create scripts directory in BUILD_DIR
   mkdir -p "$BUILD_DIR/scripts/"
+
+  # Copy mega upload and path generation script to local folder
+  cp "$MEGA_UPLOADER" "$BUILD_DIR/scripts/upload.rb" > /dev/null 2>&1
 
   # Copy supplements to local folder
   cp -R "$SUPPLEMENTS" "$BUILD_DIR/"
