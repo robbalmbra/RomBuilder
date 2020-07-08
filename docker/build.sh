@@ -750,6 +750,9 @@ fi
 # Retrieve md5, file size and rom count
 if [ "$MEGA_UPLOAD" -eq 1 ] || [ "$SCP_UPLOAD" -eq 1 ]; then
 
+  # Flush md5 file to avoid duplicates for each device
+  echo "" > $BUILD_DIR/.hashes
+
   # Iterate over ROMS
   rom_count=0
   for ROM in $BUILD_DIR/rom/out/target/product/*/*.zip; do
