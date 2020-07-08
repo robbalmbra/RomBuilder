@@ -103,7 +103,7 @@ mega_upload()
     error_exit "mega directory generation"
     
     # Upload with progress bar and stats
-    rmega-up "$ROM" -r "$MEGA_UPLOAD_FOLDER/$UPLOAD_NAME/$DATE/" --user "$MEGA_USERNAME" --pass "$MEGA_PASSWORD"
+    rmega-up "$ROM" -r "$MEGA_UPLOAD_FOLDER/$UPLOAD_NAME/$DATE/" --user "$MEGA_USERNAME" --pass "$MEGA_PASSWORD" > /dev/null 2>&1
     error_exit "mega upload"
     
     sleep 2
