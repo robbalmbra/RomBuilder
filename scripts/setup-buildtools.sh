@@ -116,7 +116,13 @@ ldconfig > /dev/null 2>&1
 
 # Start in foreground if systemctl fails
 if [ $ret -ne 0 ]; then
-  buildkite-agent start
+  buildkite-agent start &
+fi
+
+# Update buildkite target and launch build
+if [ ! -z "BPIPELINE_ADDRESS" ]; then
+echo "Updating buildkite pipeline"
+# TODO
 fi
 
 if [ -f "/tmp/id_rsa" ]; then
