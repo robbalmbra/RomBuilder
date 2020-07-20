@@ -13,6 +13,10 @@ else
   AUTO_TERMINATE=1
 fi
 
+if [ -z "$INSTALL_CLEAN" ]; then
+  INSTALL_CLEAN="make installclean"
+fi
+
 if [ -z "$MEGA_UPLOAD_FOLDER" ]; then
   MEGA_UPLOAD_FOLDER="ROMS"
 fi
@@ -594,7 +598,7 @@ if [ "$SKIP_BUILD" -eq 0 ]; then
     if [ "$runonce" -ne 0 ]; then
       # Clean between builds
       echo "Cleaning build"
-      make installclean > /dev/null 2>&1
+      eval "$INSTALL_CLEAN" > /dev/null 2>&1
     fi
 
     echo "--- Building $DEVICE ($BUILD_NAME) :building_construction:"
