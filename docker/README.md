@@ -61,13 +61,16 @@ Options can be defined within environment variables or within the environment se
 * MAX_CPUS - Defines max CPUs to use for the building process; e.g. `MAX_CPUS=6` defines to only use 6 CPUS for the build. Default uses all CPU cores for the build.
 * CUSTOM_OUTPUT_DIR - Overrides default build directory to selected directory
 * DEBUG=1 - Dont flush any output to /dev/null. Default ignores output.
-* EXTRA_COMMANDS - Run user commands after sync has finished, e.g. `pwd;ls -al;git clone test.git /opt/out` Default is ignored.
 * SKIP_BUILD=1 - Skip build process. Default will build.
 * DATE_REVERT - Specifies the date that the repo will pull before the specified date; e.g `2020-03-01 00:00`
 * PRODUCE_DEVICE_TREES=1 - Apply modifications and only produce device trees.
-* ADDITIONAL_PROPS - Defines a list of props that will be appended to the build props of the build; e.g `ro.config.vc_call_steps=20;camera.eis.enable=1`. Note - Each prop is seperated by a semicolon.
-* USER_MODS - Defines location of custom modifications bash script to alter sources after being pulled
 * JUST_UPLOAD=1 - Causes build script to only upload any built files to mega and/or scp
+* INSTALL_CLEAN - Overrides command for cleaning between builds, default is set to `make installclean`
+
+**Build modifications**
+* USER_MODS - Defines location of custom modifications bash script to alter sources after being pulled
+* ADDITIONAL_PROPS - Defines a list of props that will be appended to the build props of the build; e.g `ro.config.vc_call_steps=20;camera.eis.enable=1`. Note - Each prop is seperated by a semicolon.
+* EXTRA_COMMANDS - Run user commands after sync has finished, e.g. `pwd;ls -al;git clone test.git /opt/out` Default is ignored.
 
 **OTA**
 * PROCESS_OTA=1 - Generate ota json and upload to sourceforge. Default is ignored.
