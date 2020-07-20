@@ -119,12 +119,6 @@ if [ $ret -ne 0 ]; then
   buildkite-agent start &
 fi
 
-# Update buildkite target and launch build
-if [ ! -z "BPIPELINE_ADDRESS" ]; then
-echo "Updating buildkite pipeline"
-# TODO
-fi
-
 if [ -f "/tmp/id_rsa" ]; then
   mkdir /var/lib/buildkite-agent/.ssh/
   chown buildkite-agent:buildkite-agent /var/lib/buildkite-agent/.ssh/
