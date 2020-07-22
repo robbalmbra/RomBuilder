@@ -110,6 +110,41 @@ if [ "$mega_check" -eq 2 ]; then
   export MEGA_UPLOAD=1
 fi
 
+# Check if custom upload vars all set if any custom upload variable is set
+variables=(
+  CUSTOM_UPLOAD_NAME
+  CUSTOM_UPLOAD_SCRIPT
+  CUSTOM_UPLOAD_FOLDER
+  CUSTOM_UPLOAD_LINK
+)
+
+check_vars $variables
+custom_upload_check=$count
+
+if [ "custom_upload_check" -eq 4 ]; then
+  #Check if SCRIPT is url or file and test file existence
+  regex='(https?|ftp|file)://[-A-Za-z0-9\+&@#/%?=~_|!:,.;]*[-A-Za-z0-9\+&@#/%=~_|]'
+
+  if [[ $CUSTOM_UPLOAD_SCRIPT =~ $regex ]]; then
+    wget "$CUSTOM_UPLOAD_SCRIPT" -O /tmp/custom_script > /dev/null 2>&1
+    if [ $? -ne 0 ]; then
+      echo "Error - CUSTOM_UPLOAD_SCRIPT is an invalid url"
+      exit 1
+    fi
+  else
+    if [ ! -f "$CUSTOM_UPLOAD_SCRIPT" ]; then
+      echo "Error - CUSTOM_UPLOAD_SCRIPT is an invalid file"
+      exit 1
+    else
+      cp "$CUSTOM_UPLOAD_SCRIPT" /tmp/custom_script
+    fi
+  fi
+
+  CUSTOM_UPLOAD_SCRIPT="/tmp/custom_script"
+  chmod 775 "$CUSTOM_UPLOAD_SCRIPT"
+  export CUSTOM_UPLOAD=1
+fi
+
 if [ -z "$TEST_BUILD" ]; then
 
   if [ $mega_check -ne 0 ]; then
@@ -140,7 +175,7 @@ scp_check=$count
 
 if [ "$scp_check" -eq 5 ]; then
   export SCP_UPLOAD=1
-  
+
   # Check if private key exists for scp transfer, location is ~/.ssh/id_rsa
   if [ ! -f "$HOME/.ssh/id_rsa" ]; then
     echo "Error - Private key doesn't exist for user buildkite-agent, transfer a valid private key to ~/.ssh/id_rsa"

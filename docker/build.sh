@@ -29,6 +29,10 @@ if [ -z "$SCP_UPLOAD" ]; then
   export SCP_UPLOAD=0
 fi
 
+if [ -z "$CUSTOM_UPLOAD" ]; then
+  export CUSTOM_UPLOAD=0
+fi
+
 if [ -z "$SKIP_API_DOCS" ]; then
   export SKIP_API_DOCS=0
 fi
@@ -85,6 +89,31 @@ fi
 
 ota_found=0
 
+# Custom upload handler via script
+custom_upload()
+{
+  echo "--- Uploading to $CUSTOM_UPLOAD_NAME :rea:"
+
+  shopt -s nocaseglob
+  DATE=$(date '+%d-%m-%y');
+  for ROM in $BUILD_DIR/rom/out/target/product/*/*.zip; do
+
+    # Skip if zip has -ota- in zip
+    if [[ $ROM == *"-ota-"* ]]; then
+      continue
+    fi
+
+    echo "Uploading $(basename $ROM)"
+    eval "$CUSTOM_UPLOAD_SCRIPT $ROM $CUSTOM_UPLOAD_FOLDER"
+    error_exit "$CUSTOM_UPLOAD_NAME upload"
+
+    sleep 2
+
+  done
+
+  echo "Upload complete"
+}
+
 # Upload function for mega
 mega_upload()
 {
@@ -105,11 +134,11 @@ mega_upload()
     # Create directory structure
     ruby $BUILD_DIR/scripts/upload.rb "$MEGA_USERNAME" "$MEGA_PASSWORD" "$MEGA_UPLOAD_FOLDER/$UPLOAD_NAME/$DATE/"
     error_exit "mega directory generation"
-    
+
     # Upload with progress bar and stats
     rmega-up "$ROM" -r "$MEGA_UPLOAD_FOLDER/$UPLOAD_NAME/$DATE/" -l --user "$MEGA_USERNAME" --pass "$MEGA_PASSWORD" > /dev/null 2>&1
     error_exit "mega upload"
-    
+
     sleep 2
   done
 
@@ -146,7 +175,7 @@ scp_upload()
     rsync -avR -e "ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" /tmp/rom_out/./$scp_path_string $SCP_USERNAME@$SCP_HOST:$SCP_DEST > /dev/null 2>&1
     error_exit "scp rsync"
     rm -rf /tmp/rom_out/ 2> /dev/null
-    sleep 3
+    sleep 2
   done
 
   echo "Upload complete"
@@ -321,6 +350,13 @@ if [ ! -z "$JUST_UPLOAD" ]; then
 
       # Call handler for scp upload
       scp_upload
+
+    fi
+
+    if [ "$CUSTOM_UPLOAD" -eq 1 ]; then
+
+      # Call handler for custom upload
+      custom_upload
 
     fi
 
@@ -749,10 +785,19 @@ if [ "$TEST_BUILD" -eq 0 ]; then
     scp_upload
 
   fi
+
+  if [ "$CUSTOM_UPLOAD" -eq 1 ]; then
+
+    # Create link for telegram updater
+    custom_folder_link="$CUSTOM_UPLOAD_LINK"
+
+    # Call handler for custom upload
+    custom_upload
+  fi
 fi
 
 # Retrieve md5, file size and rom count
-if [ "$MEGA_UPLOAD" -eq 1 ] || [ "$SCP_UPLOAD" -eq 1 ]; then
+if [ "$MEGA_UPLOAD" -eq 1 ] || [ "$SCP_UPLOAD" -eq 1 ] || [ "$CUSTOM_UPLOAD" -eq 1 ]; then
 
   # Flush md5 file to avoid duplicates for each device
   echo "" > $BUILD_DIR/.hashes
@@ -819,6 +864,10 @@ if [ "$TEST_BUILD" -eq 0 ]; then
         echo "$scp_folder_link" >> "$BUILD_DIR/.sources"
       fi
 
+      if [ ! -z "$custom_folder_link" ]; then
+        echo "$custom_folder_link" >> "$BUILD_DIR/.sources"
+      fi
+
       # Send message
       echo "Sending message to broadcast group"
       python3 "$BUILD_DIR/scripts/SendMessage.py" "$UPLOAD_NAME" "ten" "$file_size" changelog.txt notes.txt "$BUILD_DIR/.sources" "$TELEGRAM_TOKEN" "$TELEGRAM_GROUP" "$BUILD_DIR/.hashes" "$TELEGRAM_AUTHORS" "$TELEGRAM_SUPPORT_LINK"
@@ -827,7 +876,7 @@ if [ "$TEST_BUILD" -eq 0 ]; then
 fi
 
 # Disable auto terminate if nothing is set to upload
-if [ "$MEGA_UPLOAD" -eq 0 ] && [ "$SCP_UPLOAD" -eq 0 ]; then
+if [ "$MEGA_UPLOAD" -eq 0 ] && [ "$SCP_UPLOAD" -eq 0 ] && [ "$CUSTOM_UPLOAD" -eq 0 ]; then
   AUTO_TERMINATE=0
 fi
 

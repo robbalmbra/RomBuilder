@@ -38,13 +38,20 @@ Options can be defined within environment variables or within the environment se
 * SCP_HOST - Specifies the host to connect to, e.g. `test.git.com`
 * SCP_DEST - Specifies an absolute path to upload directory, e.g. `/home/robbalmbra/project/`
 * SCP_PATH - Specifies the structure within the SCP_DEST directory, e.g `PE/{device}/{date}/`. Optional - {device} will resolve to the current device being uploaded, {date} will resolve to the current date.
-* SCP_LINK - Public link to where files are hosted
+* SCP_LINK - Public link to where the files are hosted
+
+**Custom file uploader**
+Uploads using custom handler via a script, the script is called with the parameters `$ROM $CUSTOM_UPLOAD_FOLDER`, please specify the interpreter using a shebang in the header of the file. Whereby ROM is the absolute path to the ROM file and CUSTOM_UPLOAD_FOLDER is the path of the output directory on the upload server.
+* CUSTOM_UPLOAD_NAME - Defines the name of the uploader
+* CUSTOM_UPLOAD_SCRIPT - Specifies absolute script location that contains upload methods, alternatively a HTTP link to the script to download
+* CUSTOM_UPLOAD_FOLDER - Specifies the folder to upload to
+* CUSTOM_UPLOAD_LINK - Specifies a link to where files are hosted
 
 **Telegram build updater**
 * TELEGRAM_TOKEN - Specifies token for automatic group update after build has completed.
 * TELEGRAM_GROUP - Specifies telegram group name, e.g `@groupname`
 * TELEGRAM_AUTHORS - Specifies the authors for the telegram automatic group update
-* TELEGRAM_SUPPORT_LINK - Specifies a  http or https link to support page or group, i.e. telegram
+* TELEGRAM_SUPPORT_LINK - Specifies a http or https link to support page or group, i.e. telegram
 
 **Ccache options**
 * CUSTOM_CCACHE_DIR -  Specifies alternative directory for ccache to save relevant files into for the build, e.g. `/media/data/ccache`
