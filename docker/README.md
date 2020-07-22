@@ -41,6 +41,7 @@ Options can be defined within environment variables or within the environment se
 * SCP_LINK - Public link to where the files are hosted
 
 **Custom file uploader**
+
 Uploads using custom handler via a script, the script is called with the parameters `$ROM $CUSTOM_UPLOAD_FOLDER`, please specify the interpreter using a shebang in the header of the file. Whereby ROM is the absolute path to the ROM file and CUSTOM_UPLOAD_FOLDER is the path of the output directory on the upload server.
 * CUSTOM_UPLOAD_NAME - Defines the name of the uploader
 * CUSTOM_UPLOAD_SCRIPT - Specifies absolute script location that contains upload methods, alternatively a HTTP link to the script to download
