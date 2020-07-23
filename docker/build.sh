@@ -13,6 +13,10 @@ else
   AUTO_TERMINATE=1
 fi
 
+if [ -z "FORCE_CLEAN" ]; then
+  FORCE_CLEAN=0
+fi
+
 if [ -z "$INSTALL_CLEAN" ]; then
   INSTALL_CLEAN="make installclean"
 fi
@@ -238,6 +242,10 @@ if [[ ! -z "${BUILDKITE}" ]]; then
       mkdir -p "/var/lib/buildkite-agent/build/$UPLOAD_NAME" > /dev/null 2>&1
       BUILD_DIR="/var/lib/buildkite-agent/build/$UPLOAD_NAME"
     fi
+  fi
+
+  if [ $FORCE_CLEAN -eq 1 ]; then
+    rm -rf "$BUILD_DIR/*"
   fi
 
   # Create scripts directory in BUILD_DIR
