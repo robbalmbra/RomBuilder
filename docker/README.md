@@ -74,6 +74,7 @@ Uploads using custom handler via a script, the script is called with the paramet
 * PRODUCE_DEVICE_TREES=1 - Apply modifications and only produce device trees.
 * JUST_UPLOAD=1 - Causes build script to only upload any built files to mega and/or scp
 * INSTALL_CLEAN - Overrides command for cleaning between builds, default is set to `make installclean`
+* FORCE_CLEAN - Deletes previous build history on host
 
 **Build modifications**
 * USER_MODS - Defines location of custom modifications bash script to alter sources after being pulled
