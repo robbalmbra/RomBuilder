@@ -245,6 +245,7 @@ if [[ ! -z "${BUILDKITE}" ]]; then
   fi
 
   if [ $FORCE_CLEAN -eq 1 ]; then
+    echo "Forcing clean"
     rm -rf "$BUILD_DIR/*"
   fi
 
