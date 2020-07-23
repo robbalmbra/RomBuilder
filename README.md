@@ -1,6 +1,6 @@
 # RomBuilder
 
-To use this script to build roms, include the repo in a buildkite build instance.
+To use this script to build roms, include the repo in a buildkite build instance. Please grasp an understanding of rom building, dont assume this will do everything, xda have some great tutorials and guides on building ROMS.
 
 ## Scripts
 
