@@ -2,6 +2,10 @@
 
 # Script for local build V1.0
 
+function error_message {
+  echo "Error - $1"
+}
+
 function check_vars {
 
   count=0
@@ -18,11 +22,10 @@ function check_vars {
 
   if [ $count -gt 0 ] && [ $count -lt ${#variables[@]} ]; then
     if [ $count -eq 1 ]; then
-      echo "Error - ${variable_string:0:${#variable_string}-2} is a missing variable. Please define this."
+      error_message "${variable_string:0:${#variable_string}-2} is a missing variable. Please define this."
     else
-      echo "Error - ${variable_string:0:${#variable_string}-2} are missing variables. Please define these."
+      error_message "${variable_string:0:${#variable_string}-2} are missing variables. Please define these."
     fi
-
     exit 1
   fi
 
@@ -32,7 +35,7 @@ error_exit()
 {
     ret="$?"
     if [ "$ret" != "0" ]; then
-      echo "Error - '$1' failed with return code '$ret'"
+      error_message "'$1' failed with return code '$ret'"
       exit 1
     fi
 }
@@ -44,7 +47,7 @@ CURRENT="$(pwd)"
 new=0
 
 if [ ! -d "/opt/build_env" ]; then
-  echo "Error - Build tools don't exist on machine. Please run setup-buildtools.sh in the scripts folder to install the relevant software packages."
+  error_message "Build tools don't exist on machine. Please run setup-buildtools.sh in the scripts folder to install the relevant software packages."
   exit 1
 fi
 
@@ -69,7 +72,7 @@ quit=0
 for variable in "${variables[@]}"
 do
   if [[ -z ${!variable+x} ]]; then
-    echo "$0 - Error, $variable isn't set.";
+    error_message "'$variable' isn't set.";
     quit=1
     break
   fi
@@ -128,12 +131,12 @@ if [ "custom_upload_check" -eq 4 ]; then
   if [[ $CUSTOM_UPLOAD_SCRIPT =~ $regex ]]; then
     wget "$CUSTOM_UPLOAD_SCRIPT" -O /tmp/custom_script > /dev/null 2>&1
     if [ $? -ne 0 ]; then
-      echo "Error - CUSTOM_UPLOAD_SCRIPT is an invalid url"
+      error_message "CUSTOM_UPLOAD_SCRIPT is an invalid url"
       exit 1
     fi
   else
     if [ ! -f "$CUSTOM_UPLOAD_SCRIPT" ]; then
-      echo "Error - CUSTOM_UPLOAD_SCRIPT is an invalid file"
+      error_message "CUSTOM_UPLOAD_SCRIPT is an invalid file"
       exit 1
     else
       cp "$CUSTOM_UPLOAD_SCRIPT" /tmp/custom_script
@@ -149,12 +152,12 @@ if [ -z "$TEST_BUILD" ]; then
 
   if [ $mega_check -ne 0 ]; then
     if [ -z "$MEGA_FOLDER_ID" ]; then
-      echo "$0 - Error, MEGA_FOLDER_ID isn't set."
+      error_message "MEGA_FOLDER_ID isn't set."
       exit 1
     fi
 
     if [ -z "$MEGA_DECRYPT_KEY" ]; then
-      echo "$0 - Error, MEGA_DECRYPT_KEY isn't set."
+      error_message "MEGA_DECRYPT_KEY isn't set."
       exit 1
     fi
   fi
@@ -178,14 +181,22 @@ if [ "$scp_check" -eq 5 ]; then
 
   # Check if private key exists for scp transfer, location is ~/.ssh/id_rsa
   if [ ! -f "$HOME/.ssh/id_rsa" ]; then
-    echo "Error - Private key doesn't exist for user buildkite-agent, transfer a valid private key to ~/.ssh/id_rsa"
+    error_message "Private key doesn't exist for user buildkite-agent, transfer a valid private key to ~/.ssh/id_rsa"
     exit 1
   else
     # Check permissions and connection to host
     if [ ! -r "$HOME/.ssh/id_rsa" ]; then
-      echo "Error - Private key can't be read by user buildkite-agent."
+      error_message "Private key can't be read by user buildkite-agent."
       exit 1
     fi
+
+    # Check connection to server via public key auth
+    ssh -o BatchMode=yes -o ConnectTimeout=5 ${SCP_USERNAME}@${HOST} > /dev/null 2>&1
+    if [ $? -gt 1 ]; then
+      error_message "Failed to connect to '${SCP_HOST}' using username ${SCP_USERNAME}"
+      exit 1
+    fi
+
   fi
 fi
 
@@ -205,7 +216,7 @@ if [[ ! -z "$USER_MODIFICATIONS" ]]; then
     echo "Downloading and saving $USER_MODIFICATIONS to '$CURRENT/user_modifications.sh'"
     wget $USER_MODIFICATIONS -O "$CURRENT/user_modifications.sh"
   else
-    echo "Error - '$USER_MODIFICATIONS' isn't a valid url."
+    error_message "'$USER_MODIFICATIONS' isn't a valid url."
     exit 1
   fi
 
@@ -217,7 +228,7 @@ fi
 # Override if modification file exists from buildkite stage
 if [[ ! -z "$USER_MODS" ]]; then
   if [[ ! -f "$USER_MODS" ]]; then
-    echo "Error - '$USER_MODS' doesnt exist."
+    error_message "'$USER_MODS' doesnt exist."
     exit 1
   fi
 
