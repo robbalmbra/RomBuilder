@@ -901,7 +901,7 @@ if [ $AUTO_TERMINATE -eq 1 ]; then
        if [ ! -z "$CUSTOM_TERMINATION_COMMAND" ]; then
          eval $CUSTOM_TERMINATION_COMMAND > /dev/null 2>&1
        else
-        /bin/bash /tmp/terminate.sh
+        /bin/bash /tmp/terminate.sh &
        fi
     fi
   fi
