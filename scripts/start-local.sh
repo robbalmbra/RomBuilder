@@ -191,7 +191,6 @@ if [ "$scp_check" -eq 5 ]; then
     fi
 
     # Check connection to server via public key auth
-    echo "ssh -o BatchMode=yes -o ConnectTimeout=5 ${SCP_USERNAME}@${SCP_HOST}"
     ssh -o BatchMode=yes -o ConnectTimeout=5 ${SCP_USERNAME}@${SCP_HOST}
     ret=$?
     if [ $ret -gt 1 ]; then
