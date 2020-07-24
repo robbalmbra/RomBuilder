@@ -124,7 +124,7 @@ variables=(
 check_vars $variables
 custom_upload_check=$count
 
-if [ "custom_upload_check" -eq 4 ]; then
+if [ "$custom_upload_check" -eq 4 ]; then
   #Check if SCRIPT is url or file and test file existence
   regex='(https?|ftp|file)://[-A-Za-z0-9\+&@#/%?=~_|!:,.;]*[-A-Za-z0-9\+&@#/%=~_|]'
 
