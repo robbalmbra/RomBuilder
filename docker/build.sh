@@ -13,7 +13,7 @@ else
   AUTO_TERMINATE=1
 fi
 
-if [ -z "FORCE_CLEAN" ]; then
+if [ -z "$FORCE_CLEAN" ]; then
   FORCE_CLEAN=0
 fi
 
