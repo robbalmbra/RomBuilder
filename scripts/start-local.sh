@@ -191,7 +191,7 @@ if [ "$scp_check" -eq 5 ]; then
     fi
 
     # Check connection to server via public key auth
-    ssh -o BatchMode=yes -o ConnectTimeout=5 ${SCP_USERNAME}@${HOST} > /dev/null 2>&1
+    ssh -o BatchMode=yes -o ConnectTimeout=5 ${SCP_USERNAME}@${HOST}
     ret=$?
     if [ $ret -gt 1 ]; then
       error_message "Failed to connect to '${SCP_HOST}' using username ${SCP_USERNAME}. Return code: $ret"
