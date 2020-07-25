@@ -144,7 +144,7 @@ mega_upload()
     mega_path_string=${mega_path_string/\{upload_name\}/$UPLOAD_NAME}
 
     echo "Uploading $(basename $ROM)"
-    mega-put -c $ROM $mega_path_string > /dev/null 2>&1
+    mega-put -c $ROM "$mega_path_string/" > /dev/null 2>&1
     error_exit "mega put"
     sleep 2
   done
