@@ -13,8 +13,6 @@ def create_path(fullpath,storage)
       next
     end
 
-    puts path
-
     # Find folders in inode
     inode_id = parent_folder.folders.find { |folder| folder.name == path }
 
