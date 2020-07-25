@@ -4,13 +4,16 @@ def create_path(fullpath,storage)
   paths = fullpath.split("/")
 
   i=0
-  parent_folder=""
+  parent_folder = storage.root
 
   # Iterate over path segments by slash
   paths.each do |path|
-    if i == 0
-      parent_folder = storage.root
+
+    if path.length == 0
+      next
     end
+
+    puts path
 
     # Find folders in inode
     inode_id = parent_folder.folders.find { |folder| folder.name == path }
