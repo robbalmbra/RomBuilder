@@ -72,13 +72,19 @@ libpcre++-dev libsodium-dev libc-ares-dev libfreeimage-dev libavcodec-dev libavu
 libswscale-dev libmediainfo-dev libzen-dev libuv1-dev libxkbcommon-dev libxkbcommon-x11-0 zram-config ruby gem > /dev/null 2>&1
 error_exit "apt packages"
 
-# Install rmega module for upload
-sudo gem install rmega
-
 # Install python packages
 echo "Installing python packages"
 pip3 install python-telegram-bot --upgrade > /dev/null 2>&1
 error_exit "pip3"
+
+# Install mega
+echo "Installing mega command line tools"
+wget --quiet -O /opt/megasync.deb https://mega.nz/linux/MEGAsync/xUbuntu_$(lsb_release -rs)/amd64/megasync-xUbuntu_$(lsb_release -rs)_amd64.deb && dpkg -i /opt/megasync.deb > /dev/null 2>&1
+apt update --fix-missing > /dev/null 2>&1
+sudo apt install -f > /dev/null 2>&1
+cd /opt/ && git clone --quiet https://github.com/meganz/MEGAcmd.git > /dev/null 2>&1
+cd /opt/MEGAcmd && git submodule update --quiet --init --recursive && sh autogen.sh > /dev/null 2>&1 && ./configure --quiet > /dev/null 2>&1 && make -j$(nproc) > /dev/null 2>&1 && make install > /dev/null 2>&1
+error_exit "mega"
 
 apt --fix-broken -y install > /dev/null 2>&1
 
@@ -105,6 +111,11 @@ fi
 # Start buildkite
 sudo systemctl enable buildkite-agent > /dev/null 2>&1 && sudo systemctl start buildkite-agent > /dev/null 2>&1
 ret=$?
+
+# Removing temp files
+rm -rf /opt/MEGAcmd/ 2> /dev/null
+rm -rf /opt/mega/ 2> /dev/null
+rm -rf /opt/megasync.deb 2> /dev/null
 
 # ld for libs
 ldconfig > /dev/null 2>&1
