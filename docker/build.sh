@@ -124,6 +124,10 @@ mega_upload()
   # Upload to mega if set
   echo "--- Uploading to mega :rea:"
 
+  mega-logout > /dev/null 2>&1
+  mega-login $MEGA_USERNAME $MEGA_PASSWORD > /dev/null 2>&1
+  error_exit "mega login"
+
   shopt -s nocaseglob
   DATE=$(date '+%d-%m-%y');
   for ROM in $BUILD_DIR/rom/out/target/product/*/*.zip; do
@@ -134,15 +138,8 @@ mega_upload()
     fi
 
     echo "Uploading $(basename $ROM)"
-
-    # Create directory structure
-    ruby $BUILD_DIR/scripts/upload.rb "$MEGA_USERNAME" "$MEGA_PASSWORD" "$MEGA_UPLOAD_FOLDER/$UPLOAD_NAME/$DATE/"
-    error_exit "mega directory generation"
-
-    # Upload with progress bar and stats
-    rmega-up "$ROM" -r "$MEGA_UPLOAD_FOLDER/$UPLOAD_NAME/$DATE/" -l --user "$MEGA_USERNAME" --pass "$MEGA_PASSWORD" > /dev/null 2>&1
-    error_exit "mega upload"
-
+    mega-put -c $ROM $MEGA_UPLOAD_FOLDER/$UPLOAD_NAME/$DATE/
+    error_exit "mega put"
     sleep 2
   done
 
