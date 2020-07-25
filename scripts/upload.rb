@@ -30,6 +30,7 @@ end
 
 if ARGV.length < 3
   puts "USAGE: ./upload.rb [USERNAME] [PASSWORD] [PATH]"
+  exit
 end
 
 begin
