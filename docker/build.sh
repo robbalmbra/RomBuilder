@@ -138,7 +138,7 @@ mega_upload()
     fi
 
     echo "Uploading $(basename $ROM)"
-    mega-put -c $ROM $MEGA_UPLOAD_FOLDER/$UPLOAD_NAME/$DATE/
+    mega-put -c $ROM $MEGA_UPLOAD_FOLDER/$UPLOAD_NAME/$DATE/ > /dev/null 2>&1
     error_exit "mega put"
     sleep 2
   done
