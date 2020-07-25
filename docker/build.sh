@@ -137,8 +137,14 @@ mega_upload()
       continue
     fi
 
+    # Assign dynamic variables to path if they exist
+    DEVICE_NAME="$(basename "$(dirname "$ROM")")"
+    mega_path_string=${MEGA_UPLOAD_FOLDER/\{device\}/$DEVICE_NAME}
+    mega_path_string=${mega_path_string/\{date\}/$DATE}
+    mega_path_string=${mega_path_string/\{upload_name\}/$UPLOAD_NAME}
+
     echo "Uploading $(basename $ROM)"
-    mega-put -c $ROM $MEGA_UPLOAD_FOLDER/$UPLOAD_NAME/$DATE/ > /dev/null 2>&1
+    mega-put -c $ROM $mega_path_string > /dev/null 2>&1
     error_exit "mega put"
     sleep 2
   done
