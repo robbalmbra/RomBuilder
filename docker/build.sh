@@ -898,6 +898,9 @@ if [ "$TEST_BUILD" -eq 1 ]; then
   AUTO_TERMINATE=0
 fi
 
+# Build complete
+echo "Build complete"
+
 # Ignore auto terminates if set, otherwise run termination file in aws or gcloud
 if [ $AUTO_TERMINATE -eq 1 ]; then
   if [[ "$rom_count" -gt 0 ]]; then
