@@ -3,7 +3,7 @@
 # Create simplified changelog from rom created changelog since date - v1.0
 
 if [ $# -lt 2 ]; then
-  echo "USAGE: $0 [CHANGELOG FILE] [DATE]"
+  echo "USAGE: $0 [CHANGELOG FILE] [DATE (MM-DD-YYYY)]"
   exit 1
 fi
 
