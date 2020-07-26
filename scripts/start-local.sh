@@ -110,6 +110,16 @@ check_vars $variables
 mega_check=$count
 
 if [ "$mega_check" -eq 2 ]; then
+
+  # Check login details and error if incorrect
+  mega-logout > /dev/null 2>&1
+  mega-login $MEGA_USERNAME $MEGA_PASSWORD > /dev/null 2>&1
+  
+  if [ $? -ne 0 ]; then
+    error_message "MEGA LOGIN failed with those credentials."
+    exit 1
+  fi
+
   export MEGA_UPLOAD=1
 fi
 
