@@ -21,10 +21,6 @@ if [ -z "$INSTALL_CLEAN" ]; then
   INSTALL_CLEAN="make installclean"
 fi
 
-if [ -z "$MEGA_UPLOAD_FOLDER" ]; then
-  MEGA_UPLOAD_FOLDER="ROMS"
-fi
-
 if [ -z "$MEGA_UPLOAD" ]; then
   export MEGA_UPLOAD=0
 fi
@@ -130,6 +126,11 @@ mega_upload()
 
   shopt -s nocaseglob
   DATE=$(date '+%d-%m-%y');
+  
+  if [ -z "$MEGA_UPLOAD_FOLDER" ]; then
+    MEGA_UPLOAD_FOLDER="ROMS/$UPLOAD_NAME/$DATE"
+  fi
+  
   for ROM in $BUILD_DIR/rom/out/target/product/*/*.zip; do
 
     # Skip if zip has -ota- in zip
