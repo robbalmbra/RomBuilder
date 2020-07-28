@@ -70,6 +70,7 @@ Uploads using custom handler via a script, the script is called with the paramet
 * CUSTOM_OUTPUT_DIR - Overrides default build directory to selected directory
 * DEBUG=1 - Dont flush any output to /dev/null. Default ignores output.
 * SKIP_BUILD=1 - Skip build process. Default will build.
+* SKIP_API_DOCS=1 - Skip API document generation
 * DATE_REVERT - Specifies the date that the repo will pull before the specified date; e.g `2020-03-01 00:00`
 * PRODUCE_DEVICE_TREES=1 - Apply modifications and only produce device trees.
 * JUST_UPLOAD=1 - Causes build script to only upload any built files to mega and/or scp
