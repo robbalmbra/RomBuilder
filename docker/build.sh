@@ -657,10 +657,10 @@ if [ "$SKIP_BUILD" -eq 0 ]; then
     build_id+="-${LUNCH_DEBUG}"
     if [[ ! -z "${CUSTOM_LUNCH_COMMAND}" ]]; then
       echo "${CUSTOM_LUNCH_COMMAND} $build_id"
-      eval "${CUSTOM_LUNCH_COMMAND}" "$build_id" > /dev/null 2>&1
+      eval "${CUSTOM_LUNCH_COMMAND}" "$build_id" 1> /dev/null
     else
       echo "lunch $build_id"
-      lunch "$build_id" > /dev/null 2>&1
+      lunch "$build_id" 1> /dev/null
     fi
 
     error_exit "lunch"
