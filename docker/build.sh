@@ -403,13 +403,13 @@ fi
 cd "$BUILD_DIR"
 
 # Set git login details if available
-if [ ! -z "$GIT_UNAME"]; then
+if [[ ! -z $GIT_UNAME ]]; then
   git config --global user.name "$GIT_UNAME"
 else
   git config --global user.name "robbbalmbra"
 fi
 
-if [ ! -z "$GIT_EMAIL"]; then
+if [[ ! -z $GIT_EMAIL ]]; then
   git config --global user.email "$GIT_EMAIL"
 else
   git config --global user.email "robbalmbra@gmail.com"
