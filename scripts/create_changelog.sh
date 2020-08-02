@@ -7,4 +7,4 @@ fi
 
 day_count=$1
 output_file=$2
-repo forall -pc git log --reverse --no-merges --since=$Day_count.days.ago > $output_file
+repo forall -pc git log --reverse --no-merges --since=$day_count.days.ago > $output_file
