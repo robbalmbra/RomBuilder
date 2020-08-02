@@ -259,6 +259,10 @@ if [[ ! -z "${BUILDKITE}" ]]; then
   # Copy mega upload and path generation script to local folder
   cp "$MEGA_UPLOADER" "$BUILD_DIR/scripts/upload.rb" > /dev/null 2>&1
 
+  # Copy changelog creator to local folder
+  cp "$CHANGELOG_CREATOR" "$BUILD_DIR/scripts/changelog_creator.sh"
+  chmod 775 "$BUILD_DIR/scripts/changelog_creator.sh"
+
   # Copy supplements to local folder
   cp -R "$SUPPLEMENTS" "$BUILD_DIR/"
 
