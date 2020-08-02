@@ -2,6 +2,7 @@
 
 if [ $# -lt 2 ]; then
   echo "USAGE: $0 [DAYS] [OUTPUT_FILE]"
+  exit 1
 fi
 
 day_count=$1
