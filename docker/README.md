@@ -53,6 +53,7 @@ Uploads using custom handler via a script, the script is called with the paramet
 * TELEGRAM_GROUP - Specifies telegram group name, e.g `@groupname`
 * TELEGRAM_AUTHORS - Specifies the authors for the telegram automatic group update
 * TELEGRAM_SUPPORT_LINK - Specifies a http or https link to support page or group, i.e. telegram
+* CHANGELOG_DAYS - Specifies how far back to retrieve changelog commits from repos
 
 **Ccache options**
 * CUSTOM_CCACHE_DIR -  Specifies alternative directory for ccache to save relevant files into for the build, e.g. `/media/data/ccache`
