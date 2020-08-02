@@ -885,9 +885,13 @@ if [ "$TEST_BUILD" -eq 0 ]; then
         echo "$custom_folder_link" >> "$BUILD_DIR/.sources"
       fi
 
+      cd "$BUILD_DIR/rom/build/"
+      /bin/bash "$BUILD_DIR/scripts/changelog_creator.sh" "$CHANGELOG_DAYS" "$BUILD_DIR/changelog.txt"
+      cd "$BUILD_DIR/"
+
       # Send message
       echo "Sending message to broadcast group"
-      python3 "$BUILD_DIR/scripts/SendMessage.py" "$UPLOAD_NAME" "ten" "$file_size" changelog.txt notes.txt "$BUILD_DIR/.sources" "$TELEGRAM_TOKEN" "$TELEGRAM_GROUP" "$BUILD_DIR/.hashes" "$TELEGRAM_AUTHORS" "$TELEGRAM_SUPPORT_LINK"
+      python3 "$BUILD_DIR/scripts/SendMessage.py" "$UPLOAD_NAME" "ten" "$file_size" "$BUILD_DIR/changelog.txt" notes.txt "$BUILD_DIR/.sources" "$TELEGRAM_TOKEN" "$TELEGRAM_GROUP" "$BUILD_DIR/.hashes" "$TELEGRAM_AUTHORS" "$TELEGRAM_SUPPORT_LINK"
     fi
   fi
 fi
