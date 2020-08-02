@@ -98,6 +98,7 @@ variables=(
   TELEGRAM_GROUP
   TELEGRAM_AUTHORS
   TELEGRAM_SUPPORT_LINK
+  CHANGELOG_DAYS
 )
 check_vars $variables
 
