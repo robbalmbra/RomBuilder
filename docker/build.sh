@@ -885,9 +885,8 @@ if [ "$TEST_BUILD" -eq 0 ]; then
         echo "$custom_folder_link" >> "$BUILD_DIR/.sources"
       fi
 
-      cd "$BUILD_DIR/rom/build/"
+      # Generating changelog
       /bin/bash "$BUILD_DIR/scripts/changelog_creator.sh" "$CHANGELOG_DAYS" "$BUILD_DIR/changelog.txt"
-      cd "$BUILD_DIR/"
 
       # Send message
       echo "Sending message to broadcast group"
