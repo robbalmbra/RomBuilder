@@ -717,6 +717,7 @@ if [ "$SKIP_BUILD" -eq 0 ]; then
 
     # Upload error log to buildkite if any errors occur
     ret="$?"
+    mka_pid=$!
 
     # Notify logger script to stop logging to buildkite
     touch "$BUILD_DIR/logs/$DEVICE/.finished"
@@ -728,8 +729,9 @@ if [ "$SKIP_BUILD" -eq 0 ]; then
 
     if [ "$ret" != "0" ]; then
 
-      echo "Error - $DEVICE build failed ($ret) :bk-status-failed:"
-
+      echo "Error - $DEVICE build failed ($ret) :exclamation:"
+      kill $mka_pid
+      
       # Save folder for cd
       CURRENT=$(pwd)
 
