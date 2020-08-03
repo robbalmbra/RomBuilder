@@ -77,6 +77,7 @@ Uploads using custom handler via a script, the script is called with the paramet
 * JUST_UPLOAD=1 - Causes build script to only upload any built files to mega and/or scp
 * INSTALL_CLEAN - Overrides command for cleaning between builds, default is set to `make installclean`
 * FORCE_CLEAN - Deletes previous build history on host
+* RETURN_CHANGELOG=n - Only returns the changelog within the previous n days. e.g `RETURN_CHANGELOG=5` equals to the previous 5 days of commits
 
 **Build modifications**
 * USER_MODS - Defines location of custom modifications bash script to alter sources after being pulled
