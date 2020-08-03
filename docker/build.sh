@@ -457,7 +457,6 @@ fi
 
 # Use https for https repos
 if [[ ! "$REPO" =~ "git://" ]]; then
-  git config --global url."https://github.com/".insteadOf git@github.com:
   git config --global url."https://".insteadOf git://
 fi
 
