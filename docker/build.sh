@@ -512,6 +512,14 @@ if [ "$SKIP_BUILD" -eq 0 ]; then
   run repo sync -d -f -c -j$MAX_CPU --force-sync --quiet $SYNC_OPTIONS
   error_exit "repo sync"
 
+  if [ ! -z "$RETURN_CHANGELOG" ]; then
+      # Generating changelog
+      cd "$BUILD_DIR/rom/build/"
+      /bin/bash "$BUILD_DIR/scripts/changelog_creator.sh" "$RETURN_CHANGELOG" "$BUILD_DIR/changelog.txt"
+      cat "$BUILD_DIR/changelog.txt"
+      exit 0
+  fi
+
   if [[ ! -z $DATE_REVERT ]]; then
     echo "Reverting repo to date '$DATE_REVERT'"
     repo forall -c 'git checkout `git rev-list -n1 --before="$DATE_REVERT" HEAD`' > /dev/null 2>&1
