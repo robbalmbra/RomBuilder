@@ -790,37 +790,34 @@ else
   ota_found=1
 fi
 
-# Upload firmware to mega
-if [ "$TEST_BUILD" -eq 0 ]; then
+# Upload handlers
+if [ "$MEGA_UPLOAD" -eq 1 ]; then
 
-  if [ "$MEGA_UPLOAD" -eq 1 ]; then
+  # Create link to created folder for telegram updater
+  mega_folder_link="https://mega.nz/folder/${MEGA_FOLDER_ID}${MEGA_DECRYPT_KEY}"
 
-    # Create link to created folder for telegram updater
-    mega_folder_link="https://mega.nz/folder/${MEGA_FOLDER_ID}${MEGA_DECRYPT_KEY}"
+  # Call handler for mega upload
+  mega_upload
 
-    # Call handler for mega upload
-    mega_upload
+fi
 
-  fi
+if [ "$SCP_UPLOAD" -eq 1 ]; then
 
-  if [ "$SCP_UPLOAD" -eq 1 ]; then
+  # Create link to created folder for telegram updater
+  scp_folder_link="$SCP_LINK"
 
-    # Create link to created folder for telegram updater
-    scp_folder_link="$SCP_LINK"
+  # Call handler for scp upload
+  scp_upload
 
-    # Call handler for scp upload
-    scp_upload
+fi
 
-  fi
+if [ "$CUSTOM_UPLOAD" -eq 1 ]; then
 
-  if [ "$CUSTOM_UPLOAD" -eq 1 ]; then
+  # Create link for telegram updater
+  custom_folder_link="$CUSTOM_UPLOAD_LINK"
 
-    # Create link for telegram updater
-    custom_folder_link="$CUSTOM_UPLOAD_LINK"
-
-    # Call handler for custom upload
-    custom_upload
-  fi
+  # Call handler for custom upload
+  custom_upload
 fi
 
 # Retrieve md5, file size and rom count
