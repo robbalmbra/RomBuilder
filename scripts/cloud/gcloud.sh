@@ -12,35 +12,66 @@ if ! [ -x "$(command -v gcloud)" ]; then
   exit 1
 fi
 
-if [ $# -lt 3 ]; then
-  echo "USAGE: $0 [TOKEN] [PROJECT NAME] [ZONE] [[MACHINE TYPE]]"
+if ! [ -x "$(command -v jq)" ]; then
+  echo "$0 - Error: jq is not installed."
   exit 2
+fi
+
+# Input checks
+if [ $# -lt 5 ]; then
+  echo "USAGE: $0 [TOKEN] [PROJECT NAME] [ZONE] [API_KEY] [ORG/PIPELINE ID] [[MACHINE TYPE]]"
+  exit 3
 fi
 
 if [ -z $1 ]; then
   echo "$0 - Error: TOKEN is invalid"
-  exit 3
+  exit 4
 fi
 
 if [ -z $2 ]; then
   echo "$0 - Error: PROJECT NAME is invalid"
-  exit 4
+  exit 5
 fi
 
 if [ -z $3 ]; then
   echo "$0 - Error: ZONE is invalid"
-  exit 5
+  exit 6
+fi
+
+if [ -z $4 ]; then
+  echo "$0 - Error: API_KEY is invalid"
+  exit 7
+fi
+
+if [ -z $5 ]; then
+  echo "$0 - Error: ORG/PIPELINE_ID is invalid"
+  exit 8
+fi
+
+# Check API auth for buildkite
+status_code=$(curl -o /dev/null -s -w "%{http_code}\n" -H "Authorization: Bearer $4" "https://api.buildkite.com/v2/user")
+if [ $status_code -eq 401 ]; then
+  echo "$0 - Error: Failed to connect to buildkite service, is your API_KEY correct?"
+  exit 9
+fi
+
+# Check org/pipeline check for updating pipeline in program
+pipeline_conf=$(curl "https://api.buildkite.com/v2/$5" -H "Authorization: Bearer $4" | jq -r '.configuration')
+if [ -z "$pipeline_conf" ]; then
+  echo "$0 - Error failed to access '$5', does the pipeline and organization exist? e.g. organizations/{org.name}/pipelines/{pipeline.name}"
+  exit 10
 fi
 
 TOKEN=$1
 PROJECT_NAME=$2
 ZONE=$3
-
+API_KEY=$4
+PIPELINEORG_ID=$5
 token_size=${#TOKEN}
 
 if [ $token_size -ne 50 ]; then
   echo "Error - TOKEN is invalid"
-  exit 6
+  exit 11
 fi
 
 # Check if user has a ssh private key to import to gcloud
@@ -70,7 +101,7 @@ done <<< "$PROJECTS"
 # Error if failed to find project
 if [ $found -eq 0 ]; then
   echo "Error - Failed to find project name '$PROJECT_NAME'."
-  exit 7
+  exit 12
 fi
 
 # Check zones
@@ -87,12 +118,12 @@ done
 # Error if failed to find zone
 if [ $found -eq 0 ]; then
   echo "Error - Failed to find zone '$ZONE'. Use 'gcloud compute zones list' to list valid configurations."
-  exit 8
+  exit 13
 fi
 
 # Check machine types if specified
-if [ ! -z $4 ]; then
-  VM_MACHINE="$4"
+if [ ! -z $6 ]; then
+  VM_MACHINE="$6"
   found=0
   MACHINE_TYPES=($(gcloud compute machine-types list | tail +2 | awk '{print $1}'))
   for entry in "${MACHINE_TYPES[@]}"
@@ -106,7 +137,7 @@ if [ ! -z $4 ]; then
   # Error if failed to find machine type
   if [ $found -eq 0 ]; then
     echo "Error - Failed to find machine type '$VM_MACHINE'. Use 'gcloud compute machine-types list' to list valid configurations."
-    exit 9
+    exit 14
   fi
 fi
 
@@ -162,6 +193,13 @@ if [ $? -eq 0 ]; then
   if [ -f "$HOME/rom.env" ]; then
     scp -o StrictHostKeyChecking=no "$HOME/rom.env" ubuntu@$public_ip:/tmp/rom.env > /dev/null 2>&1
   fi
+
+  # Update target name to VN_NAME if correctly configured within the buildkite env
+  echo "Updating buildkite target name to '$VM_NAME' if configured correctly"
+  //updated_conf=$(echo "$pipeline_conf" | sed -e "/agents/!b;n;c\      target=$VM_NAME")
+  //todo
+
+
 
   echo "Complete"
 else
