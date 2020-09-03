@@ -54,6 +54,7 @@ Uploads using custom handler via a script, the script is called with the paramet
 * TELEGRAM_AUTHORS - Specifies the authors for the telegram automatic group update
 * TELEGRAM_SUPPORT_LINK - Specifies a http or https link to support page or group, i.e. telegram
 * CHANGELOG_DAYS - Specifies how far back to retrieve changelog commits from repos
+* CUSTOM_TELEGRAM_HANDLER - Specifies the location of a custom python script for the telegram message updater. Refer to [here](https://github.com/robbalmbra/RomBuilder/blob/1ac5574822ed5b0550e8214766a0f36deb44cf30/docker/build.sh#L902) for passed parameters to the script.
 
 **Ccache options**
 * CUSTOM_CCACHE_DIR -  Specifies alternative directory for ccache to save relevant files into for the build, e.g. `/media/data/ccache`
