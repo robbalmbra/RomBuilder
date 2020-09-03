@@ -248,6 +248,31 @@ if [[ ! -z "$USER_MODS" ]]; then
   chmod +x $USER_MODS
 fi
 
+# Alternative telegram handler
+if [[ ! -z "$CUSTOM_TELEGRAM_HANDLER" ]]; then
+  if [[ ! -f "$CUSTOM_TELEGRAM_HANDLER" ]]; then
+    error_message "'$CUSTOM_TELEGRAM_HANDLER' doesnt exist."
+    exit 1
+  fi
+  
+  variables=(
+    CUSTOM_TELEGRAM_HANDLER
+    TELEGRAM_TOKEN
+    TELEGRAM_GROUP
+    TELEGRAM_AUTHORS
+    TELEGRAM_SUPPORT_LINK
+    CHANGELOG_DAYS
+  )
+  check_vars $variables
+  
+  echo "Using '$CUSTOM_TELEGRAM_HANDLER' as telegram handler"
+  chmod +x $CUSTOM_TELEGRAM_HANDLER
+  export TELEGRAM_BOT="$CUSTOM_TELEGRAM_HANDLER"
+else
+  # Default handler
+  export TELEGRAM_BOT="$CURRENT/SendMessage.py"
+fi
+
 # Run build
 echo "--- Initializing build environment :parcel:"
 
@@ -258,7 +283,6 @@ fi
 
 export BUILDKITE_LOGGER="$CURRENT/buildkite_logger.sh"
 export ROM_PATCHER="$CURRENT/patcher.sh"
-export TELEGRAM_BOT="$CURRENT/SendMessage.py"
 export MEGA_UPLOADER="$CURRENT/upload.rb"
 export CHANGELOG_CREATOR="$CURRENT/create_changelog.sh"
 export SUPPLEMENTS="$CURRENT/../supplements/"
