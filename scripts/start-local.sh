@@ -248,6 +248,19 @@ if [[ ! -z "$USER_MODS" ]]; then
   chmod +x $USER_MODS
 fi
 
+# Check if variables exist if ADDITIONAL_CHANGELOGS is set
+if [[ ! -z "$ADDITIONAL_CHANGELOGS" ]]; then
+  variables=(
+    ADDITIONAL_CHANGELOGS
+    TELEGRAM_TOKEN
+    TELEGRAM_GROUP
+    TELEGRAM_AUTHORS
+    TELEGRAM_SUPPORT_LINK
+    CHANGELOG_DAYS
+  )
+  check_vars $variables
+fi
+
 # Alternative telegram handler
 if [[ ! -z "$CUSTOM_TELEGRAM_HANDLER" ]]; then
   if [[ ! -f "$CUSTOM_TELEGRAM_HANDLER" ]]; then
