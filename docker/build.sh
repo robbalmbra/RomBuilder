@@ -894,12 +894,26 @@ if [ "$TEST_BUILD" -eq 0 ]; then
 
       # Generating changelog
       cd "$BUILD_DIR/rom/build/"
+      touch "$BUILD_DIR/changelog.txt"
+      
+      # Add additional changelog entries if env variable is set
+      if [ ! -z "$ADDITIONAL_CHANGELOGS" ]; then
+        IFS=';'
+        read -a strarr <<< "$ADDITIONAL_CHANGELOGS"
+        
+        for val in "${strarr[@]}";
+        do
+          echo "$val" >> "$BUILD_DIR/changelog.txt"
+        done
+      fi
+      
       /bin/bash "$BUILD_DIR/scripts/changelog_creator.sh" "$CHANGELOG_DAYS" "$BUILD_DIR/changelog.txt"
       cd "$BUILD_DIR/"
 
       # Send message
       echo "Sending message to broadcast group"
       python3 "$BUILD_DIR/scripts/SendMessage.py" "$UPLOAD_NAME" "ten" "$file_size" "$BUILD_DIR/changelog.txt" notes.txt "$BUILD_DIR/.sources" "$TELEGRAM_TOKEN" "$TELEGRAM_GROUP" "$BUILD_DIR/.hashes" "$TELEGRAM_AUTHORS" "$TELEGRAM_SUPPORT_LINK"
+      echo "" > $BUILD_DIR/changelog.txt
     fi
   fi
 fi
